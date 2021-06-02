@@ -7,6 +7,10 @@
 
     <style name="TextAppearance.Vino.Toolbar" parent="">
         <item name="android:textSize">22sp</item>
-        <item name="android:fontFamily">@font/nunito</item>
+        <item name="android:fontFamily">@font/varela_round</item>
+    </style>
+
+    <style name="Widget.Vino.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
+        <item name="fontFamily">@font/asset</item>
     </style>
 </resources>

@@ -21,11 +21,6 @@
         android:id="@+id/navigation_todos"
         android:name="com.example.vino.ui.todos.TodosFragment"
         android:label="@string/title_todos"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_todos" />
 
-    <fragment
-        android:id="@+id/navigation_login"
-        android:name="com.example.vino.ui.login.LoginFragment"
-        android:label="Login"
-        tools:layout="@layout/fragment_login"/>
 </navigation>
