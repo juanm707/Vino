@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.Vino.Toolbar" parent="ThemeOverlay.AppCompat">
+        <item name="android:background">@color/white</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Vino.Toolbar</item>
+    </style>
+
+    <style name="TextAppearance.Vino.Toolbar" parent="">
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontFamily">@font/nunito</item>
+    </style>
+</resources>
