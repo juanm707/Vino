@@ -2,4 +2,8 @@
 <resources>
     <string name="sign_in">Sign In</string>
     <string name="create_an_account">Create an account</string>
+    <string name="vineyards">Vineyards</string>
+    <string name="vineyard_image">Vineyard image</string>
+    <string name="temperature_value">Temperature: %d°</string>
+    <string name="humidity_value">Humidity: %d%</string>
 </resources>

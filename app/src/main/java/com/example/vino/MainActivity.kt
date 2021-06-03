@@ -20,9 +20,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.appBar.setNavigationOnClickListener {
-            Toast.makeText(applicationContext, "Logo", Toast.LENGTH_SHORT).show()
-        }
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -36,6 +33,10 @@ class MainActivity : AppCompatActivity() {
         //setupActionBarWithNavController(navController, appBarConfiguration) // removed action bar
         setSupportActionBar(binding.appBar) // this is for the top bar, right item
         navView.setupWithNavController(navController)
+
+        binding.appBar.setNavigationOnClickListener {
+            Toast.makeText(applicationContext, "Logo", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
