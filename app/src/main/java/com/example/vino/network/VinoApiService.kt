@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 
-private const val BASE_URL = "http://10.0.0.37:8000" // for actual device use 10.0.0.37
+private const val BASE_URL = "http://10.0.2.2:8000" // for actual device use 10.0.0.37
 
 /**
  * Build the Moshi object with Kotlin adapter factory that Retrofit will be using.
@@ -29,7 +29,7 @@ private val retrofit = Retrofit.Builder()
 interface VinoApiService {
     /**
      * Returns a [VineyardManagerUser] and this method can be called from a Coroutine.
-     * The @GET annotation indicates that the "vineyardmanagement.json" endpoint will be requested with the GET
+     * The @GET annotation indicates that the "vineyards.json" endpoint will be requested with the GET
      * HTTP method
      */
     @GET("vineyards.json")

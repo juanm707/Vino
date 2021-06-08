@@ -13,4 +13,9 @@
     <style name="Widget.Vino.BottomNavigationView" parent="Widget.Design.BottomNavigationView">
         <item name="fontFamily">@font/asset</item>
     </style>
+
+    <style name="VineyardRipple">
+        <item name="colorControlHighlight">#00AA2929</item>
+        <item name="android:background">?selectableItemBackgroundBorderless</item>
+    </style>
 </resources>

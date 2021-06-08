@@ -18,7 +18,6 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/vineyard_image"
             android:scaleType="centerCrop"
-            app:srcCompat="@color/light_green_dark"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <TextView
