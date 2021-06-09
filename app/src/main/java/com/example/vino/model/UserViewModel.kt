@@ -32,7 +32,7 @@ class UserViewModel : ViewModel() {
     private fun getUser() {
         viewModelScope.launch {
             _status.value = VinoApiStatus.LOADING
-            delay(3000) // to act as slow connection
+            //delay(3000) // to act as slow connection
             try {
                 _user.value = VinoApi.retrofitService.getUser()
                 _status.value = VinoApiStatus.DONE

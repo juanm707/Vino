@@ -12,4 +12,6 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="colorPrimaryRipple">#42C158DC</color>
+
+    <color name="light_background_purple">#F6E5FA</color>
 </resources>

@@ -35,6 +35,7 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -42,8 +43,7 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
         binding.lifecycleOwner = this
         binding.userViewModel = vinoUserModel
 
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
