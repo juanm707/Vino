@@ -5,36 +5,46 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vino.network.Todo
 import com.example.vino.network.VineyardManagerUser
 import com.example.vino.network.VinoApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 enum class VinoApiStatus { LOADING, ERROR, DONE }
 
 class UserViewModel : ViewModel() {
 
-    // The internal MutableLiveData that stores the status of the most recent request
     private val _user = MutableLiveData<VineyardManagerUser>()
     private val _status = MutableLiveData<VinoApiStatus>()
+    private val _todos = MutableLiveData<List<Todo>>()
 
-    // The external immutable LiveData for the request status
     val vinoUser: LiveData<VineyardManagerUser> = _user
     val status: LiveData<VinoApiStatus> = _status
+    val todos: LiveData<List<Todo>> = _todos
 
     init {
-        getUser()
+        getUser() // first thing to do is get user for home fragment
     }
 
 
+    //delay(3000) // to act as slow connection
     private fun getUser() {
-        viewModelScope.launch {
+        getDataLoad {
+            _user.value = VinoApi.retrofitService.getUser()
+        }
+    }
+
+    fun getTodos() {
+        getDataLoad {
+            _todos.value = VinoApi.retrofitService.getTodos()
+        }
+    }
+
+    private fun getDataLoad(getData: suspend () -> Unit): Job {
+        return viewModelScope.launch {
             _status.value = VinoApiStatus.LOADING
-            //delay(3000) // to act as slow connection
             try {
-                _user.value = VinoApi.retrofitService.getUser()
+                getData()
                 _status.value = VinoApiStatus.DONE
             } catch (e: Exception) {
                 Log.d("NetworkError", "$e handled!")

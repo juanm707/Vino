@@ -15,12 +15,12 @@ import com.example.vino.model.VinoApiStatus
 import com.example.vino.network.Vineyard
 import com.example.vino.network.VineyardManagerUser
 import com.example.vino.ui.adapter.VineyardGridAdapter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
     //TODO: Use list adapter with diff  util
 
-    private var user: VineyardManagerUser? = null
     private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
     private val vinoUserModel: UserViewModel by activityViewModels()
@@ -77,12 +77,14 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
             binding.vineyardRecyclerView.visibility = View.VISIBLE
 
             // on cpu thread, but not really needed since not a lot of vineyards
-            lifecycleScope.launch {
+            lifecycleScope.launch(Dispatchers.Default) {
                 userVineyards = it.vineyards.sortedBy { vineyard ->
                     vineyard.name
                 }
-                binding.vineyardRecyclerView.adapter = VineyardGridAdapter(userVineyards, requireContext(), this@HomeFragment)
-                binding.vineyardRecyclerView.setHasFixedSize(true)
+                activity?.runOnUiThread {
+                    binding.vineyardRecyclerView.adapter = VineyardGridAdapter(userVineyards, requireContext(), this@HomeFragment)
+                    binding.vineyardRecyclerView.setHasFixedSize(true)
+                }
             }
         })
     }

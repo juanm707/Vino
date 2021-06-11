@@ -34,6 +34,9 @@ interface VinoApiService {
      */
     @GET("vineyards.json")
     suspend fun getUser() : VineyardManagerUser
+
+    @GET("todos.json")
+    suspend fun getTodos() : List<Todo>
 }
 
 /**
