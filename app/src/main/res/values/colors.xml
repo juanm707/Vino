@@ -14,4 +14,9 @@
     <color name="colorPrimaryRipple">#42C158DC</color>
 
     <color name="light_background_purple">#F6E5FA</color>
+
+    <color name="greyDark">#292828</color>
+    <color name="greyMedium">#434343</color>
+    <color name="greyText">#FF5D5C5E</color>
+    <color name="greyBackground">#C8C6C8</color>
 </resources>

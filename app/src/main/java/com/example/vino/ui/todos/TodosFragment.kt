@@ -25,7 +25,7 @@ import java.util.*
 
 class TodosFragment : Fragment() {
 
-    private lateinit var todosViewModel: TodosViewModel
+    private val vinoUserModel: UserViewModel by activityViewModels()
     private var _binding: FragmentTodosBinding? = null
     private lateinit var todoCollectionAdapter: TodoCollectionAdapter
     private lateinit var viewPager: ViewPager2
@@ -71,8 +71,10 @@ class TodosFragment : Fragment() {
                 0 -> {
                     tab.text = "Incomplete"
                     tab.contentDescription = "Incomplete tasks"
-                    val badge = tab.orCreateBadge
-                    badge.number = 3
+                    if (vinoUserModel.vinoUser.value != null) {
+                        val badge = tab.orCreateBadge
+                        badge.number = vinoUserModel.vinoUser.value?.todoAmount!!
+                    }
                 }
                 1 -> {
                     tab.text = "Completed"
@@ -95,9 +97,14 @@ class TodoCollectionAdapter(fragment: Fragment) : FragmentStateAdapter(fragment)
     override fun createFragment(position: Int): Fragment {
         // Return a NEW fragment instance in createFragment(int)
         val fragment = TodoListFragment()
-        fragment.arguments = Bundle().apply {
-            // Our object is just an integer :-P
-            putInt(ARG_OBJECT, position + 1)
+        if (position == 0) {
+            fragment.arguments = Bundle().apply {
+                putBoolean(ARG_TODO_TYPE, false)
+            }
+        } else if (position == 1) {
+            fragment.arguments = Bundle().apply {
+                putBoolean(ARG_TODO_TYPE, true)
+            }
         }
         return fragment
     }
@@ -105,16 +112,23 @@ class TodoCollectionAdapter(fragment: Fragment) : FragmentStateAdapter(fragment)
 }
 
 // TODO MAKE SEPARATE FILE
-private const val ARG_OBJECT = "object"
+private const val ARG_TODO_TYPE = "completed" // is this completed or incomplete
 
 // Instances of this class are fragments representing a single
 // object in our collection.
 class TodoListFragment : Fragment() {
 
     private val vinoUserModel: UserViewModel by activityViewModels()
-    private lateinit var recyclerView: RecyclerView
     private var _binding: TodoFragmentCollectionObjectBinding? = null
+    private var completed = false
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            completed = it.getBoolean(ARG_TODO_TYPE)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -139,23 +153,24 @@ class TodoListFragment : Fragment() {
             binding.progressCircular.hide() // hide progress once user is grabbed
             binding.todoRecyclerView.visibility = View.VISIBLE
 
-            val adapter = TodoListAdapter()
+            val adapter = TodoListAdapter(completed, requireContext())
             binding.todoRecyclerView.adapter = adapter
 
             lifecycleScope.launch(Dispatchers.Default) {
-                val sortedTodoList = todoList.sortedBy { todo ->
-                    val calendar = Calendar.getInstance()
-                    calendar.set(Calendar.DAY_OF_MONTH, todo.dueDate.substringAfter("/").toInt())
-                    calendar.set(Calendar.MONTH, todo.dueDate.substringBefore("/").toInt())
-                    return@sortedBy calendar.time
-                }
+                val sortedTodoList = todoList
+                    .filter { it.completed == completed }
+                    .sortedBy { todo ->
+                        val calendar = Calendar.getInstance()
+                        calendar.set(Calendar.DAY_OF_MONTH, todo.dueDate.substringAfter("/").toInt())
+                        calendar.set(Calendar.MONTH, todo.dueDate.substringBefore("/").toInt())
+                        return@sortedBy calendar.time
+                    }
+
                 activity?.runOnUiThread {
                     adapter.submitList(sortedTodoList)
                 }
             }
         })
-
-        //recyclerView.adapter = TodoRecyclerViewAdapter()
 
         binding.todoRecyclerView.setHasFixedSize(true)
     }

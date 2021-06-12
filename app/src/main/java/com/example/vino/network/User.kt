@@ -8,6 +8,7 @@ data class VineyardManagerUser(
     val joinDate: String,
     val active: Boolean,
     val head: Head,
+    val todoAmount: Int,
     val vineyards: List<Vineyard>
 )
 
@@ -26,5 +27,6 @@ data class Todo(
     val id: Int,
     val job: String,
     val description: String,
-    @Json(name = "due") val dueDate: String
+    @Json(name = "due") val dueDate: String,
+    val completed: Boolean
 )
