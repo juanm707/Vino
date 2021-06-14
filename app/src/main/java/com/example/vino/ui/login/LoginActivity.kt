@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
         binding = FragmentLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setPasswordTextChangeListener()
+        setPasswordAndUsernameTextChangeListener()
         setSignInButtonClickListener()
         setCreateAccountClickListener()
     }
@@ -94,10 +94,15 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun setPasswordTextChangeListener() {
+    private fun setPasswordAndUsernameTextChangeListener() {
         binding.passwordTextBox.addTextChangedListener {
             // if password error, when user starts typing, remove error
             binding.passwordTextBoxLayout.error = null
+        }
+
+        binding.usernameTextBox.addTextChangedListener {
+            // if password error, when user starts typing, remove error
+            binding.usernameTextBoxLayout.error = null
         }
     }
 

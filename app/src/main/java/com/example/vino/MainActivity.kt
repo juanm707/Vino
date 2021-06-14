@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
 
-        // TODO badges
+        // TODO badges if have todos
         var badge = navView.getOrCreateBadge(R.id.navigation_todos)
         badge.isVisible
 

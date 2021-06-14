@@ -16,11 +16,11 @@ class UserViewModel : ViewModel() {
 
     private val _user = MutableLiveData<VineyardManagerUser>()
     private val _status = MutableLiveData<VinoApiStatus>()
-    private val _todos = MutableLiveData<List<Todo>>()
+    private val _todos = MutableLiveData<MutableList<Todo>>()
 
     val vinoUser: LiveData<VineyardManagerUser> = _user
     val status: LiveData<VinoApiStatus> = _status
-    val todos: LiveData<List<Todo>> = _todos
+    val todos: LiveData<MutableList<Todo>> = _todos
 
     init {
         getUser() // first thing to do is get user for home fragment
