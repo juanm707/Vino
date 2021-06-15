@@ -147,7 +147,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun getLogoConstraintAnimation(start: Int, end: Int): ValueAnimator? {
-        val mainConstraintLayout: ConstraintLayout = binding.loginConstraintLayout as ConstraintLayout
+        val mainConstraintLayout: ConstraintLayout = binding.loginConstraintLayout
         val constraintSet = ConstraintSet()
 
         val anim = ValueAnimator.ofInt(start, end)

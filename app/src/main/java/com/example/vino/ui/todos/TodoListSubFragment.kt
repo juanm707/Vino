@@ -2,6 +2,7 @@ package com.example.vino.ui.todos
 
 import android.graphics.*
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,10 @@ import com.example.vino.model.VinoApiStatus
 import com.example.vino.network.Todo
 import com.example.vino.ui.adapter.ARG_TODO_TYPE
 import com.example.vino.ui.adapter.TodoListAdapter
+import com.google.android.material.card.MaterialCardView
+import jp.wasabeef.recyclerview.animators.FadeInUpAnimator
 import jp.wasabeef.recyclerview.animators.OvershootInLeftAnimator
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -63,8 +67,10 @@ class TodoListSubFragment : Fragment() {
 
     private fun setUpRecyclerView() {
         binding.todoRecyclerView.visibility = View.INVISIBLE // to show progress circle
-        // TODO: Fix delete animation
-        binding.todoRecyclerView.itemAnimator = OvershootInLeftAnimator()
+        // TODO: Fix delete animation?
+        binding.todoRecyclerView.itemAnimator = SlideInLeftAnimator().apply {
+            removeDuration = 75
+        }
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.todoRecyclerView) // for swipe delete
 
         vinoUserModel.todos.observe(viewLifecycleOwner, { todoList ->
@@ -114,6 +120,7 @@ class TodoListSubFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 sortedTodoList.removeAt(viewHolder.adapterPosition)
                 adapter.notifyItemRemoved(viewHolder.adapterPosition)
+
             }
 
             override fun onChildDraw(
@@ -125,54 +132,68 @@ class TodoListSubFragment : Fragment() {
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-
                 val itemView = viewHolder.itemView
+                val cardView = itemView.findViewById<MaterialCardView>(R.id.todo_card_view)
+                val radius = 4f * resources.displayMetrics.density // original for card view corners
+
+                if (dX < 0f) // if user slides to left, change to 0 radius so no corners on red delete background
+                    setCardViewCorners(cardView, 0f)
+                else  // reset to original
+                    setCardViewCorners(cardView, radius)
+
                 val height = itemView.bottom.toFloat() - itemView.top.toFloat()
                 val width = height / 3
                 val paint = Paint()
+                paint.color = Color.parseColor("#D32F2F") // red
 
-                paint.color = Color.parseColor("#D32F2F")
+                // Create the red delete background
                 val background = RectF(
                             itemView.right.toFloat() + dX,
                             itemView.top.toFloat(),
                             itemView.right.toFloat(),
                             itemView.bottom.toFloat()
                 )
-                val radius = 4F * resources.displayMetrics.density
+                // delete corners same as card view
                 val corners = floatArrayOf(
-                    0F, 0F,   // Top left radius in px
+                    0f, 0f,   // Top left radius in px
                     radius, radius,   // Top right radius in px
                     radius, radius,     // Bottom right radius in px
                     0f, 0f      // Bottom left radius in px
                 )
+
+                // create the round red delete rectangle
                 val path = Path()
                 path.addRoundRect(background, corners, Path.Direction.CW)
-                //c.drawRoundRect(background, 10F, 10F, paint)
+
+                // draw on canvas
                 c.drawPath(path, paint)
+
+                // get delete icon
                 val drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_delete_24)
                 val bitmap = Bitmap.createBitmap(drawable!!.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
                 val canvas = Canvas(bitmap)
                 drawable.setBounds(0, 0, canvas.width, canvas.height)
                 drawable.draw(canvas)
 
+                // place icon
                 val iconDest = RectF(
                     itemView.right.toFloat() - 2 * width,
-                    itemView.top
-                        .toFloat() + width,
+                    itemView.top.toFloat() + width,
                     itemView.right.toFloat() - width,
                     itemView.bottom.toFloat() - width
                 )
                 c.drawBitmap(bitmap, null, iconDest, paint)
 
-                super.onChildDraw(
-                    c,
-                    recyclerView,
-                    viewHolder,
-                    dX,
-                    dY,
-                    actionState,
-                    isCurrentlyActive
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive
                 )
+            }
+
+            private fun setCardViewCorners(cardView: MaterialCardView, radius: Float) {
+                cardView.shapeAppearanceModel = cardView.shapeAppearanceModel
+                    .toBuilder()
+                    .setTopRightCornerSize(radius)
+                    .setBottomRightCornerSize(radius)
+                    .build()
             }
         }
 }

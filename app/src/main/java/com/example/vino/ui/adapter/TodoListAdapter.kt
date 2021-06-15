@@ -1,5 +1,6 @@
 package com.example.vino.ui.adapter
 
+import android.animation.Animator
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vino.R
 import com.example.vino.network.Todo
+import jp.wasabeef.recyclerview.animators.holder.AnimateViewHolder
 
 class TodoListAdapter(private val completed: Boolean, private val context: Context) : ListAdapter<Todo, TodoListAdapter.TodoViewHolder>(DiffCallback) {
 
@@ -62,5 +64,6 @@ class TodoListAdapter(private val completed: Boolean, private val context: Conte
         val dueDate: TextView = itemView.findViewById(R.id.due_by_date)
         val checkBox: CheckBox = itemView.findViewById(R.id.todo_checkbox)
         val cardView: CardView = itemView.findViewById(R.id.todo_card_view)
+
     }
 }
