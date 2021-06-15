@@ -2,7 +2,7 @@ package com.example.vino.network
 
 import com.squareup.moshi.Json
 
-data class VineyardManagerUser(
+class VineyardManagerUser(
     val userName: String,
     val userID: Int,
     val joinDate: String,
@@ -12,21 +12,21 @@ data class VineyardManagerUser(
     val vineyards: List<Vineyard>
 )
 
-data class Head(
+class Head(
     val name: String,
     val phone: String,
     val email: List<String>
 )
 
-data class Vineyard(
+class Vineyard(
     val name: String,
     val imageUrl: String
 )
 
-data class Todo(
+class Todo(
     val id: Int,
     val job: String,
     val description: String,
-    @Json(name = "due") val dueDate: String,
-    val completed: Boolean
+    @Json(name = "due") var dueDate: String,
+    var completed: Boolean
 )

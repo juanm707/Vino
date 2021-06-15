@@ -23,13 +23,15 @@ import com.google.android.material.card.MaterialCardView
 import jp.wasabeef.recyclerview.animators.FadeInUpAnimator
 import jp.wasabeef.recyclerview.animators.OvershootInLeftAnimator
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 
 // Instances of this class are fragments representing a single
 // object in our collection.
-class TodoListSubFragment : Fragment() {
+class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
 
     private val vinoUserModel: UserViewModel by activityViewModels()
     private var _binding: TodoFragmentCollectionObjectBinding? = null
@@ -55,7 +57,6 @@ class TodoListSubFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         setUpConnectionImageAndText()
         setUpRecyclerView()
     }
@@ -65,11 +66,18 @@ class TodoListSubFragment : Fragment() {
         _binding = null
     }
 
+    override fun onCheckboxClick(position: Int) {
+        // in local database set complete and make request to set complete
+        val todoRemoved = sortedTodoList.removeAt(position)
+        vinoUserModel.setTodoComplete(todoRemoved.id)
+        adapter.notifyItemRemoved(position)
+    }
+
     private fun setUpRecyclerView() {
         binding.todoRecyclerView.visibility = View.INVISIBLE // to show progress circle
         // TODO: Fix delete animation?
-        binding.todoRecyclerView.itemAnimator = SlideInLeftAnimator().apply {
-            removeDuration = 75
+        binding.todoRecyclerView.itemAnimator = SlideInRightAnimator().apply {
+            removeDuration = 100
         }
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.todoRecyclerView) // for swipe delete
 
@@ -78,11 +86,18 @@ class TodoListSubFragment : Fragment() {
             binding.progressCircular.hide() // hide progress once user is grabbed
             binding.todoRecyclerView.visibility = View.VISIBLE
 
-            adapter = TodoListAdapter(completed, requireContext())
+            adapter = TodoListAdapter(completed, requireContext(), this)
             binding.todoRecyclerView.adapter = adapter
 
             lifecycleScope.launch(Dispatchers.Default) {
-                val filteredList = todoList.filter { it.completed == completed }
+                val filteredList = todoList
+                    .filter { it.completed == completed }
+                    .sortedBy { todo ->
+                        val calendar = Calendar.getInstance()
+                        calendar.set(Calendar.DAY_OF_MONTH, todo.dueDate.substringAfter("/").toInt())
+                        calendar.set(Calendar.MONTH, todo.dueDate.substringBefore("/").toInt())
+                        return@sortedBy calendar.time
+                    }
                 sortedTodoList = filteredList.toMutableList()
 
                 activity?.runOnUiThread {
