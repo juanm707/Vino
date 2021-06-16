@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentHomeBinding
 import com.example.vino.model.UserViewModel
+import com.example.vino.model.UserViewModelFactory
 import com.example.vino.model.VinoApiStatus
 import com.example.vino.network.Vineyard
 import com.example.vino.network.VineyardManagerUser
@@ -23,7 +25,9 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
 
     private lateinit var homeViewModel: HomeViewModel
     private var _binding: FragmentHomeBinding? = null
-    private val vinoUserModel: UserViewModel by activityViewModels()
+    private val vinoUserModel: UserViewModel by activityViewModels {
+        UserViewModelFactory((requireActivity().application as VinoApplication).repository)
+    }
     private lateinit var userVineyards: List<Vineyard>
 
     // This property is only valid between onCreateView and

@@ -66,5 +66,11 @@ dependencies {
     // Coil (image)
     implementation "io.coil-kt:coil:1.2.1"
 
+    // Recycle view animations
     implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
+
+    // Room components
+    implementation "androidx.room:room-ktx:2.3.0"
+    kapt "androidx.room:room-compiler:2.3.0"
+    androidTestImplementation "androidx.room:room-testing:2.3.0"
 }

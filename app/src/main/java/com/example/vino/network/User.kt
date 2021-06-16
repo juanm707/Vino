@@ -1,5 +1,7 @@
 package com.example.vino.network
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 
 class VineyardManagerUser(
@@ -23,8 +25,9 @@ class Vineyard(
     val imageUrl: String
 )
 
+@Entity(tableName = "Todo")
 class Todo(
-    val id: Int,
+    @PrimaryKey val id: Int,
     val job: String,
     val description: String,
     @Json(name = "due") var dueDate: String,

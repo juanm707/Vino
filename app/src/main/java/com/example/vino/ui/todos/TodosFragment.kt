@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentTodosBinding
 import com.example.vino.databinding.TodoFragmentCollectionObjectBinding
 import com.example.vino.model.UserViewModel
+import com.example.vino.model.UserViewModelFactory
 import com.example.vino.model.VinoApiStatus
 import com.example.vino.network.Todo
 import com.example.vino.ui.adapter.TodoCollectionAdapter
@@ -28,7 +30,10 @@ import java.util.*
 
 class TodosFragment : Fragment() {
 
-    private val vinoUserModel: UserViewModel by activityViewModels()
+    //private val vinoUserModel: UserViewModel by activityViewModels()
+    private val vinoUserModel: UserViewModel by activityViewModels {
+        UserViewModelFactory((requireActivity().application as VinoApplication).repository)
+    }
     private var _binding: FragmentTodosBinding? = null
     private lateinit var todoCollectionAdapter: TodoCollectionAdapter
     private lateinit var viewPager: ViewPager2
