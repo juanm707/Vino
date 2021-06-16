@@ -2,7 +2,12 @@ package com.example.vino.ui.login
 
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
@@ -12,8 +17,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.animation.doOnEnd
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.DEFAULT_SOUND
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.widget.addTextChangedListener
 import com.example.vino.MainActivity
+import com.example.vino.R
 import com.example.vino.databinding.FragmentLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -25,6 +34,8 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //createNotificationChannel()
 
         density = resources.displayMetrics.density
         screenHeight = resources.displayMetrics.heightPixels
@@ -53,6 +64,21 @@ class LoginActivity : AppCompatActivity() {
         binding.signInButton.setOnClickListener {
             if (isLoginValid(binding.passwordTextBox.text, binding.usernameTextBox.text)) {
                 animateSignIn()
+//                val builder = NotificationCompat.Builder(this, "vino_02")
+//                    .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+//                    .setContentTitle("My notification")
+//                    .setContentText("Much longer text that cannot fit one line...")
+//                    .setStyle(NotificationCompat.BigTextStyle()
+//                        .bigText("Much longer text that cannot fit one line..."))
+//                    .setPriority(NotificationCompat.PRIORITY_MAX)
+//                    .setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_VIBRATE )
+//                    .setAutoCancel(true)
+//
+//                val notificationId = 707
+//                with(NotificationManagerCompat.from(this)) {
+//                    // notificationId is a unique int for each notification that you must define
+//                    notify(notificationId, builder.build())
+//                }
             }
         }
     }
@@ -124,7 +150,7 @@ class LoginActivity : AppCompatActivity() {
             getLogoConstraintAnimation(32, (((screenHeight/2)/density) - logoSizeHalf).toInt())
         )
         animationSet2.doOnEnd {
-            setVisibilityGoneAll()
+            setVisibilityGoneAllLoginView()
 
             // start the main activity
             val intent = Intent(this, MainActivity::class.java)
@@ -133,7 +159,7 @@ class LoginActivity : AppCompatActivity() {
         animationSet2.start()
     }
 
-    private fun setVisibilityGoneAll() {
+    private fun setVisibilityGoneAllLoginView() {
         setVisibilityGone(binding.usernameTextBox)
         setVisibilityGone(binding.usernameTextBoxLayout)
         setVisibilityGone(binding.passwordTextBox)
@@ -177,4 +203,21 @@ class LoginActivity : AppCompatActivity() {
         anim.duration = 200
         return anim
     }
+
+//    private fun createNotificationChannel() {
+//        // Create the NotificationChannel, but only on API 26+ because
+//        // the NotificationChannel class is new and not in the support library
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val name = "Vino Pepino"
+//            val descriptionText = "Sample Channel description"
+//            val importance = NotificationManager.IMPORTANCE_HIGH
+//            val channel = NotificationChannel("vino_02", name, importance).apply {
+//                description = descriptionText
+//            }
+//            // Register the channel with the system
+//            val notificationManager: NotificationManager =
+//                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//            notificationManager.createNotificationChannel(channel)
+//        }
+//    }
 }
