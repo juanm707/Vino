@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -22,9 +23,12 @@ import com.example.vino.model.VinoApiStatus
 import com.example.vino.network.Todo
 import com.example.vino.ui.adapter.TodoCollectionAdapter
 import com.example.vino.ui.adapter.TodoListAdapter
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -37,6 +41,7 @@ class TodosFragment : Fragment() {
     private var _binding: FragmentTodosBinding? = null
     private lateinit var todoCollectionAdapter: TodoCollectionAdapter
     private lateinit var viewPager: ViewPager2
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -58,10 +63,7 @@ class TodosFragment : Fragment() {
 
         setViewPagerAdapter()
         setUpTabLayout()
-
-        binding.addTodoButton.setOnClickListener {
-            vinoUserModel.insertTodo(Todo(5, "Eat", "Take lunch!", "6/19", false))
-        }
+        setUpBottomSheet()
 
         vinoUserModel.getTodos()
     }
@@ -108,5 +110,47 @@ class TodosFragment : Fragment() {
         vinoUserModel.todoAmount.observe(viewLifecycleOwner, { newTodoInCompleteAmount ->
             tabLayout.getTabAt(0)?.orCreateBadge?.number = newTodoInCompleteAmount
         })
+    }
+
+    private fun setUpBottomSheet() {
+        var dueByDate: String? = null
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetLayout.addTodoBottomSheetContent)
+        binding.addTodoButton.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+        binding.bottomSheetLayout.closeBottomSheet.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            clearTodoInput()
+        }
+        binding.bottomSheetLayout.addTodoBottomSheetButton.setOnClickListener {
+            val newTodo = Todo(
+                99,
+                binding.bottomSheetLayout.titleEditText.text.toString(),
+                binding.bottomSheetLayout.todoEditText.text.toString(),
+                dueByDate?: "1/1",
+                false)
+
+            vinoUserModel.insertTodo(newTodo)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        binding.bottomSheetLayout.newTodoDueBy.setOnClickListener {
+            val datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds() + 86400000) // set tomorrow as default
+                .build()
+            datePicker.show(childFragmentManager, "Date Picker")
+
+            datePicker.addOnPositiveButtonClickListener {
+                if (datePicker.selection != null) {
+                    val sdf = SimpleDateFormat("M/dd", Locale.US)
+                    dueByDate = sdf.format(Date(datePicker.selection!! + 86400000))
+                    binding.bottomSheetLayout.newTodoDueBy.text = "Due by: $dueByDate"
+                }
+            }
+        }
+    }
+
+    private fun clearTodoInput() {
+
     }
 }

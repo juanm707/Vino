@@ -30,9 +30,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-
-// Instances of this class are fragments representing a single
-// object in our collection.
 class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
 
     private val vinoUserModel: UserViewModel by activityViewModels {
@@ -79,6 +76,7 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
     }
 
     private fun setUpRecyclerView() {
+        // TODO recycler view due date sticky headers
         binding.todoRecyclerView.visibility = View.INVISIBLE // to show progress circle
         // TODO: Fix delete animation?
         binding.todoRecyclerView.itemAnimator = SlideInRightAnimator().apply {
@@ -110,17 +108,17 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
 
     private fun observeCompleteTodos() {
         vinoUserModel.completeTodos.observe(viewLifecycleOwner, { completedTodoList ->
-            observeTodos(completedTodoList)
+            setTodos(completedTodoList)
         })
     }
 
     private fun observeInCompleteTodos() {
         vinoUserModel.inCompleteTodos.observe(viewLifecycleOwner, { inCompleteTodoList ->
-            observeTodos(inCompleteTodoList)
+            setTodos(inCompleteTodoList)
         })
     }
 
-    private fun observeTodos(todoList: List<Todo>) {
+    private fun setTodos(todoList: List<Todo>) {
         binding.progressCircular.hide()
         binding.todoRecyclerView.visibility = View.VISIBLE
 
@@ -170,7 +168,7 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
                 val cardView = itemView.findViewById<MaterialCardView>(R.id.todo_card_view)
                 val radius = 4f * resources.displayMetrics.density // original for card view corners
 
-                if (dX < 0f) // if user slides to left, change to 0 radius so no corners on red delete background
+                if (dX < 0f) // if user slides to left, change to 0 radius so no round corners on when red delete background visible
                     setCardViewCorners(cardView, 0f)
                 else  // reset to original
                     setCardViewCorners(cardView, radius)
@@ -178,7 +176,7 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
                 val height = itemView.bottom.toFloat() - itemView.top.toFloat()
                 val width = height / 3
                 val paint = Paint()
-                paint.color = Color.parseColor("#D32F2F") // red
+                paint.color = Color.parseColor("#722f37") // wine red? or use regular delete red
 
                 // Create the red delete background
                 val background = RectF(
@@ -218,8 +216,7 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
                 )
                 c.drawBitmap(bitmap, null, iconDest, paint)
 
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive
-                )
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             }
 
             private fun setCardViewCorners(cardView: MaterialCardView, radius: Float) {
