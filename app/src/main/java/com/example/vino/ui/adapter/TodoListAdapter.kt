@@ -52,8 +52,10 @@ class TodoListAdapter(private val completed: Boolean, private val context: Conte
             holder.checkBox.isChecked = true
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greyBackground))
             holder.dueDate.text = "Completed on ${todo.dueDate}"
-        } else
+        } else {
+            holder.checkBox.isChecked = false
             holder.dueDate.text = "Due by ${todo.dueDate}"
+        }
 
         holder.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {

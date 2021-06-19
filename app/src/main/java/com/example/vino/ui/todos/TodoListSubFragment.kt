@@ -74,8 +74,8 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
         // in local database set complete and make request to set complete
         //val todoRemoved = sortedTodoList.removeAt(position)
         val todoRemoved = sortedByDate.removeAt(position)
-        adapter.notifyItemRemoved(position) // TODO: fix on remove updates everything, does not show remive animation, disable observable a bit
-        vinoUserModel.setTodoComplete(todoRemoved.id)
+        adapter.notifyItemRemoved(position) // TODO: fix on remove updates everything, does not show remove animation, disable observable a bit
+        vinoUserModel.updateTodo(todoRemoved)
     }
 
     private fun setUpRecyclerView() {
@@ -84,39 +84,17 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
         binding.todoRecyclerView.itemAnimator = SlideInRightAnimator().apply {
             removeDuration = 100
         }
-        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.todoRecyclerView) // for swipe delete
 
-//        vinoUserModel.todos.observe(viewLifecycleOwner, { todoList ->
-//
-//            binding.progressCircular.hide() // hide progress once user is grabbed
-//            binding.todoRecyclerView.visibility = View.VISIBLE
-//
-//            adapter = TodoListAdapter(completed, requireContext(), this)
-//            binding.todoRecyclerView.adapter = adapter
-//
-//            lifecycleScope.launch(Dispatchers.Default) {
-//                val filteredList = todoList
-//                    .filter { it.completed == completed }
-//                    .sortedBy { todo ->
-//                        val calendar = Calendar.getInstance()
-//                        calendar.set(Calendar.DAY_OF_MONTH, todo.dueDate.substringAfter("/").toInt())
-//                        calendar.set(Calendar.MONTH, todo.dueDate.substringBefore("/").toInt())
-//                        return@sortedBy calendar.time
-//                    }
-//                sortedTodoList = filteredList.toMutableList()
-//
-//                activity?.runOnUiThread {
-//                    adapter.submitList(sortedTodoList)
-//                }
-//            }
-//        })
+        adapter = TodoListAdapter(completed, requireContext(), this)
+        binding.todoRecyclerView.adapter = adapter
+        binding.todoRecyclerView.setHasFixedSize(true)
+
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.todoRecyclerView) // for swipe delete
 
         if (completed)
             observeCompleteTodos()
         else
             observeInCompleteTodos()
-
-        binding.todoRecyclerView.setHasFixedSize(true)
     }
 
     private fun setUpConnectionImageAndText() {
@@ -124,7 +102,7 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
         vinoUserModel.status.observe(viewLifecycleOwner, {
             if (it != VinoApiStatus.LOADING)
                 binding.progressCircular.hide()
-//            if (it == VinoApiStatus.ERROR)
+//            if (it == VinoApiStatus.ERROR) // TODO add no connection image and or text
 //                binding.connectionStatusText.visibility = View.VISIBLE
             // if DONE hide text
         })
@@ -132,48 +110,32 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
 
     private fun observeCompleteTodos() {
         vinoUserModel.completeTodos.observe(viewLifecycleOwner, { completedTodoList ->
-            binding.progressCircular.hide()
-            binding.todoRecyclerView.visibility = View.VISIBLE
-
-            adapter = TodoListAdapter(completed, requireContext(), this)
-            binding.todoRecyclerView.adapter = adapter
-
-            lifecycleScope.launch(Dispatchers.Default) {
-                sortedByDate = completedTodoList
-                    .sortedBy { todo ->
-                        val calendar = Calendar.getInstance()
-                        calendar.set(Calendar.DAY_OF_MONTH, todo.dueDate.substringAfter("/").toInt())
-                        calendar.set(Calendar.MONTH, todo.dueDate.substringBefore("/").toInt())
-                        return@sortedBy calendar.time
-                    }.toMutableList()
-                activity?.runOnUiThread {
-                    adapter.submitList(sortedByDate)
-                }
-            }
+            observeTodos(completedTodoList)
         })
     }
 
     private fun observeInCompleteTodos() {
-        vinoUserModel.inCompleteTodos.observe(viewLifecycleOwner, { completedTodoList ->
-            binding.progressCircular.hide()
-            binding.todoRecyclerView.visibility = View.VISIBLE
-
-            adapter = TodoListAdapter(completed, requireContext(), this)
-            binding.todoRecyclerView.adapter = adapter
-
-            lifecycleScope.launch(Dispatchers.Default) {
-                sortedByDate = completedTodoList
-                    .sortedBy { todo ->
-                        val calendar = Calendar.getInstance()
-                        calendar.set(Calendar.DAY_OF_MONTH, todo.dueDate.substringAfter("/").toInt())
-                        calendar.set(Calendar.MONTH, todo.dueDate.substringBefore("/").toInt())
-                        return@sortedBy calendar.time
-                    }.toMutableList()
-                activity?.runOnUiThread {
-                    adapter.submitList(sortedByDate)
-                }
-            }
+        vinoUserModel.inCompleteTodos.observe(viewLifecycleOwner, { inCompleteTodoList ->
+            observeTodos(inCompleteTodoList)
         })
+    }
+
+    private fun observeTodos(todoList: List<Todo>) {
+        binding.progressCircular.hide()
+        binding.todoRecyclerView.visibility = View.VISIBLE
+
+        lifecycleScope.launch(Dispatchers.Default) {
+            sortedByDate = todoList
+                .sortedBy { todo ->
+                    val calendar = Calendar.getInstance()
+                    calendar.set(Calendar.DAY_OF_MONTH, todo.dueDate.substringAfter("/").toInt())
+                    calendar.set(Calendar.MONTH, todo.dueDate.substringBefore("/").toInt())
+                    return@sortedBy calendar.time
+                }.toMutableList()
+            activity?.runOnUiThread {
+                adapter.submitList(sortedByDate)
+            }
+        }
     }
 
     // TODO add vibrations on delete
@@ -190,8 +152,9 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 //sortedTodoList.removeAt(viewHolder.adapterPosition)
-                sortedByDate.removeAt(viewHolder.adapterPosition)
+                val deletedTodo = sortedByDate.removeAt(viewHolder.adapterPosition)
                 adapter.notifyItemRemoved(viewHolder.adapterPosition)
+                vinoUserModel.deleteTodo(deletedTodo)
             }
 
             override fun onChildDraw(

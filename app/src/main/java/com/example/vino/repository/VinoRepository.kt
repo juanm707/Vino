@@ -20,4 +20,14 @@ class VinoRepository(private val todoDao: TodoDao) {
     suspend fun insert(todo: Todo) {
         return todoDao.insert(todo)
     }
+
+    @WorkerThread
+    suspend fun update(todo: Todo) {
+        return todoDao.update(todo)
+    }
+
+    @WorkerThread
+    suspend fun delete(todo: Todo) {
+        return todoDao.delete(todo)
+    }
 }

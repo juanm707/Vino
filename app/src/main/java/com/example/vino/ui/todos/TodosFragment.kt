@@ -59,11 +59,11 @@ class TodosFragment : Fragment() {
         setViewPagerAdapter()
         setUpTabLayout()
 
-        vinoUserModel.getTodos()
+        binding.addTodoButton.setOnClickListener {
+            vinoUserModel.insertTodo(Todo(5, "Eat", "Take lunch!", "6/19", false))
+        }
 
-//        binding.addTodoButton.setOnClickListener {
-//            Toast.makeText(requireContext(), "Add todo", Toast.LENGTH_SHORT).show()
-//        }
+        vinoUserModel.getTodos()
     }
 
     override fun onDestroyView() {
@@ -84,10 +84,14 @@ class TodosFragment : Fragment() {
                 0 -> {
                     tab.text = "Incomplete"
                     tab.contentDescription = "Incomplete tasks"
-                    if (vinoUserModel.vinoUser.value != null) {
-                        val badge = tab.orCreateBadge
-                        badge.number = vinoUserModel.vinoUser.value?.todoAmount!!
-                    }
+//                    val badge = tab.orCreateBadge
+////                    if (vinoUserModel.vinoUser.value != null) {
+////                        val badge = tab.orCreateBadge
+////                        badge.number = vinoUserModel.vinoUser.value?.todoAmount!!
+////                    }
+//                    vinoUserModel.todoAmount.observe(viewLifecycleOwner, { newTodoInCompleteAmount ->
+//                        badge.number = newTodoInCompleteAmount
+//                    })
                 }
                 1 -> {
                     tab.text = "Completed"
@@ -101,5 +105,8 @@ class TodosFragment : Fragment() {
 
         // TODO update tab layout appropriately
         //tabLayout.getTabAt(0)?.orCreateBadge?.number = 10
+        vinoUserModel.todoAmount.observe(viewLifecycleOwner, { newTodoInCompleteAmount ->
+            tabLayout.getTabAt(0)?.orCreateBadge?.number = newTodoInCompleteAmount
+        })
     }
 }

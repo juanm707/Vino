@@ -16,10 +16,12 @@ class UserViewModel(private val repository: VinoRepository) : ViewModel() {
     private val _user = MutableLiveData<VineyardManagerUser>()
     private val _status = MutableLiveData<VinoApiStatus>()
     private val _todos = MutableLiveData<MutableList<Todo>>()
+    private val _todoAmount = MutableLiveData(0)
 
     val vinoUser: LiveData<VineyardManagerUser> = _user
     val status: LiveData<VinoApiStatus> = _status
     val todos: LiveData<MutableList<Todo>> = _todos
+    val todoAmount: LiveData<Int> = _todoAmount
 
     val completeTodos: LiveData<List<Todo>> = repository.completeTodos.asLiveData()
     val inCompleteTodos:  LiveData<List<Todo>> = repository.inCompleteTodos.asLiveData()
@@ -41,15 +43,34 @@ class UserViewModel(private val repository: VinoRepository) : ViewModel() {
 
     fun getTodos() {
         getDataLoad {
-            _todos.value = VinoApi.retrofitService.getTodos() // TODO: might not need this?
+            _todoAmount.value = 0 // reset
+            _todos.value = VinoApi.retrofitService.getTodos()
             _todos.value!!.forEach { todo ->
-                repository.insert(todo)
+                insertTodo(todo)
             }
         }
     }
 
     fun insertTodo(todo: Todo) = viewModelScope.launch {
         repository.insert(todo)
+        if (!todo.completed)
+            _todoAmount.value = _todoAmount.value?.plus(1)
+    }
+
+    fun updateTodo(todo: Todo) = viewModelScope.launch {
+        todo.completed = true
+        val calendar = Calendar.getInstance()
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH) + 1
+        todo.dueDate = "$month/$day"
+        repository.update(todo)
+        _todoAmount.value = _todoAmount.value?.minus(1)
+    }
+
+    fun deleteTodo(todo: Todo) = viewModelScope.launch {
+        repository.delete(todo)
+        if (!todo.completed)
+            _todoAmount.value = _todoAmount.value?.minus(1)
     }
 
     private fun getDataLoad(getData: suspend () -> Unit): Job {
@@ -61,19 +82,6 @@ class UserViewModel(private val repository: VinoRepository) : ViewModel() {
             } catch (e: Exception) {
                 Log.d("NetworkError", "$e handled!")
                 _status.value = VinoApiStatus.ERROR
-            }
-        }
-    }
-
-    fun setTodoComplete(id: Int) {
-        _todos.value?.forEach { todo ->
-            if (todo.id == id) {
-                //todo.completed = true
-                val calendar = Calendar.getInstance()
-                val day = calendar.get(Calendar.DAY_OF_MONTH)
-                val month = calendar.get(Calendar.MONTH) + 1
-                //todo.dueDate = "$month/$day"
-                insertTodo(Todo(id, todo.job, todo.description, "$month/$day", true)) // TODO instead of inserting just update table
             }
         }
     }
