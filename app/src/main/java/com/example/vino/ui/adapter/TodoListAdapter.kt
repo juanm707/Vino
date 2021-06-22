@@ -45,16 +45,16 @@ class TodoListAdapter(private val completed: Boolean, private val context: Conte
         holder.description.text = todo.description
 
         if (completed) {
-            holder.job.setTextColor(ContextCompat.getColor(context, R.color.greyMedium))
-            holder.dueDate.setTextColor(ContextCompat.getColor(context, R.color.greyDark))
-            holder.description.setTextColor(ContextCompat.getColor(context, R.color.greyText))
-            holder.checkBox.buttonTintList = ColorStateList.valueOf(Color.parseColor("#434343"))
+            holder.job.setTextColor(ContextCompat.getColor(context, R.color.greenHeaderText))
+            holder.dueDate.setTextColor(ContextCompat.getColor(context, R.color.greenDarkerText))
+            holder.description.setTextColor(ContextCompat.getColor(context, R.color.light_green_dark))
+            holder.checkBox.buttonTintList = ColorStateList.valueOf(Color.parseColor("#4B830D"))
             holder.checkBox.isChecked = true
-            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.greyBackground))
-            holder.dueDate.text = "Completed on ${todo.dueDate}"
+            holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.light_green_background))
+            holder.dueDate.text = context.getString(R.string.completed_on, todo.dueDate)
         } else {
             holder.checkBox.isChecked = false
-            holder.dueDate.text = "Due by ${todo.dueDate}"
+            holder.dueDate.text = context.getString(R.string.due_by, todo.dueDate)
         }
 
         holder.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->

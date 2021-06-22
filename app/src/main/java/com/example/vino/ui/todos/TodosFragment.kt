@@ -1,33 +1,27 @@
 package com.example.vino.ui.todos
 
-import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.example.vino.R
 import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentTodosBinding
-import com.example.vino.databinding.TodoFragmentCollectionObjectBinding
 import com.example.vino.model.UserViewModel
 import com.example.vino.model.UserViewModelFactory
-import com.example.vino.model.VinoApiStatus
 import com.example.vino.network.Todo
 import com.example.vino.ui.adapter.TodoCollectionAdapter
-import com.example.vino.ui.adapter.TodoListAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -77,6 +71,7 @@ class TodosFragment : Fragment() {
         todoCollectionAdapter = TodoCollectionAdapter(this)
         viewPager = binding.pager
         viewPager.adapter = todoCollectionAdapter
+        viewPager.isUserInputEnabled = false // no scroll
     }
 
     private fun setUpTabLayout() {
@@ -86,18 +81,12 @@ class TodosFragment : Fragment() {
                 0 -> {
                     tab.text = "Incomplete"
                     tab.contentDescription = "Incomplete tasks"
-//                    val badge = tab.orCreateBadge
-////                    if (vinoUserModel.vinoUser.value != null) {
-////                        val badge = tab.orCreateBadge
-////                        badge.number = vinoUserModel.vinoUser.value?.todoAmount!!
-////                    }
-//                    vinoUserModel.todoAmount.observe(viewLifecycleOwner, { newTodoInCompleteAmount ->
-//                        badge.number = newTodoInCompleteAmount
-//                    })
+                    tab.customView = getCustomTabView(R.color.purple_600)
                 }
                 1 -> {
                     tab.text = "Completed"
                     tab.contentDescription = "Completed tasks"
+                    tab.customView = getCustomTabView(R.color.light_green_dark);
                 }
                 else -> {
                     tab.text = "Oops" // should never see this
@@ -105,8 +94,29 @@ class TodosFragment : Fragment() {
             }
         }.attach()
 
-        // TODO update tab layout appropriately
-        //tabLayout.getTabAt(0)?.orCreateBadge?.number = 10
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab != null) {
+                    if (tab.position == 0) {
+                        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(requireContext(), R.color.purple_600))
+                        //tabLayout.setTabTextColors(Color.parseColor("#727272"), Color.parseColor("#8E24AA")) // changes font
+                    }
+                    else {
+                        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(requireContext(), R.color.light_green_600))
+                        //tabLayout.setTabTextColors(Color.parseColor("#727272"), Color.parseColor("#30600B")) // changes font
+                    }
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+        })
+
         vinoUserModel.todoAmount.observe(viewLifecycleOwner, { newTodoInCompleteAmount ->
             tabLayout.getTabAt(0)?.orCreateBadge?.number = newTodoInCompleteAmount
         })
@@ -115,6 +125,7 @@ class TodosFragment : Fragment() {
     private fun setUpBottomSheet() {
         var dueByDate: String? = null
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetLayout.addTodoBottomSheetContent)
+
         binding.addTodoButton.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
@@ -130,9 +141,10 @@ class TodosFragment : Fragment() {
                 dueByDate?: "1/1",
                 false)
 
-            vinoUserModel.insertTodo(newTodo)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            vinoUserModel.insertTodo(newTodo)
         }
+
         binding.bottomSheetLayout.newTodoDueBy.setOnClickListener {
             val datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select date")
@@ -150,7 +162,13 @@ class TodosFragment : Fragment() {
         }
     }
 
-    private fun clearTodoInput() {
+    private fun getCustomTabView(colorResource: Int): TextView {
+        val textView: TextView = LayoutInflater.from(requireContext()).inflate(R.layout.custom_tab,null) as TextView
+        textView.setTextColor(ContextCompat.getColor(requireContext(), colorResource))
+        return textView
+    }
 
+    private fun clearTodoInput() {
+        // TODO Clear todo input on hide
     }
 }
