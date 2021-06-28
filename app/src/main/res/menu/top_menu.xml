@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_bar_search"
+        android:id="@+id/action_bar_account"
         android:icon="@drawable/ic_baseline_account_circle_28"
         android:title="Account"
         app:showAsAction="always" />

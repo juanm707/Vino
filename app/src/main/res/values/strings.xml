@@ -11,6 +11,8 @@
     <string name="vineyard_image">Vineyard image</string>
     <string name="temperature_value">Temperature: %1$d°</string>
     <string name="humidity_value">Humidity: %1$d%%</string>
+    <string name="temperature_value_degreee">%1$d°</string>
+    <string name="humidity_value_percent">%1$d%%</string>
     <string name="completed_on">Completed on %1$s</string>
     <string name="due_by">Due by %1$s</string>
 </resources>

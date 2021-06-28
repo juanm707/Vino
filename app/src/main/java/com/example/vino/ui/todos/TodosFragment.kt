@@ -99,11 +99,9 @@ class TodosFragment : Fragment() {
                 if (tab != null) {
                     if (tab.position == 0) {
                         tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(requireContext(), R.color.purple_600))
-                        //tabLayout.setTabTextColors(Color.parseColor("#727272"), Color.parseColor("#8E24AA")) // changes font
                     }
                     else {
                         tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(requireContext(), R.color.light_green_600))
-                        //tabLayout.setTabTextColors(Color.parseColor("#727272"), Color.parseColor("#30600B")) // changes font
                     }
                 }
             }
