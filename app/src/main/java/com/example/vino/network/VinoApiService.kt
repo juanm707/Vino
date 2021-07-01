@@ -1,5 +1,7 @@
 package com.example.vino.network
 
+import com.example.vino.model.Block
+import com.example.vino.model.Todo
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -37,6 +39,9 @@ interface VinoApiService {
 
     @GET("todos.json")
     suspend fun getTodos() : MutableList<Todo>
+
+    @GET("blocks.json")
+    suspend fun getBlocks() : List<BlockCoordinates>
 }
 
 /**

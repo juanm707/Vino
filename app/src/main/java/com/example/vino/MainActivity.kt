@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBar) // this is for the top bar, right item
         navView.setupWithNavController(navController)
-        //setupActionBarWithNavController(navController)
 
         binding.appBar.setNavigationOnClickListener {
             //Toast.makeText(applicationContext, "Logo", Toast.LENGTH_SHORT).show()

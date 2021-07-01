@@ -75,7 +75,7 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
 
     override fun onVineyardClick(
         position: Int,
-        vineyard: String,
+        vineyardId: Int,
         vineyardCardView: MaterialCardView,
         vineyardLinearLayout: LinearLayout,
         vineyardName: TextView,
@@ -84,7 +84,6 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
         humidity: TextView,
         imageCacheKey: MemoryCache.Key?
     ) {
-        //Toast.makeText(requireContext(), vineyard, Toast.LENGTH_SHORT).show()
 
         val extras = FragmentNavigatorExtras(
             vineyardCardView to vineyardCardView.transitionName,
@@ -94,7 +93,9 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
             temperature to temperature.transitionName,
             humidity to humidity.transitionName,
         )
-        val action = HomeFragmentDirections.actionNavigationHomeToBlankFragment(vineyard, imageCacheKey)
+
+        vinoUserModel.imageCacheKey = imageCacheKey
+        val action = HomeFragmentDirections.actionNavigationHomeToVineyardDetailFragment(vineyardId)
         findNavController().navigate(action, extras)
     }
 
@@ -125,19 +126,19 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
     }
 
     private fun setAccountName(userName: String, companyName: String) {
-        binding.accountName.apply {
-            visibility = View.VISIBLE
-            text = userName
-        }
-        binding.companyName.apply {
-            visibility = View.VISIBLE
-            text = companyName
+        setTextAndVisibility(binding.accountName, userName)
+        setTextAndVisibility(binding.companyName, companyName)
+    }
+
+    private fun setTextAndVisibility(textView: TextView, newText: String) {
+        textView.apply {
+            text = newText
         }
     }
 
     private fun setUpConnectionImageAndText() {
         // on api status, either way DONE or ERROR, hide loading
-        vinoUserModel.status.observe(viewLifecycleOwner, {
+        vinoUserModel.apiStatus.observe(viewLifecycleOwner, {
             if (it != VinoApiStatus.LOADING)
                 binding.progressCircular.hide()
             if (it == VinoApiStatus.ERROR)

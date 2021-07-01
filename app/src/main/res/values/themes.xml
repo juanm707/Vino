@@ -14,7 +14,5 @@
         <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/varela_round</item>
         <item name="colorControlHighlight">@color/colorPrimaryRipple</item>
-
-        <item name="android:windowContentTransitions">true</item>
     </style>
 </resources>

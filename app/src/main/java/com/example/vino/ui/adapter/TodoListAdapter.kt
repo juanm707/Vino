@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vino.R
-import com.example.vino.network.Todo
+import com.example.vino.model.Todo
 
 class TodoListAdapter(private val completed: Boolean, private val context: Context, val checkBoxListener: OnTodoCheckBoxListener) : ListAdapter<Todo, TodoListAdapter.TodoViewHolder>(DiffCallback) {
 

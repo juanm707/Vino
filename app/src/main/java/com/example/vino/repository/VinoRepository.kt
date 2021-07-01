@@ -1,11 +1,13 @@
 package com.example.vino.repository
 
 import androidx.annotation.WorkerThread
-import com.example.vino.network.Todo
+import com.example.vino.model.Block
+import com.example.vino.model.Todo
+import com.example.vino.vinodao.BlockDao
 import com.example.vino.vinodao.TodoDao
 import kotlinx.coroutines.flow.Flow
 
-class VinoRepository(private val todoDao: TodoDao) {
+class VinoRepository(private val todoDao: TodoDao, private val blockDao: BlockDao) {
 
     // Room executes all queries on a separate thread.
     // Observed Flow will notify the observer when the data has changed.
@@ -19,6 +21,11 @@ class VinoRepository(private val todoDao: TodoDao) {
     @WorkerThread
     suspend fun insert(todo: Todo) {
         return todoDao.insert(todo)
+    }
+
+    @WorkerThread
+    suspend fun insert(block: Block) {
+        return blockDao.insert(block)
     }
 
     @WorkerThread

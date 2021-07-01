@@ -1,7 +1,7 @@
 package com.example.vino.vinodao
 
 import androidx.room.*
-import com.example.vino.network.Todo
+import com.example.vino.model.Todo
 import kotlinx.coroutines.flow.Flow
 
 @Dao

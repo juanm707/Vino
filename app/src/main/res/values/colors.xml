@@ -23,4 +23,7 @@
     <color name="greyMedium">#434343</color>
     <color name="greyText">#FF5D5C5E</color>
     <color name="greyBackground">#C8C6C8</color>
+
+    <color name="block_stroke">#FFB300</color>
+    <color name="block_fill">#33FFB300</color>
 </resources>

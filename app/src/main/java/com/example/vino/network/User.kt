@@ -20,12 +20,3 @@ class Head(
     val phone: String,
     val email: List<String>
 )
-
-@Entity(tableName = "Todo")
-class Todo(
-    @PrimaryKey val id: Int,
-    val job: String,
-    val description: String,
-    @Json(name = "due") var dueDate: String,
-    var completed: Boolean
-)

@@ -27,14 +27,6 @@ class VineyardGridAdapter(private val vineyards: List<Vineyard>, private val con
     override fun onBindViewHolder(holder: VineyardCardViewHolder, position: Int) {
         val vineyard = vineyards[position]
         holder.bind(vineyard, context)
-//        holder.vineyardName.text = vineyards[position].name
-//        val imgUri = vineyards[position].imageUrl.toUri().buildUpon().scheme("https").build()
-//        holder.vineyardImage.load(imgUri) {
-//            placeholder(R.drawable.loading_animation)
-//            error(R.drawable.ic_baseline_broken_image_24)
-//        }
-//        holder.temperature.text = context.getString(R.string.temperature_value, 86)
-//        holder.humidity.text = context.getString(R.string.humidity_value, 30)
     }
 
     override fun getItemCount(): Int {
@@ -73,8 +65,8 @@ class VineyardGridAdapter(private val vineyards: List<Vineyard>, private val con
                 }
             }
 
-            temperature.text = context.getString(R.string.temperature_value, 86)
-            humidity.text = context.getString(R.string.humidity_value, 30)
+            temperature.text = context.getString(R.string.temperature_value, vineyard.temperature)
+            humidity.text = context.getString(R.string.humidity_value, vineyard.humidity)
 
             setItemsTransitionName(vineyard.name)
 
@@ -91,14 +83,14 @@ class VineyardGridAdapter(private val vineyards: List<Vineyard>, private val con
         }
 
         override fun onClick(v: View?) {
-            onVineyardListener.onVineyardClick(adapterPosition, vineyardObject.name, vineyardItemCardView, vineyardLinearLayout, vineyardName, vineyardImage, temperature, humidity, imageCacheKey)
+            onVineyardListener.onVineyardClick(adapterPosition, vineyardObject.id, vineyardItemCardView, vineyardLinearLayout, vineyardName, vineyardImage, temperature, humidity, imageCacheKey)
         }
     }
 
     interface OnVineyardListener {
         fun onVineyardClick(
             position: Int,
-            vineyard: String,
+            vineyardId: Int,
             vineyardCardView: MaterialCardView,
             vineyardLinearLayout: LinearLayout,
             vineyardName: TextView,
@@ -106,7 +98,6 @@ class VineyardGridAdapter(private val vineyards: List<Vineyard>, private val con
             temperature: TextView,
             humidity: TextView,
             imageCacheKey: MemoryCache.Key?
-        ) {
-        }
+        ) {}
     }
 }

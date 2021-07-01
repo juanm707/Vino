@@ -16,7 +16,7 @@ import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentTodosBinding
 import com.example.vino.model.UserViewModel
 import com.example.vino.model.UserViewModelFactory
-import com.example.vino.network.Todo
+import com.example.vino.model.Todo
 import com.example.vino.ui.adapter.TodoCollectionAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -81,12 +81,12 @@ class TodosFragment : Fragment() {
                 0 -> {
                     tab.text = "Incomplete"
                     tab.contentDescription = "Incomplete tasks"
-                    tab.customView = getCustomTabView(R.color.purple_600)
+                    //tab.customView = getCustomTabView(R.color.purple_600)
                 }
                 1 -> {
                     tab.text = "Completed"
                     tab.contentDescription = "Completed tasks"
-                    tab.customView = getCustomTabView(R.color.light_green_dark);
+                    //tab.customView = getCustomTabView(R.color.light_green_dark);
                 }
                 else -> {
                     tab.text = "Oops" // should never see this
@@ -94,26 +94,26 @@ class TodosFragment : Fragment() {
             }
         }.attach()
 
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                if (tab != null) {
-                    if (tab.position == 0) {
-                        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(requireContext(), R.color.purple_600))
-                    }
-                    else {
-                        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(requireContext(), R.color.light_green_600))
-                    }
-                }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
-        })
+//        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+//            override fun onTabSelected(tab: TabLayout.Tab?) {
+//                if (tab != null) {
+//                    if (tab.position == 0) {
+//                        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(requireContext(), R.color.purple_600))
+//                    }
+//                    else {
+//                        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(requireContext(), R.color.light_green_600))
+//                    }
+//                }
+//            }
+//
+//            override fun onTabUnselected(tab: TabLayout.Tab?) {
+//
+//            }
+//
+//            override fun onTabReselected(tab: TabLayout.Tab?) {
+//
+//            }
+//        })
 
         vinoUserModel.todoAmount.observe(viewLifecycleOwner, { newTodoInCompleteAmount ->
             tabLayout.getTabAt(0)?.orCreateBadge?.number = newTodoInCompleteAmount

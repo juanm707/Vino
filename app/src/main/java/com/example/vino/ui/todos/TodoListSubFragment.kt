@@ -18,7 +18,7 @@ import com.example.vino.databinding.TodoFragmentCollectionObjectBinding
 import com.example.vino.model.UserViewModel
 import com.example.vino.model.UserViewModelFactory
 import com.example.vino.model.VinoApiStatus
-import com.example.vino.network.Todo
+import com.example.vino.model.Todo
 import com.example.vino.ui.adapter.ARG_TODO_TYPE
 import com.example.vino.ui.adapter.TodoListAdapter
 import com.google.android.material.card.MaterialCardView
@@ -71,7 +71,7 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
         // in local database set complete and make request to set complete
         //val todoRemoved = sortedTodoList.removeAt(position)
         val todoRemoved = sortedByDate.removeAt(position)
-        adapter.notifyItemRemoved(position) // TODO: fix on remove updates everything, does not show remove animation, disable observable a bit
+        adapter.notifyItemRemoved(position)
         vinoUserModel.updateTodo(todoRemoved)
     }
 
@@ -97,7 +97,7 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
 
     private fun setUpConnectionImageAndText() {
         // on api status, either way DONE or ERROR, hide loading
-        vinoUserModel.status.observe(viewLifecycleOwner, {
+        vinoUserModel.apiStatus.observe(viewLifecycleOwner, {
             if (it != VinoApiStatus.LOADING)
                 binding.progressCircular.hide()
 //            if (it == VinoApiStatus.ERROR) // TODO add no connection image and or text
