@@ -34,7 +34,6 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
     private val binding get() = _binding!!
 
     private lateinit var map: GoogleMap
-    private val name = "Blanton"
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -54,7 +53,7 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
             googleMap.addMarker(
                 MarkerOptions()
                     .position(vineyardLocation)
-                    .title(name)
+                    .title(vineyard.name)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.grape_logo)) // must svg png etc not xml
             )
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(vineyardLocation))
