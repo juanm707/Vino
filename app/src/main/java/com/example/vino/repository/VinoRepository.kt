@@ -67,7 +67,7 @@ class VinoRepository(private val todoDao: TodoDao,
         }
     }
 
-    suspend fun refreshBlocks() {
+    suspend fun refreshBlocks() { // TODO: would take vineyard id
         vinoApiService.getBlocks().forEach { block ->
             insert(Block(block.id, block.vineyardId, block.name, block.variety, block.acres,
                 block.vines, block.rootstock, block.clone, block.yearPlanted, block.rowSpacing, block.vineSpacing))

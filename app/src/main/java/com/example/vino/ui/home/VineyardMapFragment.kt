@@ -18,9 +18,6 @@ import com.google.android.gms.maps.GoogleMap.MAP_TYPE_HYBRID
 import com.google.android.gms.maps.model.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-const val LATITUDE = 0
-const val LONGITUDE = 1
-
 class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
     private val vinoUserModel: UserViewModel by activityViewModels {

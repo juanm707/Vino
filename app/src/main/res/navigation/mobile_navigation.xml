@@ -40,10 +40,9 @@
         <action
             android:id="@+id/action_vineyard_detail_to_vineyardMapFragment"
             app:destination="@id/vineyardMapFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/slide_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_out" />
+            app:enterAnim="@anim/slide_in"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left" />
     </fragment>
 
     <fragment

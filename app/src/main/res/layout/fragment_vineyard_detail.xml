@@ -133,12 +133,14 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:background="@color/purple_600"
+                        android:textStyle="bold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Map View"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                        android:textColor="@color/purple_dark" />
+                        android:textColor="@color/white" />
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -168,12 +170,14 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:background="@color/purple_600"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Leaf Stress"
+                        android:textStyle="bold"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                        android:textColor="@color/purple_dark" />
+                        android:textColor="@color/white" />
 
                     <ImageView
                         android:layout_width="match_parent"
