@@ -11,12 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.example.vino.R
 import com.example.vino.VinoApplication
-import com.example.vino.databinding.FragmentHomeBinding
 import com.example.vino.databinding.FragmentVineyardMapBinding
-import com.example.vino.model.UserViewModel
-import com.example.vino.model.UserViewModelFactory
-import com.example.vino.network.BlockCoordinates
-import com.example.vino.network.Coordinates
+import com.example.vino.model.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_HYBRID
 import com.google.android.gms.maps.model.*
@@ -34,6 +30,8 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
     private val binding get() = _binding!!
 
     private lateinit var map: GoogleMap
+    private var vineyard: Vineyard? = null
+    private var clickedBlock: String? = null
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -46,14 +44,13 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
          * user has installed Google Play services and returned to the app.
          */
         map = googleMap
-        val vineyard = vinoUserModel.currentVineyard
 
         if (vineyard != null) {
-            val vineyardLocation = LatLng(vineyard.latitude, vineyard.longitude)
+            val vineyardLocation = LatLng(vineyard!!.latitude, vineyard!!.longitude)
             googleMap.addMarker(
                 MarkerOptions()
                     .position(vineyardLocation)
-                    .title(vineyard.name)
+                    .title(vineyard!!.name)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.grape_logo)) // must svg png etc not xml
             )
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(vineyardLocation))
@@ -80,8 +77,10 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        vineyard = vinoUserModel.currentVineyard
 
-        vinoUserModel.getBlocks() // to display the blocks on map
+        if (vineyard != null)
+            vinoUserModel.refreshBlocks(vineyard!!.id) // to display the blocks on map
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
@@ -95,9 +94,10 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
     }
 
     override fun onPolygonClick(polygon: Polygon) {
-        Toast.makeText(requireContext(), "Selected ${polygon.tag}", Toast.LENGTH_SHORT).show()
+        clickedBlock = polygon.tag as String?
         centerPolygon(polygon)
-        binding.banner.show()
+        if (!binding.banner.isShown)
+            binding.banner.show()
     }
 
     private fun setUpBanner() {
@@ -108,7 +108,7 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
         binding.banner.setRightButtonListener {
             binding.banner.dismiss()
             MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered)
-                .setMessage("Rows: 34-76" + '\n' + "Variety: Cabernet Sauvignon")
+                .setMessage(getBlockInfo())
                 .setNegativeButton("Dismiss") { dialog, which ->
                     // Respond to negative button press
                 }
@@ -132,14 +132,14 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
         })
     }
 
-    private fun addPolygonBlock(googleMap: GoogleMap, block: BlockCoordinates) {
+    private fun addPolygonBlock(googleMap: GoogleMap, parentBlock: BlockWithCoordinates) {
         // Add polygons to indicate areas on the map.
-        val polygon = googleMap.addPolygon(getPolygon(block.coordinates))
+        val polygon = googleMap.addPolygon(getPolygon(parentBlock.coordinates))
         // Store a data object with the polygon, used here to indicate an arbitrary type.
-        polygon.tag = block.name
+        polygon.tag = parentBlock.block.name
     }
 
-    private fun getPolygon(coordinates: List<Coordinates>): PolygonOptions {
+    private fun getPolygon(coordinates: List<Coordinate>): PolygonOptions {
         val newPolygon = PolygonOptions()
             .clickable(true)
             .strokeColor(ContextCompat.getColor(requireContext(), R.color.block_stroke))
@@ -150,5 +150,22 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
         }
 
         return newPolygon
+    }
+
+    private fun getBlockInfo(): String {
+        val selectedBlock = vinoUserModel.getBlockForName(clickedBlock)
+        return if (selectedBlock == null)
+            "No block info available..."
+        else {
+            "Name: ${selectedBlock.name}" + '\n' +
+                    "Variety: ${selectedBlock.variety}" + '\n' +
+                    "Acres: ${selectedBlock.acres}" + '\n' +
+                    "Vines: ${selectedBlock.vines}" + '\n' +
+                    "Rootstock: ${selectedBlock.rootstock}" + '\n' +
+                    "Clone: ${selectedBlock.clone}" + '\n' +
+                    "Year Planted: ${selectedBlock.yearPlanted}" + '\n' +
+                    "Row Spacing: ${selectedBlock.rowSpacing} ft." + '\n' +
+                    "Vine Spacing: ${selectedBlock.vineSpacing} ft."
+        }
     }
 }

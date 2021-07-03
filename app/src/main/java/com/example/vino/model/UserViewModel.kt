@@ -16,15 +16,12 @@ class UserViewModel(private val repository: VinoRepository) : ViewModel() {
 
     private val _user = MutableLiveData<VineyardManagerUser>()
     private val _status = MutableLiveData<VinoApiStatus>()
-    private val _todos = MutableLiveData<MutableList<Todo>>()
-    private val _todoAmount = MutableLiveData(0)
-    private val _blocks = MutableLiveData<List<BlockCoordinates>>()
+    private val _blocks = MutableLiveData<List<BlockWithCoordinates>>()
 
     val vinoUser: LiveData<VineyardManagerUser> = _user
     val apiStatus: LiveData<VinoApiStatus> = _status
-    val todos: LiveData<MutableList<Todo>> = _todos
-    val todoAmount: LiveData<Int> = _todoAmount // to update the badge
-    val blocks: LiveData<List<BlockCoordinates>> = _blocks // current blocks
+
+    var blocks: LiveData<List<BlockWithCoordinates>> = _blocks // current blocks
 
     val completeTodos: LiveData<List<Todo>> = repository.completeTodos.asLiveData()
     val inCompleteTodos:  LiveData<List<Todo>> = repository.inCompleteTodos.asLiveData()
@@ -33,44 +30,34 @@ class UserViewModel(private val repository: VinoRepository) : ViewModel() {
     var currentVineyard: Vineyard? = null
 
     init {
-        getUser() // first thing to do is get user for home fragment
+        refreshUser() // first thing to do is get user for home fragment
     }
 
     fun <T> MutableLiveData<T>.notifyObserver() {
         this.value = this.value
     }
 
-    //delay(3000) // to act as slow connection
-    private fun getUser() {
+    private fun refreshUser() {
         getDataLoad {
-            _user.value = VinoApi.retrofitService.getUser()
+            _user.value = repository.refreshUser()
         }
     }
 
-    fun getTodos() {
+    fun refreshTodos() {
         getDataLoad {
-            _todoAmount.value = 0 // reset
-            _todos.value = VinoApi.retrofitService.getTodos()
-            _todos.value!!.forEach { todo ->
-                insertTodo(todo)
-            }
+            repository.refreshTodos()
         }
     }
 
-    fun getBlocks() {
+    fun refreshBlocks(id: Int) {
         getDataLoad {
-            _blocks.value = VinoApi.retrofitService.getBlocks()
-            _blocks.value!!.forEach { block ->
-                insertBlock(Block(block.id, block.vineyardId, block.name))
-            }
-
+            repository.refreshBlocks()
+            _blocks.value = repository.getBlocksForVineyardId(id)
         }
     }
 
     fun insertTodo(todo: Todo) = viewModelScope.launch {
         repository.insert(todo)
-        if (!todo.completed)
-            _todoAmount.value = _todoAmount.value?.plus(1)
     }
 
     fun insertBlock(block: Block) = viewModelScope.launch {
@@ -84,13 +71,10 @@ class UserViewModel(private val repository: VinoRepository) : ViewModel() {
         val month = calendar.get(Calendar.MONTH) + 1
         todo.dueDate = "$month/$day"
         repository.update(todo)
-        _todoAmount.value = _todoAmount.value?.minus(1)
     }
 
     fun deleteTodo(todo: Todo) = viewModelScope.launch {
         repository.delete(todo)
-        if (!todo.completed)
-            _todoAmount.value = _todoAmount.value?.minus(1)
     }
 
     fun setSelectedVineyard(id: Int) {
@@ -103,12 +87,23 @@ class UserViewModel(private val repository: VinoRepository) : ViewModel() {
         return viewModelScope.launch {
             _status.value = VinoApiStatus.LOADING
             try {
+                //delay(3000) // for slow connection
                 getData()
                 _status.value = VinoApiStatus.DONE
             } catch (e: Exception) {
                 Log.d("NetworkError", "$e handled!")
                 _status.value = VinoApiStatus.ERROR
             }
+        }
+    }
+
+    fun getBlockForName(name: String?): Block? {
+        return if (name == null)
+            null
+        else {
+            _blocks.value?.find { parentBlock ->
+                parentBlock.block.name == name
+            }?.block
         }
     }
 }

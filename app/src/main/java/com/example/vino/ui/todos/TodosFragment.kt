@@ -59,7 +59,7 @@ class TodosFragment : Fragment() {
         setUpTabLayout()
         setUpBottomSheet()
 
-        vinoUserModel.getTodos()
+        vinoUserModel.refreshTodos()
     }
 
     override fun onDestroyView() {
@@ -76,17 +76,17 @@ class TodosFragment : Fragment() {
 
     private fun setUpTabLayout() {
         val tabLayout = binding.tabLayout
+
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
                 0 -> {
                     tab.text = "Incomplete"
                     tab.contentDescription = "Incomplete tasks"
-                    //tab.customView = getCustomTabView(R.color.purple_600)
                 }
                 1 -> {
                     tab.text = "Completed"
                     tab.contentDescription = "Completed tasks"
-                    //tab.customView = getCustomTabView(R.color.light_green_dark);
+                    tab.customView = getCustomTabView(R.color.light_green_dark)
                 }
                 else -> {
                     tab.text = "Oops" // should never see this
@@ -94,30 +94,32 @@ class TodosFragment : Fragment() {
             }
         }.attach()
 
-//        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-//            override fun onTabSelected(tab: TabLayout.Tab?) {
-//                if (tab != null) {
-//                    if (tab.position == 0) {
-//                        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(requireContext(), R.color.purple_600))
-//                    }
-//                    else {
-//                        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(requireContext(), R.color.light_green_600))
-//                    }
-//                }
-//            }
-//
-//            override fun onTabUnselected(tab: TabLayout.Tab?) {
-//
-//            }
-//
-//            override fun onTabReselected(tab: TabLayout.Tab?) {
-//
-//            }
-//        })
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab != null) {
+                    if (tab.position == 0) {
+                        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(requireContext(), R.color.purple_600))
+                    }
+                    else {
+                        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(requireContext(), R.color.light_green_600))
+                    }
+                }
+            }
 
-        vinoUserModel.todoAmount.observe(viewLifecycleOwner, { newTodoInCompleteAmount ->
-            tabLayout.getTabAt(0)?.orCreateBadge?.number = newTodoInCompleteAmount
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
         })
+
+        // updates whenever the database is updated
+        vinoUserModel.inCompleteTodos.observe(viewLifecycleOwner, { newTodoInCompleteAmount ->
+            tabLayout.getTabAt(0)?.orCreateBadge?.number = newTodoInCompleteAmount.size
+        })
+
     }
 
     private fun setUpBottomSheet() {

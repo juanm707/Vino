@@ -1,7 +1,5 @@
 package com.example.vino.model
 
-import com.example.vino.network.Coordinates
-
 class Vineyard(
     val id: Int,
     val name: String,

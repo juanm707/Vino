@@ -3,6 +3,7 @@ package com.example.vino.ui.adapter
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Paint
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -46,6 +47,7 @@ class TodoListAdapter(private val completed: Boolean, private val context: Conte
 
         if (completed) {
             holder.job.setTextColor(ContextCompat.getColor(context, R.color.greenHeaderText))
+            holder.job.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             holder.dueDate.setTextColor(ContextCompat.getColor(context, R.color.greenDarkerText))
             holder.description.setTextColor(ContextCompat.getColor(context, R.color.light_green_dark))
             holder.checkBox.buttonTintList = ColorStateList.valueOf(Color.parseColor("#4B830D"))

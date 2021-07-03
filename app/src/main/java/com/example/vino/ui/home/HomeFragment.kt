@@ -1,6 +1,7 @@
 package com.example.vino.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,6 +67,7 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
 
         setUpRecyclerView()
         setUpConnectionImageAndText()
+        Log.d("OnViewCreated", "Inside HomeFragment") // called every time you click bottom nav icon
     }
 
     override fun onDestroyView() {

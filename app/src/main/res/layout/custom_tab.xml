@@ -7,5 +7,4 @@
     android:gravity="center"
     android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
     android:textColor="@color/black"
-    android:textSize="14sp"
-    android:textStyle="bold" />
+    android:textSize="14sp" />

@@ -2,13 +2,13 @@ package com.example.vino.ui.todos
 
 import android.graphics.*
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -22,9 +22,6 @@ import com.example.vino.model.Todo
 import com.example.vino.ui.adapter.ARG_TODO_TYPE
 import com.example.vino.ui.adapter.TodoListAdapter
 import com.google.android.material.card.MaterialCardView
-import jp.wasabeef.recyclerview.animators.FadeInUpAnimator
-import jp.wasabeef.recyclerview.animators.OvershootInLeftAnimator
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -90,9 +87,9 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.todoRecyclerView) // for swipe delete
 
         if (completed)
-            observeCompleteTodos()
+            observeTodos(vinoUserModel.completeTodos)
         else
-            observeInCompleteTodos()
+            observeTodos(vinoUserModel.inCompleteTodos)
     }
 
     private fun setUpConnectionImageAndText() {
@@ -106,15 +103,16 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
         })
     }
 
-    private fun observeCompleteTodos() {
-        vinoUserModel.completeTodos.observe(viewLifecycleOwner, { completedTodoList ->
-            setTodos(completedTodoList)
-        })
-    }
-
-    private fun observeInCompleteTodos() {
-        vinoUserModel.inCompleteTodos.observe(viewLifecycleOwner, { inCompleteTodoList ->
-            setTodos(inCompleteTodoList)
+    private fun observeTodos(todosForObserved: LiveData<List<Todo>>) {
+        todosForObserved.observe(viewLifecycleOwner, { newTodoList ->
+            if (newTodoList.isEmpty()) {
+                binding.noTodoImage.visibility = View.VISIBLE
+                binding.noTodoText.visibility = View.VISIBLE
+            } else { // TODO change text if complete vs incomplete
+                binding.noTodoImage.visibility = View.GONE
+                binding.noTodoText.visibility = View.GONE
+                setTodos(newTodoList)
+            }
         })
     }
 
