@@ -13,8 +13,13 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.vino.R
+import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentLeafWaterPotentialBinding
+import com.example.vino.model.UserViewModel
+import com.example.vino.model.UserViewModelFactory
+import com.example.vino.model.Vineyard
 import com.example.vino.ui.formatter.LWPXAxisValueFormatter
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
@@ -29,9 +34,17 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class LeafWaterPotentialFragment : Fragment() {
+
+    private val vinoUserModel: UserViewModel by activityViewModels {
+        UserViewModelFactory((requireActivity().application as VinoApplication).repository)
+    }
+
+    private var vineyard: Vineyard? = null
 
     private var _binding: FragmentLeafWaterPotentialBinding? = null
     private val binding get() = _binding!!
@@ -48,13 +61,14 @@ class LeafWaterPotentialFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        vineyard = vinoUserModel.currentVineyard
         val chart = binding.chart
 
         setUpChart(chart)
         setChartData(chart)
 
         binding.cameraButton.setOnClickListener {
-            shareBitmap(chart.chartBitmap)
+            shareChartBitmap(chart.chartBitmap)
         }
     }
 
@@ -169,14 +183,17 @@ class LeafWaterPotentialFragment : Fragment() {
         chart.setExtraOffsets(10F, 0F, 10F, 10F)
     }
 
-    private fun shareBitmap(bitmap: Bitmap) {
-        //---Save bitmap to external cache directory---//
-        //get cache directory
+    private fun shareChartBitmap(bitmap: Bitmap) {
+        // get cache directory
         val cachePath = File(requireContext().externalCacheDir, "my_images/")
         cachePath.mkdirs()
 
         //create png file
-        val file = File(cachePath, "Blanton_Leaf_Water_Potential_Chart_7-5.png")
+        val calendar = Calendar.getInstance()
+        val month = calendar.get(Calendar.MONTH) + 1
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val file = File(cachePath, "${vineyard?.name}_Leaf_Water_Potential_Chart_$month-$day.png")
         val fileOutputStream: FileOutputStream
 
         try {
@@ -190,19 +207,22 @@ class LeafWaterPotentialFragment : Fragment() {
             e.printStackTrace()
         }
 
-        //---Share File---//
-        //get file uri
-        val myImageFileUri: Uri = FileProvider.getUriForFile(requireContext().applicationContext,
+        // get file uri
+        val chartImageFileUri: Uri = FileProvider.getUriForFile(
+            requireContext().applicationContext,
             requireContext().applicationContext.packageName + ".fileprovider",
             file
         )
 
-        //create a intent
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.putExtra(Intent.EXTRA_STREAM, myImageFileUri)
-        intent.type = "image/png"
-        startActivity(Intent.createChooser(intent, "Send to"))
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_STREAM, chartImageFileUri)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            setDataAndType(chartImageFileUri, "image/png") // setting removes the permission error
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 }
