@@ -93,6 +93,11 @@ class VineyardDetailFragment : Fragment() {
             val action = VineyardDetailFragmentDirections.actionVineyardDetailToVineyardMapFragment()
             findNavController().navigate(action)
         }
+
+        binding.lwpButton.setOnClickListener {
+            val action = VineyardDetailFragmentDirections.actionVineyardDetailToLeafWaterPotentialFragment()
+            findNavController().navigate(action)
+        }
     }
 
     override fun onDestroyView() {

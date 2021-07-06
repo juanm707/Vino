@@ -124,8 +124,9 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
             sortedByDate = todoList
                 .sortedBy { todo ->
                     val calendar = Calendar.getInstance()
-                    calendar.set(Calendar.DAY_OF_MONTH, todo.dueDate.substringAfter("/").toInt())
-                    calendar.set(Calendar.MONTH, todo.dueDate.substringBefore("/").toInt())
+                    calendar.timeInMillis = todo.dueDate
+//                    calendar.set(Calendar.DAY_OF_MONTH, todo.dueDate.substringAfter("/").toInt())
+//                    calendar.set(Calendar.MONTH, todo.dueDate.substringBefore("/").toInt())
                     return@sortedBy calendar.time
                 }.toMutableList()
             activity?.runOnUiThread {

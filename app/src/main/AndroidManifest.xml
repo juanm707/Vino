@@ -45,6 +45,17 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
+
+        <provider
+            android:authorities="com.example.vino.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+
     </application>
 
 </manifest>

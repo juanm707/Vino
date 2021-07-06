@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vino.R
 import com.example.vino.model.Todo
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TodoListAdapter(private val completed: Boolean, private val context: Context, val checkBoxListener: OnTodoCheckBoxListener) : ListAdapter<Todo, TodoListAdapter.TodoViewHolder>(DiffCallback) {
 
@@ -42,6 +44,10 @@ class TodoListAdapter(private val completed: Boolean, private val context: Conte
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
         val todo = getItem(position)
+
+        val sdf = SimpleDateFormat("dd MMM", Locale.US)
+        val dueOrCompletedDate = sdf.format(Date(todo.dueDate))
+
         holder.job.text = todo.job
         holder.description.text = todo.description
 
@@ -53,10 +59,10 @@ class TodoListAdapter(private val completed: Boolean, private val context: Conte
             holder.checkBox.buttonTintList = ColorStateList.valueOf(Color.parseColor("#4B830D"))
             holder.checkBox.isChecked = true
             holder.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.light_green_background))
-            holder.dueDate.text = context.getString(R.string.completed_on, todo.dueDate)
+            holder.dueDate.text = context.getString(R.string.completed_on, dueOrCompletedDate)
         } else {
             holder.checkBox.isChecked = false
-            holder.dueDate.text = context.getString(R.string.due_by, todo.dueDate)
+            holder.dueDate.text = context.getString(R.string.due_by, dueOrCompletedDate)
         }
 
         holder.checkBox.setOnCheckedChangeListener { buttonView, isChecked ->

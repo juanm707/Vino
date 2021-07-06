@@ -15,4 +15,8 @@
     <string name="humidity_value_percent">%1$d%%</string>
     <string name="completed_on">Completed on %1$s</string>
     <string name="due_by">Due by %1$s</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

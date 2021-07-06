@@ -81,4 +81,7 @@ dependencies {
 
     // Material Banner
     implementation "com.sergivonavi:materialbanner:1.2.0"
+
+    //MPChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

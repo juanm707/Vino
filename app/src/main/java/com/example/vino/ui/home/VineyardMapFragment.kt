@@ -77,6 +77,7 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
         vineyard = vinoUserModel.currentVineyard
 
         if (vineyard != null)
+            binding.vineyardNameMapTitle.text = vineyard?.name
             vinoUserModel.refreshBlocks(vineyard!!.id) // to display the blocks on map
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?

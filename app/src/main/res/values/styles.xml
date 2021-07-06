@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Widget.Vino.Toolbar" parent="ThemeOverlay.AppCompat">
         <item name="android:background">@color/white</item>
         <item name="titleTextAppearance">@style/TextAppearance.Vino.Toolbar</item>
@@ -17,5 +18,10 @@
     <style name="VineyardRipple">
         <item name="colorControlHighlight">#00AA2929</item>
         <item name="android:background">?selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="Widget.Theme.Vino.ButtonBar.Fullscreen" parent="">
+        <item name="android:background">@color/black_overlay</item>
+        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
     </style>
 </resources>

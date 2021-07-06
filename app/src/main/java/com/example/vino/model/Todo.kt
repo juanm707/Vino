@@ -9,6 +9,6 @@ class Todo(
     @PrimaryKey val id: Int,
     val job: String,
     val description: String,
-    @Json(name = "due") var dueDate: String,
+    @Json(name = "due") var dueDate: Long,
     var completed: Boolean
 )

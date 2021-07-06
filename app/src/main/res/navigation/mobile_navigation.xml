@@ -43,6 +43,13 @@
             app:enterAnim="@anim/slide_in"
             app:popExitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left" />
+        <action
+            android:id="@+id/action_vineyard_detail_to_leafWaterPotentialFragment"
+            app:destination="@id/leafWaterPotentialFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left" />
+
     </fragment>
 
     <fragment
@@ -54,5 +61,10 @@
             android:id="@+id/action_vineyardMapFragment_to_vineyard_detail"
             app:destination="@id/vineyard_detail" />
     </fragment>
+    <fragment
+        android:id="@+id/leafWaterPotentialFragment"
+        android:name="com.example.vino.ui.home.LeafWaterPotentialFragment"
+        android:label="fragment_leaf_water_potential"
+        tools:layout="@layout/fragment_leaf_water_potential" />
 
 </navigation>

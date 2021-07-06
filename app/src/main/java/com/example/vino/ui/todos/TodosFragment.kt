@@ -123,7 +123,8 @@ class TodosFragment : Fragment() {
     }
 
     private fun setUpBottomSheet() {
-        var dueByDate: String? = null
+        var dueByDate: Long? = null
+
         bottomSheetBehavior = BottomSheetBehavior.from(binding.bottomSheetLayout.addTodoBottomSheetContent)
 
         binding.addTodoButton.setOnClickListener {
@@ -138,7 +139,7 @@ class TodosFragment : Fragment() {
                 99,
                 binding.bottomSheetLayout.titleEditText.text.toString(),
                 binding.bottomSheetLayout.todoEditText.text.toString(),
-                dueByDate?: "1/1",
+                dueByDate?: 0,
                 false)
 
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -147,16 +148,20 @@ class TodosFragment : Fragment() {
 
         binding.bottomSheetLayout.newTodoDueBy.setOnClickListener {
             val datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
+                .setTitleText("Select due date")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds() + 86400000) // set tomorrow as default
                 .build()
             datePicker.show(childFragmentManager, "Date Picker")
 
             datePicker.addOnPositiveButtonClickListener {
                 if (datePicker.selection != null) {
-                    val sdf = SimpleDateFormat("M/dd", Locale.US)
-                    dueByDate = sdf.format(Date(datePicker.selection!! + 86400000))
-                    binding.bottomSheetLayout.newTodoDueBy.text = "Due by: $dueByDate"
+                    val sdf = SimpleDateFormat("dd MMM", Locale.US)
+                    //dueByDate = sdf.format(Date(datePicker.selection!! + 86400000))
+                    dueByDate = datePicker.selection
+                    var textDueByDate: String? = null
+                    if (dueByDate != null)
+                        textDueByDate = sdf.format(Date(dueByDate!! + 86400000))
+                    binding.bottomSheetLayout.newTodoDueBy.text = "Due by: $textDueByDate"
                 }
             }
         }
@@ -169,6 +174,6 @@ class TodosFragment : Fragment() {
     }
 
     private fun clearTodoInput() {
-        // TODO Clear todo input on hide
+        // TODO Clear todo input on bottom sheet hide?
     }
 }

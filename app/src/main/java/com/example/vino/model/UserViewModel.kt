@@ -69,7 +69,7 @@ class UserViewModel(private val repository: VinoRepository) : ViewModel() {
         val calendar = Calendar.getInstance()
         val day = calendar.get(Calendar.DAY_OF_MONTH)
         val month = calendar.get(Calendar.MONTH) + 1
-        todo.dueDate = "$month/$day"
+        todo.dueDate = calendar.timeInMillis
         repository.update(todo)
     }
 

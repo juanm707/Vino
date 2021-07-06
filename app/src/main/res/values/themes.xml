@@ -15,4 +15,5 @@
         <item name="android:fontFamily">@font/varela_round</item>
         <item name="colorControlHighlight">@color/colorPrimaryRipple</item>
     </style>
+
 </resources>
