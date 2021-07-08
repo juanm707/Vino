@@ -5,18 +5,14 @@ import androidx.room.PrimaryKey
 import com.example.vino.model.Vineyard
 import com.squareup.moshi.Json
 
+@Entity(tableName = "User")
 class VineyardManagerUser(
-    val userName: String,
-    val userID: Int,
+    val firstName: String,
+    val lastName: String,
+    val company: String,
+    @PrimaryKey val userId: Int,
     val joinDate: String,
     val active: Boolean,
-    val head: Head,
-    val todoAmount: Int,
-    val vineyards: List<Vineyard>
-)
-
-class Head(
-    val name: String,
     val phone: String,
-    val email: List<String>
+    val email: String
 )

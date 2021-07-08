@@ -135,6 +135,7 @@ class TodosFragment : Fragment() {
             clearTodoInput()
         }
         binding.bottomSheetLayout.addTodoBottomSheetButton.setOnClickListener {
+            dueByDate = dueByDate?.plus(86400000)
             val newTodo = Todo(
                 99,
                 binding.bottomSheetLayout.titleEditText.text.toString(),
@@ -156,11 +157,11 @@ class TodosFragment : Fragment() {
             datePicker.addOnPositiveButtonClickListener {
                 if (datePicker.selection != null) {
                     val sdf = SimpleDateFormat("dd MMM", Locale.US)
-                    //dueByDate = sdf.format(Date(datePicker.selection!! + 86400000))
                     dueByDate = datePicker.selection
                     var textDueByDate: String? = null
-                    if (dueByDate != null)
+                    if (dueByDate != null) {
                         textDueByDate = sdf.format(Date(dueByDate!! + 86400000))
+                    }
                     binding.bottomSheetLayout.newTodoDueBy.text = "Due by: $textDueByDate"
                 }
             }

@@ -2,6 +2,7 @@ package com.example.vino.model
 
 import androidx.room.*
 
+
 @Entity(tableName = "Block")
 class Block(
     @PrimaryKey val blockId: Int,
@@ -17,7 +18,7 @@ class Block(
     val vineSpacing: Float
 )
 
-@Entity(tableName = "Coordinate", primaryKeys = ["coordinateId", "blockParentId", "latitude", "longitude"])
+@Entity(tableName = "Coordinate", primaryKeys = ["blockParentId", "latitude", "longitude"])
 class Coordinate(
     val coordinateId: Int,
     val blockParentId: Int,
@@ -33,3 +34,19 @@ class BlockWithCoordinates(
     )
     val coordinates: List<Coordinate>
 )
+
+@Entity(tableName = "LWPReading", primaryKeys = ["lwpReadingId", "blockId"])
+class LWPReading(
+    val lwpReadingId: Int,
+    val blockId: Int,
+    val timestamp: Long,
+    val barPressureData: Float
+)
+
+class BlockNameIdTuple {
+    @ColumnInfo(name = "blockId")
+    var blockId: Int = 0
+
+    @ColumnInfo(name = "name")
+    var blockName: String = ""
+}

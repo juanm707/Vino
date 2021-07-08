@@ -1,17 +1,18 @@
 package com.example.vino.vinodao
 
 import androidx.room.*
-import com.example.vino.model.Block
-import com.example.vino.model.BlockWithCoordinates
-import com.example.vino.model.Todo
-import com.example.vino.model.Vineyard
+import com.example.vino.model.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BlockDao {
 
+    @Transaction
     @Query("SELECT * FROM Block WHERE vineyardId = :vineyardId")
     suspend fun getBlocksForVineyardId(vineyardId: Int): List<BlockWithCoordinates>
+    
+    @Query("SELECT name, blockId FROM Block WHERE vineyardId = :vineyardId")
+    suspend fun getBlockInfoForLWPReading(vineyardId: Int): List<BlockNameIdTuple>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(block: Block)

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.example.vino.R
 import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentVineyardMapBinding
@@ -20,14 +21,16 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
-    private val vinoUserModel: UserViewModel by activityViewModels {
-        UserViewModelFactory((requireActivity().application as VinoApplication).repository)
+    private val vineyardMapFragmentViewModel: VineyardMapFragmentViewModel by viewModels {
+        VineyardMapFragmentViewModelFactory((requireActivity().application as VinoApplication).repository)
     }
+
     private var _binding: FragmentVineyardMapBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var map: GoogleMap
-    private var vineyard: Vineyard? = null
+    private var vineyardId: Int = 0
+
     private var clickedBlock: String? = null
 
     private val callback = OnMapReadyCallback { googleMap ->
@@ -42,12 +45,13 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
          */
         map = googleMap
 
-        if (vineyard != null) {
-            val vineyardLocation = LatLng(vineyard!!.latitude, vineyard!!.longitude)
+        vineyardMapFragmentViewModel.vineyard.observe(viewLifecycleOwner, { vineyard ->
+
+            val vineyardLocation = LatLng(vineyard.latitude, vineyard.longitude)
             googleMap.addMarker(
                 MarkerOptions()
                     .position(vineyardLocation)
-                    .title(vineyard!!.name)
+                    .title(vineyard.name)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.grape_logo)) // must svg png etc not xml
             )
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(vineyardLocation))
@@ -60,6 +64,13 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
             googleMap.setOnPolygonClickListener(this)
 
             addPolygonBlocks(googleMap)
+        })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            vineyardId = it.getInt("vineyardId", 0)
         }
     }
 
@@ -74,11 +85,12 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vineyard = vinoUserModel.currentVineyard
+        vineyardMapFragmentViewModel.setVineyard(vineyardId)
 
-        if (vineyard != null)
-            binding.vineyardNameMapTitle.text = vineyard?.name
-            vinoUserModel.refreshBlocks(vineyard!!.id) // to display the blocks on map
+        vineyardMapFragmentViewModel.vineyard.observe(viewLifecycleOwner, { vineyard ->
+            binding.vineyardNameMapTitle.text = vineyard.name
+            vineyardMapFragmentViewModel.refreshBlocks(vineyard.vineyardId) // to display the blocks on map
+        })
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
@@ -123,7 +135,7 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
     }
 
     private fun addPolygonBlocks(googleMap: GoogleMap) {
-        vinoUserModel.blocks.observe(viewLifecycleOwner, { blocks ->
+        vineyardMapFragmentViewModel.blocks.observe(viewLifecycleOwner, { blocks ->
             blocks.forEach { block ->
                 addPolygonBlock(googleMap, block)
             }
@@ -143,7 +155,10 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
             .strokeColor(ContextCompat.getColor(requireContext(), R.color.block_stroke))
             .fillColor(ContextCompat.getColor(requireContext(), R.color.block_fill))
 
-        coordinates.forEach { coordinate ->
+        // TODO fix sorted coordinates
+        coordinates.sortedBy {
+            it.coordinateId
+        }.forEach { coordinate ->
             newPolygon.add(LatLng(coordinate.latitude, coordinate.longitude))
         }
 
@@ -151,7 +166,7 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
     }
 
     private fun getBlockInfo(): String {
-        val selectedBlock = vinoUserModel.getBlockForName(clickedBlock)
+        val selectedBlock = vineyardMapFragmentViewModel.getBlockForName(clickedBlock)
         return if (selectedBlock == null)
             "No block info available..."
         else {

@@ -1,11 +1,14 @@
 package com.example.vino.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import java.lang.StringBuilder
+
+@Entity(tableName = "Vineyard")
 class Vineyard(
-    val id: Int,
+    @PrimaryKey val vineyardId: Int,
     val name: String,
     val imageUrl: String,
-    val temperature: Int,
-    val humidity: Int,
     val latitude: Double = 0.0,
     val longitude: Double = 0.0
 )

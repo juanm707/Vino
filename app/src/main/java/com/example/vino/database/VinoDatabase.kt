@@ -5,21 +5,22 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.vino.model.Block
-import com.example.vino.model.Coordinate
-import com.example.vino.model.Todo
-import com.example.vino.vinodao.BlockDao
-import com.example.vino.vinodao.CoordinateDao
-import com.example.vino.vinodao.TodoDao
+import com.example.vino.model.*
+import com.example.vino.network.VineyardManagerUser
+import com.example.vino.vinodao.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [Todo::class, Block::class, Coordinate::class], version = 1, exportSchema = false)
+@Database(entities = [Todo::class, Block::class, Coordinate::class, LWPReading::class, VineyardManagerUser::class, Vineyard::class, UserVineyardCrossRef::class], version = 1, exportSchema = false)
 public abstract class VinoDatabase : RoomDatabase() {
 
     abstract fun todoDao(): TodoDao
     abstract fun blockDao(): BlockDao
     abstract fun coordinateDao(): CoordinateDao
+    abstract fun lwpReadingDao(): LWPReadingDao
+    abstract fun userDao(): UserDao
+    abstract fun vineyardDao(): VineyardDao
+    abstract fun userVineyardCrossRefDao(): UserVineyardCrossRefDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

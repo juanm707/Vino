@@ -1,7 +1,7 @@
 package com.example.vino.network
 
 class BlockCoordinates( // for api response
-    val id: Int,
+    val blockId: Int,
     val vineyardId: Int,
     val name: String,
     val coordinates: List<Coordinate>,

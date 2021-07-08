@@ -60,11 +60,18 @@
         <action
             android:id="@+id/action_vineyardMapFragment_to_vineyard_detail"
             app:destination="@id/vineyard_detail" />
+        <argument
+            android:name="vineyardId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/leafWaterPotentialFragment"
         android:name="com.example.vino.ui.home.LeafWaterPotentialFragment"
         android:label="fragment_leaf_water_potential"
-        tools:layout="@layout/fragment_leaf_water_potential" />
+        tools:layout="@layout/fragment_leaf_water_potential" >
+        <argument
+            android:name="vineyardId"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

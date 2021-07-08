@@ -65,8 +65,8 @@ class VineyardGridAdapter(private val vineyards: List<Vineyard>, private val con
                 }
             }
 
-            temperature.text = context.getString(R.string.temperature_value, vineyard.temperature)
-            humidity.text = context.getString(R.string.humidity_value, vineyard.humidity)
+            temperature.text = context.getString(R.string.temperature_value, 88)
+            humidity.text = context.getString(R.string.humidity_value, 40)
 
             setItemsTransitionName(vineyard.name)
 
@@ -83,7 +83,7 @@ class VineyardGridAdapter(private val vineyards: List<Vineyard>, private val con
         }
 
         override fun onClick(v: View?) {
-            onVineyardListener.onVineyardClick(adapterPosition, vineyardObject.id, vineyardItemCardView, vineyardLinearLayout, vineyardName, vineyardImage, temperature, humidity, imageCacheKey)
+            onVineyardListener.onVineyardClick(adapterPosition, vineyardObject.vineyardId, vineyardItemCardView, vineyardLinearLayout, vineyardName, vineyardImage, temperature, humidity, imageCacheKey)
         }
     }
 

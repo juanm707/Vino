@@ -17,8 +17,8 @@ import com.example.vino.VinoApplication
 import com.example.vino.databinding.TodoFragmentCollectionObjectBinding
 import com.example.vino.model.UserViewModel
 import com.example.vino.model.UserViewModelFactory
-import com.example.vino.model.VinoApiStatus
 import com.example.vino.model.Todo
+import com.example.vino.network.VinoApiStatus
 import com.example.vino.ui.adapter.ARG_TODO_TYPE
 import com.example.vino.ui.adapter.TodoListAdapter
 import com.google.android.material.card.MaterialCardView
@@ -55,8 +55,9 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setUpConnectionImageAndText()
+        binding.progressCircular.show()
         setUpRecyclerView()
+        setUpConnectionImageAndText()
     }
 
     override fun onDestroyView() {
@@ -66,10 +67,9 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
 
     override fun onCheckboxClick(position: Int) {
         // in local database set complete and make request to set complete
-        //val todoRemoved = sortedTodoList.removeAt(position)
-        val todoRemoved = sortedByDate.removeAt(position)
+        val todoCompleted = sortedByDate.removeAt(position)
         adapter.notifyItemRemoved(position)
-        vinoUserModel.updateTodo(todoRemoved)
+        vinoUserModel.updateTodo(todoCompleted)
     }
 
     private fun setUpRecyclerView() {
@@ -95,8 +95,18 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
     private fun setUpConnectionImageAndText() {
         // on api status, either way DONE or ERROR, hide loading
         vinoUserModel.apiStatus.observe(viewLifecycleOwner, {
-            if (it != VinoApiStatus.LOADING)
+            if (it != VinoApiStatus.LOADING) {
                 binding.progressCircular.hide()
+                binding.progressCircular.visibility = View.GONE
+            }
+            if (it == VinoApiStatus.LOADING) {
+                binding.noTodoText.apply {
+                    visibility = View.GONE
+                }
+                binding.noTodoImage.apply {
+                    visibility = View.GONE
+                }
+            }
 //            if (it == VinoApiStatus.ERROR) // TODO add no connection image and or text
 //                binding.connectionStatusText.visibility = View.VISIBLE
             // if DONE hide text
@@ -105,7 +115,7 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
 
     private fun observeTodos(todosForObserved: LiveData<List<Todo>>) {
         todosForObserved.observe(viewLifecycleOwner, { newTodoList ->
-            if (newTodoList.isEmpty()) {
+            if (newTodoList.isEmpty() && (vinoUserModel.apiStatus.value != VinoApiStatus.LOADING)) {
                 binding.noTodoImage.visibility = View.VISIBLE
                 binding.noTodoText.visibility = View.VISIBLE
             } else { // TODO change text if complete vs incomplete
@@ -117,18 +127,10 @@ class TodoListSubFragment : Fragment(), TodoListAdapter.OnTodoCheckBoxListener {
     }
 
     private fun setTodos(todoList: List<Todo>) {
-        binding.progressCircular.hide()
         binding.todoRecyclerView.visibility = View.VISIBLE
 
         lifecycleScope.launch(Dispatchers.Default) {
-            sortedByDate = todoList
-                .sortedBy { todo ->
-                    val calendar = Calendar.getInstance()
-                    calendar.timeInMillis = todo.dueDate
-//                    calendar.set(Calendar.DAY_OF_MONTH, todo.dueDate.substringAfter("/").toInt())
-//                    calendar.set(Calendar.MONTH, todo.dueDate.substringBefore("/").toInt())
-                    return@sortedBy calendar.time
-                }.toMutableList()
+            sortedByDate = vinoUserModel.sortTodoByDate(todoList)
             activity?.runOnUiThread {
                 adapter.submitList(sortedByDate)
             }

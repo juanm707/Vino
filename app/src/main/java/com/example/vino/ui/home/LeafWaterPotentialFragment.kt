@@ -1,6 +1,5 @@
 package com.example.vino.ui.home
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -13,13 +12,10 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.example.vino.R
 import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentLeafWaterPotentialBinding
-import com.example.vino.model.UserViewModel
-import com.example.vino.model.UserViewModelFactory
-import com.example.vino.model.Vineyard
 import com.example.vino.ui.formatter.LWPXAxisValueFormatter
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
@@ -40,14 +36,21 @@ import kotlin.collections.ArrayList
 
 class LeafWaterPotentialFragment : Fragment() {
 
-    private val vinoUserModel: UserViewModel by activityViewModels {
-        UserViewModelFactory((requireActivity().application as VinoApplication).repository)
+    private val leafWaterPotentialFragmentViewModel: LeafWaterPotentialFragmentViewModel by viewModels {
+        LeafWaterPotentialFragmentViewModelFactory((requireActivity().application as VinoApplication).repository)
     }
 
-    private var vineyard: Vineyard? = null
+    private var vineyardId: Int = 0
 
     private var _binding: FragmentLeafWaterPotentialBinding? = null
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            vineyardId = it.getInt("vineyardId", 0)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,19 +60,23 @@ class LeafWaterPotentialFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vineyard = vinoUserModel.currentVineyard
+        leafWaterPotentialFragmentViewModel.refreshLWPReadings(vineyardId)
+
         val chart = binding.chart
 
         setUpChart(chart)
         setChartData(chart)
 
-        binding.cameraButton.setOnClickListener {
-            shareChartBitmap(chart.chartBitmap)
-        }
+        leafWaterPotentialFragmentViewModel.vineyardName.observe(viewLifecycleOwner, { vineyardName ->
+            binding.cameraButton.setOnClickListener {
+                shareChartBitmap(chart.chartBitmap, vineyardName)
+            }
+        })
     }
 
     override fun onDestroy() {
@@ -108,32 +115,10 @@ class LeafWaterPotentialFragment : Fragment() {
         chart.animateXY(1500, 1500, Easing.EaseInOutBack)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun setChartData(chart: LineChart) {
-        val entries = mutableListOf(
-            Entry(1609524000000F, 10F),
-            Entry(1610128800000F, 10F),
-            Entry(1610733600000F, 10F),
-            Entry(1611338400000F, 11F),
-            Entry(1611943200000F, 12F),
-            Entry(1612634400000F, 14F),
-            Entry(1613239200000F, 15F),
-            Entry(1613844000000F, 16F),
-            Entry(1614448800000F, 13F),
-            Entry(1614880800000F, 12F),
-            Entry(1615485600000F, 11F),
-            Entry(1616090400000F, 12F),
-            Entry(1616695200000F, 10F),
-            Entry(1617300000000F, 9F),
-            Entry(1617904800000F, 10F)
-        )
-        val name = "Block 1"
-        val dataSet = LineDataSet(entries, name)
 
-        val color = ContextCompat.getColor(requireContext(), R.color.light_green_dark)
-
-        setDataOptions(dataSet, color)
-
-        val entries2 = mutableListOf(
+        val targetEntries = mutableListOf(
             Entry(1609524000000F, 10F),
             Entry(1610128800000F, 10F),
             Entry(1610733600000F, 10F),
@@ -151,20 +136,36 @@ class LeafWaterPotentialFragment : Fragment() {
             Entry(1617904800000F, 9F)
         )
 
-        val name2 = "Target"
-        val dataSet2 = LineDataSet(entries2, name2)
-        dataSet2.enableDashedLine(10F,10F,0F)
+        val targetName = "Target"
+        val targetDataset = LineDataSet(targetEntries, targetName)
+        targetDataset.enableDashedLine(10F,10F,0F)
 
         val color2 = ContextCompat.getColor(requireContext(), R.color.target_line)
 
-        setDataOptions(dataSet2, color2)
+        setDataOptions(targetDataset, color2)
 
         val dataSets: MutableList<ILineDataSet> = ArrayList()
-        dataSets.add(dataSet)
-        dataSets.add(dataSet2)
+        dataSets.add(targetDataset)
 
-        addDataToChart(chart, dataSets)
+        leafWaterPotentialFragmentViewModel.lwpReadings.observe(viewLifecycleOwner, { lwpReadingMap ->
+            lwpReadingMap.forEach { (blockName, blockReadings) ->
+                if (blockReadings.isNotEmpty()) {
+                    val entries = mutableListOf<Entry>()
+                    blockReadings.forEach { reading ->
+                        entries.add(Entry(reading.timestamp.toFloat(), reading.barPressureData))
+                    }
+                    val blockDataset = LineDataSet(entries, blockName)
+                    setDataOptions(blockDataset, ContextCompat.getColor(requireContext(), R.color.light_green_dark))
+                    dataSets.add(blockDataset)
+                }
+            }
 
+            if (lwpReadingMap.isNotEmpty()) {
+                addDataToChart(chart, dataSets)
+                chart.notifyDataSetChanged()
+                chart.invalidate()
+            }
+        })
     }
 
     private fun setDataOptions(dataSet: LineDataSet, color: Int) {
@@ -183,7 +184,7 @@ class LeafWaterPotentialFragment : Fragment() {
         chart.setExtraOffsets(10F, 0F, 10F, 10F)
     }
 
-    private fun shareChartBitmap(bitmap: Bitmap) {
+    private fun shareChartBitmap(bitmap: Bitmap, vineyardName: String) {
         // get cache directory
         val cachePath = File(requireContext().externalCacheDir, "my_images/")
         cachePath.mkdirs()
@@ -193,7 +194,7 @@ class LeafWaterPotentialFragment : Fragment() {
         val month = calendar.get(Calendar.MONTH) + 1
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val file = File(cachePath, "${vineyard?.name}_Leaf_Water_Potential_Chart_$month-$day.png")
+        val file = File(cachePath, "${vineyardName}_Leaf_Water_Potential_Chart_$month-$day.png")
         val fileOutputStream: FileOutputStream
 
         try {

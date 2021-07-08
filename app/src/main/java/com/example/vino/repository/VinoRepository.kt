@@ -1,20 +1,20 @@
 package com.example.vino.repository
 
 import androidx.annotation.WorkerThread
-import com.example.vino.model.Block
-import com.example.vino.model.BlockWithCoordinates
-import com.example.vino.model.Coordinate
-import com.example.vino.model.Todo
+import com.example.vino.database.UserVineyardCrossRef
+import com.example.vino.model.*
 import com.example.vino.network.VineyardManagerUser
 import com.example.vino.network.VinoApiService
-import com.example.vino.vinodao.BlockDao
-import com.example.vino.vinodao.CoordinateDao
-import com.example.vino.vinodao.TodoDao
+import com.example.vino.vinodao.*
 import kotlinx.coroutines.flow.Flow
 
 class VinoRepository(private val todoDao: TodoDao,
                      private val blockDao: BlockDao,
                      private val coordinateDao: CoordinateDao,
+                     private val lwpReadingDao: LWPReadingDao,
+                     private val userDao: UserDao,
+                     private val vineyardDao: VineyardDao,
+                     private val userVineyardCrossRefDao: UserVineyardCrossRefDao,
                      private val vinoApiService: VinoApiService) {
 
     // Room executes all queries on a separate thread.
@@ -37,8 +37,28 @@ class VinoRepository(private val todoDao: TodoDao,
     }
 
     @WorkerThread
+    suspend fun insert(vineyard: Vineyard) {
+        return vineyardDao.insert(vineyard)
+    }
+
+    @WorkerThread
     suspend fun insert(coordinate: Coordinate) {
         return coordinateDao.insert(coordinate)
+    }
+
+    @WorkerThread
+    suspend fun insert(lwpReading: LWPReading) {
+        return lwpReadingDao.insert(lwpReading)
+    }
+
+    @WorkerThread
+    suspend fun insert(userVineyardCrossRef: UserVineyardCrossRef) {
+        return userVineyardCrossRefDao.insert(userVineyardCrossRef)
+    }
+
+    @WorkerThread
+    suspend fun insert(user: VineyardManagerUser) {
+        return userDao.insert(user)
     }
 
     @WorkerThread
@@ -53,12 +73,28 @@ class VinoRepository(private val todoDao: TodoDao,
 
     // This method to get from database
     suspend fun getUser(): VineyardManagerUser {
-        return vinoApiService.getUser()
+        return userDao.getUser()
+    }
+
+    suspend fun getVineyards(userId: Int): List<Vineyard> {
+        return vineyardDao.getVineyardsForUserId(userId)
+    }
+
+    suspend fun getVineyard(vineyardId: Int): Vineyard {
+        return vineyardDao.getVineyardForVineyardId(vineyardId)
+    }
+
+    suspend fun refreshVineyards(userId: Int) {
+        vinoApiService.getVineyards().forEach { vineyard ->
+            insert(vineyard)
+            insert(UserVineyardCrossRef(userId, vineyard.vineyardId))
+        }
+
     }
 
     // This method to make api request for user
-    suspend fun refreshUser(): VineyardManagerUser {
-        return vinoApiService.getUser()
+    suspend fun refreshUser() {
+        insert(vinoApiService.getUser())
     }
 
     suspend fun refreshTodos() {
@@ -69,15 +105,29 @@ class VinoRepository(private val todoDao: TodoDao,
 
     suspend fun refreshBlocks() { // TODO: would take vineyard id
         vinoApiService.getBlocks().forEach { block ->
-            insert(Block(block.id, block.vineyardId, block.name, block.variety, block.acres,
+            insert(Block(block.blockId, block.vineyardId, block.name, block.variety, block.acres,
                 block.vines, block.rootstock, block.clone, block.yearPlanted, block.rowSpacing, block.vineSpacing))
             block.coordinates.forEach {  coordinate ->
-                insert(Coordinate(coordinate.id, block.id, coordinate.latitude, coordinate.longitude))
+                insert(Coordinate(coordinate.id, block.blockId, coordinate.latitude, coordinate.longitude))
             }
         }
     }
 
+    suspend fun refreshLWPReadings() {
+        vinoApiService.getLWPReadings().forEach { lwpReading ->
+            insert(lwpReading)
+        }
+    }
+
+    suspend fun getBlockInfoForLWPReading(vineyardId: Int): List<BlockNameIdTuple> {
+        return blockDao.getBlockInfoForLWPReading(vineyardId)
+    }
+
     suspend fun getBlocksForVineyardId(vineyardId: Int): List<BlockWithCoordinates> {
         return blockDao.getBlocksForVineyardId(vineyardId)
+    }
+
+    suspend fun getLWPReadingsForBlockId(blockId: Int): List<LWPReading> {
+        return lwpReadingDao.getLWPReadingsForBlockId(blockId)
     }
 }

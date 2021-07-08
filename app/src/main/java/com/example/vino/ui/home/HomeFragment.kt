@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -19,8 +20,8 @@ import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentHomeBinding
 import com.example.vino.model.UserViewModel
 import com.example.vino.model.UserViewModelFactory
-import com.example.vino.model.VinoApiStatus
 import com.example.vino.model.Vineyard
+import com.example.vino.network.VinoApiStatus
 import com.example.vino.ui.adapter.VineyardGridAdapter
 import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.Dispatchers
@@ -28,13 +29,17 @@ import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
     //TODO: Use list adapter with diff  util
+    private val homeFragmentViewModel: HomeFragmentViewModel by viewModels {
+        HomeFragmentViewModelFactory((requireActivity().application as VinoApplication).repository)
+    }
 
-    private var _binding: FragmentHomeBinding? = null
     private val vinoUserModel: UserViewModel by activityViewModels {
         UserViewModelFactory((requireActivity().application as VinoApplication).repository)
     }
+
     private lateinit var userVineyards: List<Vineyard>
 
+    private var _binding: FragmentHomeBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -47,19 +52,12 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        binding.lifecycleOwner = this
-        binding.userViewModel = vinoUserModel
-
         return binding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        postponeEnterTransition()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        postponeEnterTransition()
 
         // text invisible until actual user (if) available
         binding.companyName.visibility = View.INVISIBLE
@@ -67,7 +65,6 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
 
         setUpRecyclerView()
         setUpConnectionImageAndText()
-        Log.d("OnViewCreated", "Inside HomeFragment") // called every time you click bottom nav icon
     }
 
     override fun onDestroyView() {
@@ -103,28 +100,33 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
 
     private fun setUpRecyclerView() {
         binding.vineyardRecyclerView.visibility = View.INVISIBLE // to show progress circle
-
+        binding.vineyardRecyclerView.adapter = VineyardGridAdapter(listOf(), requireContext(), this@HomeFragment)
         // will update after get user request
-        vinoUserModel.vinoUser.observe(viewLifecycleOwner, {
-            setAccountName(it.head.name, it.userName)
+        vinoUserModel.vinoUser.observe(viewLifecycleOwner, { user ->
+            setAccountName("${user.firstName} ${user.lastName}", user.company)
 
-            binding.progressCircular.hide() // hide progress once user is grabbed
+            // Now that we have a user, we can get the vineyards
+            homeFragmentViewModel.refreshVineyards(user.userId)
+        })
+
+        homeFragmentViewModel.vineyards.observe(viewLifecycleOwner, { vineyards ->
             binding.vineyardRecyclerView.visibility = View.VISIBLE
 
             // on cpu thread, but not really needed since not a lot of vineyards
             lifecycleScope.launch(Dispatchers.Default) {
-                userVineyards = it.vineyards.sortedBy { vineyard ->
-                    vineyard.name
-                }
+                userVineyards = homeFragmentViewModel.sortVineyardsByName(vineyards)
+
                 activity?.runOnUiThread {
                     binding.vineyardRecyclerView.adapter = VineyardGridAdapter(userVineyards, requireContext(), this@HomeFragment) // Todo change with list adapter, submit list
                     binding.vineyardRecyclerView.setHasFixedSize(true)
-                    binding.vineyardRecyclerView.doOnPreDraw {
+                    (view?.parent as? ViewGroup)?.doOnPreDraw {
                         startPostponedEnterTransition()
                     }
                 }
             }
         })
+
+
     }
 
     private fun setAccountName(userName: String, companyName: String) {
@@ -135,6 +137,7 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
     private fun setTextAndVisibility(textView: TextView, newText: String) {
         textView.apply {
             text = newText
+            visibility = View.VISIBLE
         }
     }
 

@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.example.vino.R
-import com.example.vino.model.VinoApiStatus
+import com.example.vino.network.VinoApiStatus
 
 @BindingAdapter("vinoApiStatus")
 fun bindStatus(statusImageView: ImageView, status: VinoApiStatus) {
