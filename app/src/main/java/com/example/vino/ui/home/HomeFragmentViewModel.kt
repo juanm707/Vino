@@ -6,6 +6,7 @@ import com.example.vino.model.Vineyard
 import com.example.vino.network.VinoApiStatus
 import com.example.vino.repository.VinoRepository
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class HomeFragmentViewModel(private val repository: VinoRepository) : ViewModel() {
