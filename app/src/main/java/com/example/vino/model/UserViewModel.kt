@@ -22,6 +22,7 @@ class UserViewModel(private val repository: VinoRepository) : ViewModel() {
     val inCompleteTodos:  LiveData<List<Todo>> = repository.inCompleteTodos.asLiveData()
 
     var imageCacheKey: MemoryCache.Key? = null // set by selected vineyard on click
+    var selectedVineyard: Vineyard? = null
 
     init {
         refreshUser() // first thing to do is get user for home fragment

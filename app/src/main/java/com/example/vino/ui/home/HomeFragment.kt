@@ -93,12 +93,17 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
             humidity to humidity.transitionName,
         )
 
+        vinoUserModel.selectedVineyard = homeFragmentViewModel.getVineyardById(vineyardId)
         vinoUserModel.imageCacheKey = imageCacheKey
         val action = HomeFragmentDirections.actionNavigationHomeToVineyardDetailFragment(vineyardId)
         findNavController().navigate(action, extras)
     }
 
     private fun setUpRecyclerView() {
+        (view?.parent as? ViewGroup)?.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
+
         binding.vineyardRecyclerView.visibility = View.INVISIBLE // to show progress circle
         binding.vineyardRecyclerView.adapter = VineyardGridAdapter(listOf(), requireContext(), this@HomeFragment)
         // will update after get user request
@@ -119,9 +124,6 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
                 activity?.runOnUiThread {
                     binding.vineyardRecyclerView.adapter = VineyardGridAdapter(userVineyards, requireContext(), this@HomeFragment) // Todo change with list adapter, submit list
                     binding.vineyardRecyclerView.setHasFixedSize(true)
-                    (view?.parent as? ViewGroup)?.doOnPreDraw {
-                        startPostponedEnterTransition()
-                    }
                 }
             }
         })
@@ -146,8 +148,10 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
         vinoUserModel.apiStatus.observe(viewLifecycleOwner, {
             if (it != VinoApiStatus.LOADING)
                 binding.progressCircular.hide()
-            if (it == VinoApiStatus.ERROR)
+            if (it == VinoApiStatus.ERROR) {
+                binding.connectionStatusImage.visibility = View.VISIBLE
                 binding.connectionStatusText.visibility = View.VISIBLE
+            }
             // if DONE hide text
         })
     }

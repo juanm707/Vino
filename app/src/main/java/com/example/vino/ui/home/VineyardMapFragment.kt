@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.vino.R
 import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentVineyardMapBinding
@@ -18,6 +19,9 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_HYBRID
 import com.google.android.gms.maps.model.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
@@ -155,10 +159,7 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
             .strokeColor(ContextCompat.getColor(requireContext(), R.color.block_stroke))
             .fillColor(ContextCompat.getColor(requireContext(), R.color.block_fill))
 
-        // TODO fix sorted coordinates
-        coordinates.sortedBy {
-            it.coordinateId
-        }.forEach { coordinate ->
+        coordinates.forEach { coordinate ->
             newPolygon.add(LatLng(coordinate.latitude, coordinate.longitude))
         }
 

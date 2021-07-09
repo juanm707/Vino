@@ -65,9 +65,9 @@ class VineyardDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vineyardDetailFragmentViewModel.setVineyard(vineyardId)
+        val vineyard = vinoUserModel.selectedVineyard
+        if (vineyard != null) {
 
-        vineyardDetailFragmentViewModel.vineyard.observe(viewLifecycleOwner, { vineyard ->
             setSharedViewTransitionName(vineyard.name)
 
             binding.vineyardNameEnd.text = vineyard.name
@@ -83,16 +83,20 @@ class VineyardDetailFragment : Fragment() {
 
             binding.mapButton.setOnClickListener {
                 val action =
-                    VineyardDetailFragmentDirections.actionVineyardDetailToVineyardMapFragment(vineyard.vineyardId)
+                    VineyardDetailFragmentDirections.actionVineyardDetailToVineyardMapFragment(
+                        vineyard.vineyardId
+                    )
                 findNavController().navigate(action)
             }
 
             binding.lwpButton.setOnClickListener {
                 val action =
-                    VineyardDetailFragmentDirections.actionVineyardDetailToLeafWaterPotentialFragment(vineyard.vineyardId)
+                    VineyardDetailFragmentDirections.actionVineyardDetailToLeafWaterPotentialFragment(
+                        vineyard.vineyardId
+                    )
                 findNavController().navigate(action)
             }
-        })
+        }
 
         // imageView.load uses the singleton ImageLoader to enqueue an ImageRequest.
         // The singleton ImageLoader can be accessed using

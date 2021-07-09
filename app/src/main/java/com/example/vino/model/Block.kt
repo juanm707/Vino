@@ -32,7 +32,7 @@ class BlockWithCoordinates(
         parentColumn = "blockId",
         entityColumn = "blockParentId"
     )
-    val coordinates: List<Coordinate>
+    var coordinates: List<Coordinate>
 )
 
 @Entity(tableName = "LWPReading", primaryKeys = ["lwpReadingId", "blockId"])

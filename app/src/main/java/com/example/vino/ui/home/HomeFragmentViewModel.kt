@@ -42,6 +42,12 @@ class HomeFragmentViewModel(private val repository: VinoRepository) : ViewModel(
             vineyard.name
         }
     }
+
+    fun getVineyardById(vineyardId: Int): Vineyard? {
+        return _vineyards.value?.find { vineyard ->
+            vineyard.vineyardId == vineyardId
+        }
+    }
 }
 
 class HomeFragmentViewModelFactory(private val repository: VinoRepository) : ViewModelProvider.Factory {
