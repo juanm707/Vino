@@ -18,7 +18,7 @@ class VineyardMapFragmentViewModel(private val repository: VinoRepository) : Vie
 
     val apiStatus: LiveData<VinoApiStatus> = _status
     val vineyard: LiveData<Vineyard> = _vineyard
-    var blocks: LiveData<List<BlockWithCoordinates>> = _blocks
+    val blocks: LiveData<List<BlockWithCoordinates>> = _blocks
 
     fun setVineyard(vineyardId: Int) {
         viewModelScope.launch {

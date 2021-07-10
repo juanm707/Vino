@@ -12,7 +12,6 @@
         android:id="@+id/vineyard_item_linear_layout_end"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/light_background_purple"
         android:orientation="vertical">
 
         <ImageView
@@ -113,16 +112,16 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/vineyard_detail_gradient_background">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/map_button"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="115dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/guideline4"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -155,11 +154,10 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/lwp_button"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="115dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/guideline4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/guideline3"
                 app:layout_constraintTop_toTopOf="parent">
@@ -189,20 +187,323 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/weather_button"
+                android:layout_width="wrap_content"
+                android:layout_height="115dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/map_button">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/light_blue_900"
+                        android:gravity="center"
+                        android:text="Weather"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:id="@+id/day1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_margin="4dp"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="3dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/day1date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="-/-"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/day1icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="3dp"
+                                android:src="@drawable/ic_baseline_wb_sunny_24" />
+
+                            <TextView
+                                android:id="@+id/day1temp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="4dp"
+                                android:text="--°"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/day2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_margin="4dp"
+                            android:layout_marginStart="32dp"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="3dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/day1"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/day2date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="-/-"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/day2icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="3dp"
+                                android:src="@drawable/ic_baseline_wb_sunny_24" />
+
+                            <TextView
+                                android:id="@+id/day2temp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="4dp"
+                                android:text="--°"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/day3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_margin="4dp"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="3dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/day2"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/day3date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-/-"
+                                android:layout_gravity="center_horizontal"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/day3icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_baseline_wb_sunny_24"
+                                android:layout_marginTop="3dp"/>
+
+                            <TextView
+                                android:id="@+id/day3temp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="--°"
+                                android:layout_marginTop="4dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/day4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_margin="4dp"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="3dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/day3"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/day4date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-/-"
+                                android:layout_gravity="center_horizontal"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/day4icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_baseline_wb_sunny_24"
+                                android:layout_marginTop="3dp"/>
+
+                            <TextView
+                                android:id="@+id/day4temp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="--°"
+                                android:layout_marginTop="4dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/day5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_margin="4dp"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="3dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/day4"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/day5date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-/-"
+                                android:layout_gravity="center_horizontal"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/day5icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_baseline_wb_sunny_24"
+                                android:layout_marginTop="3dp"/>
+
+                            <TextView
+                                android:id="@+id/day5temp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="--°"
+                                android:layout_marginTop="4dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/day6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_margin="4dp"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="3dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/day5"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/day6date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="-/-"
+                                android:layout_gravity="center_horizontal"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/day6icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_baseline_wb_sunny_24"
+                                android:layout_marginTop="3dp"/>
+
+                            <TextView
+                                android:id="@+id/day6temp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="--°"
+                                android:layout_marginTop="4dp"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/day7"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_margin="4dp"
+                            android:background="@color/white"
+                            android:orientation="vertical"
+                            android:padding="3dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/day6"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/day7date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:text="-/-"
+                                android:textStyle="bold" />
+
+                            <ImageView
+                                android:id="@+id/day7icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="3dp"
+                                android:src="@drawable/ic_baseline_wb_sunny_24" />
+
+                            <TextView
+                                android:id="@+id/day7temp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="4dp"
+                                android:text="--°"
+                                android:textColor="@color/black"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="130dp" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

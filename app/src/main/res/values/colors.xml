@@ -33,4 +33,23 @@
     <color name="black_overlay">#66000000</color>
 
     <color name="target_line">#9FE53935</color>
+
+    <!-- Random generated colors on website -->
+    <color name="chart_dark_green">#006400</color>
+    <color name="chart_gold">#ffd700</color>
+    <color name="chart_medium_violet_red">#c71585</color>
+    <color name="chart_lime">#00ff00</color>
+    <color name="chart_aqua">#00ffff</color>
+    <color name="chart_blue">#0000ff</color>
+    <color name="chart_dodger_blue">#1e90ff</color>
+
+    <integer-array name="chart_colors">
+        <item>@color/chart_dark_green</item>
+        <item>@color/chart_gold</item>
+        <item>@color/chart_medium_violet_red</item>
+        <item>@color/chart_lime</item>
+        <item>@color/chart_aqua</item>
+        <item>@color/chart_blue</item>
+        <item>@color/chart_dodger_blue</item>
+    </integer-array>
 </resources>

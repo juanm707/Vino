@@ -5,6 +5,8 @@ import com.example.vino.database.UserVineyardCrossRef
 import com.example.vino.model.*
 import com.example.vino.network.VineyardManagerUser
 import com.example.vino.network.VinoApiService
+import com.example.vino.network.VinoWeatherService
+import com.example.vino.network.WeatherBasic
 import com.example.vino.vinodao.*
 import kotlinx.coroutines.flow.Flow
 
@@ -15,6 +17,7 @@ class VinoRepository(private val todoDao: TodoDao,
                      private val userDao: UserDao,
                      private val vineyardDao: VineyardDao,
                      private val userVineyardCrossRefDao: UserVineyardCrossRefDao,
+                     private val vinoWeatherService: VinoWeatherService,
                      private val vinoApiService: VinoApiService) {
 
     // Room executes all queries on a separate thread.
@@ -129,5 +132,9 @@ class VinoRepository(private val todoDao: TodoDao,
 
     suspend fun getLWPReadingsForBlockId(blockId: Int): List<LWPReading> {
         return lwpReadingDao.getLWPReadingsForBlockId(blockId)
+    }
+
+    suspend fun getDailyWeather(latitude: Double, longitude: Double): WeatherBasic {
+        return vinoWeatherService.getDailyWeather(latitude, longitude)
     }
 }

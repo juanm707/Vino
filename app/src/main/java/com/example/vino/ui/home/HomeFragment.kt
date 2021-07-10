@@ -95,6 +95,7 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
 
         vinoUserModel.selectedVineyard = homeFragmentViewModel.getVineyardById(vineyardId)
         vinoUserModel.imageCacheKey = imageCacheKey
+
         val action = HomeFragmentDirections.actionNavigationHomeToVineyardDetailFragment(vineyardId)
         findNavController().navigate(action, extras)
     }

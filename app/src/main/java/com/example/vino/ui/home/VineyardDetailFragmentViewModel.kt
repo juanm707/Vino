@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.vino.model.Vineyard
 import com.example.vino.network.VinoApiStatus
+import com.example.vino.network.WeatherBasic
 import com.example.vino.repository.VinoRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -11,12 +12,15 @@ import kotlinx.coroutines.launch
 class VineyardDetailFragmentViewModel(private val repository: VinoRepository) : ViewModel() {
 
     private val _vineyard = MutableLiveData<Vineyard>()
+    private val _weather = MutableLiveData<WeatherBasic>()
 
     val vineyard: LiveData<Vineyard> = _vineyard
+    val weather: LiveData<WeatherBasic> = _weather
 
-    fun setVineyard(vineyardId: Int) {
+    fun setVineyard(vineyard: Vineyard) {
+        _vineyard.value = vineyard
         viewModelScope.launch {
-            _vineyard.value = repository.getVineyard(vineyardId)
+            _weather.value = repository.getDailyWeather(vineyard.latitude, vineyard.longitude)
         }
     }
 }

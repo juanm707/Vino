@@ -155,7 +155,7 @@ class LeafWaterPotentialFragment : Fragment() {
                         entries.add(Entry(reading.timestamp.toFloat(), reading.barPressureData))
                     }
                     val blockDataset = LineDataSet(entries, blockName)
-                    setDataOptions(blockDataset, ContextCompat.getColor(requireContext(), R.color.light_green_dark))
+                    setDataOptions(blockDataset, getRandomColor())
                     dataSets.add(blockDataset)
                 }
             }
@@ -182,6 +182,11 @@ class LeafWaterPotentialFragment : Fragment() {
         val lineData = LineData(dataSets)
         chart.data = lineData
         chart.setExtraOffsets(10F, 0F, 10F, 10F)
+    }
+
+    private fun getRandomColor(): Int {
+        val colors = requireContext().resources.getIntArray(R.array.chart_colors)
+        return colors[Random().nextInt(colors.size)]
     }
 
     private fun shareChartBitmap(bitmap: Bitmap, vineyardName: String) {

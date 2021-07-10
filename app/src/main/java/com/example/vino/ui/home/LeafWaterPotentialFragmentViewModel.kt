@@ -24,6 +24,7 @@ class LeafWaterPotentialFragmentViewModel(private val repository: VinoRepository
 
         getDataLoad {
             repository.refreshLWPReadings()
+            repository.refreshBlocks()
             _vineyardName.value = repository.getVineyard(vineyardId).name
             val blocks = repository.getBlockInfoForLWPReading(vineyardId)
             blocks.forEach { block ->

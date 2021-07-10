@@ -9,10 +9,12 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 enum class VinoApiStatus { LOADING, ERROR, DONE }
 
 private const val BASE_URL = "http://10.0.2.2:8000" // for actual device use 10.0.0.37
+private const val OPEN_WEATHER_URL = "https://api.openweathermap.org"
 
 /**
  * Build the Moshi object with Kotlin adapter factory that Retrofit will be using.
@@ -29,9 +31,11 @@ private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .build()
 
-/**
- * A public interface that exposes the [getUser] method
- */
+private val weatherRetrofit = Retrofit.Builder()
+    .addConverterFactory(MoshiConverterFactory.create(moshi))
+    .baseUrl(OPEN_WEATHER_URL)
+    .build()
+
 interface VinoApiService {
     /**
      * Returns a [VineyardManagerUser] and this method can be called from a Coroutine.
@@ -54,9 +58,16 @@ interface VinoApiService {
     suspend fun getLWPReadings() : List<LWPReading>
 }
 
+interface VinoWeatherService {
+
+    @GET("data/2.5/onecall?exclude=minutely,hourly,alerts&units=imperial&appid=")
+    suspend fun getDailyWeather(@Query("lat") latitude: Double, @Query("lon") longitude: Double) : WeatherBasic
+}
+
 /**
  * A public Api object that exposes the lazy-initialized Retrofit service
  */
 object VinoApi {
     val retrofitService: VinoApiService by lazy { retrofit.create(VinoApiService::class.java) }
+    val retrofitWeatherService: VinoWeatherService by lazy { weatherRetrofit.create(VinoWeatherService::class.java) }
 }

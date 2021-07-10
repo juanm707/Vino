@@ -20,5 +20,6 @@ class VinoApplication : Application() {
     // rather than when the application starts
     val database by lazy { VinoDatabase.getDatabase(this, applicationScope) }
     val repository by lazy { VinoRepository(database.todoDao(), database.blockDao(), database.coordinateDao(),
-        database.lwpReadingDao(), database.userDao(), database.vineyardDao(), database.userVineyardCrossRefDao(),  VinoApi.retrofitService) }
+        database.lwpReadingDao(), database.userDao(), database.vineyardDao(), database.userVineyardCrossRefDao(),
+        VinoApi.retrofitWeatherService, VinoApi.retrofitService) }
 }
