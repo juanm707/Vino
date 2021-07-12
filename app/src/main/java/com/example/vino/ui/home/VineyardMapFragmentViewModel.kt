@@ -7,9 +7,7 @@ import com.example.vino.model.BlockWithCoordinates
 import com.example.vino.model.Vineyard
 import com.example.vino.network.VinoApiStatus
 import com.example.vino.repository.VinoRepository
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class VineyardMapFragmentViewModel(private val repository: VinoRepository) : ViewModel() {
     private val _status = MutableLiveData<VinoApiStatus>()
@@ -31,9 +29,12 @@ class VineyardMapFragmentViewModel(private val repository: VinoRepository) : Vie
             repository.refreshBlocks()
             val unsortedCoordinateBlocks = repository.getBlocksForVineyardId(vineyardId)
 
-            unsortedCoordinateBlocks.forEach { block ->
-                val sortedCoordinates = block.coordinates.sortedBy { coordinate -> coordinate.coordinateId }
-                block.coordinates = sortedCoordinates
+            withContext(Dispatchers.Default) {
+                unsortedCoordinateBlocks.forEach { block ->
+                    val sortedCoordinates =
+                        block.coordinates.sortedBy { coordinate -> coordinate.coordinateId }
+                    block.coordinates = sortedCoordinates
+                }
             }
 
             _blocks.value = unsortedCoordinateBlocks

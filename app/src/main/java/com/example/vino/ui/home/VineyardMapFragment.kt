@@ -22,6 +22,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.net.MalformedURLException
+import java.net.URL
+import java.util.*
 
 class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
@@ -49,6 +52,26 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
          */
         map = googleMap
 
+//        var tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
+//            override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
+//
+//                /* Define the URL pattern for the tile images */
+//                val url = "http://my.image.server/images/zoom/$x/$y.png"
+//                val url2 = "https://tile.openweathermap.org/map/temperature/$zoom/$x/$y.png?appid=ee79ad0d5b1a83ff07fce20435019619"
+//                val url3 = String.format(Locale.US, "https://tile.openweathermap.org/map/temperature/%d/%d/%d.png?appid=ee79ad0d5b1a83ff07fce20435019619", zoom, x, y)
+//                try {
+//                    return URL(url3)
+//                } catch (e: MalformedURLException) {
+//                    throw AssertionError(e)
+//                }
+//            }
+//        }
+//
+//        val tileOverlay = map.addTileOverlay(
+//            TileOverlayOptions()
+//                .tileProvider(tileProvider)
+//        )
+
         vineyardMapFragmentViewModel.vineyard.observe(viewLifecycleOwner, { vineyard ->
 
             val vineyardLocation = LatLng(vineyard.latitude, vineyard.longitude)
@@ -69,6 +92,18 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
             addPolygonBlocks(googleMap)
         })
+    }
+
+    /*
+     * Check that the tile server supports the requested x, y and zoom.
+     * Complete this stub according to the tile range you support.
+     * If you support a limited range of tiles at different zoom levels, then you
+     * need to define the supported x, y range at each zoom level.
+     */
+    private fun checkTileExists(x: Int, y: Int, zoom: Int): Boolean {
+        val minZoom = 12
+        val maxZoom = 16
+        return zoom in minZoom..maxZoom
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
