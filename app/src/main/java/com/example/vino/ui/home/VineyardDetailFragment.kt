@@ -1,5 +1,6 @@
 package com.example.vino.ui.home
 
+import android.animation.LayoutTransition
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.transition.TransitionInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -22,6 +24,10 @@ import com.example.vino.model.UserViewModel
 import com.example.vino.model.UserViewModelFactory
 import com.example.vino.network.Daily
 import com.example.vino.network.WeatherBasic
+import com.example.vino.ui.ImageShimmer
+import com.example.vino.ui.adapter.VineyardGridAdapter
+import com.facebook.shimmer.Shimmer
+import com.facebook.shimmer.ShimmerDrawable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -60,6 +66,7 @@ class VineyardDetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentVineyardDetailBinding.inflate(inflater, container, false)
+        binding.weatherButton.layoutTransition.enableTransitionType(LayoutTransition.CHANGING) // animates when forecast set
         return binding.root
     }
 
@@ -111,11 +118,29 @@ class VineyardDetailFragment : Fragment() {
         // The singleton ImageLoader can be accessed using
         // val imageLoader = context.imageLoader
         // get image from cache
-        lifecycleScope.launch(Dispatchers.Default) {
-            val bitMap: Bitmap? =
-                vinoUserModel.imageCacheKey?.let { context?.imageLoader?.memoryCache?.get(it) } // TODO: if null set to placeholder then load? when click quick not enough time to load
-            activity?.runOnUiThread {
-                binding.vineyardImageEnd.setImageBitmap(bitMap)
+        if (vinoUserModel.imageCacheKey == null) {
+            if (vineyard != null) {
+                val imgUri = vineyard.imageUrl.toUri().buildUpon().scheme("https").build()
+
+                // This is the placeholder for the imageView
+                val shimmerDrawable = ShimmerDrawable().apply {
+                    setShimmer(ImageShimmer().shimmer)
+                }
+                binding.vineyardImageEnd.load(imgUri) {
+                    allowHardware(false)
+                    placeholder(shimmerDrawable)
+                    error(R.drawable.generic_vineyard)
+                    listener { _, metadata ->
+                        vinoUserModel.imageCacheKey = metadata.memoryCacheKey
+                    }
+                }
+            }
+        } else {
+            lifecycleScope.launch(Dispatchers.Default) {
+                val bitMap: Bitmap? = vinoUserModel.imageCacheKey?.let { context?.imageLoader?.memoryCache?.get(it) }
+                activity?.runOnUiThread {
+                    binding.vineyardImageEnd.setImageBitmap(bitMap)
+                }
             }
         }
     }
@@ -163,8 +188,9 @@ class VineyardDetailFragment : Fragment() {
         sharedElementEnterTransition = TransitionInflater.from(requireContext())
             .inflateTransition(R.transition.vineyard_detail_transition)
 
-        sharedElementReturnTransition = TransitionInflater.from(requireContext())
-            .inflateTransition(R.transition.vineyard_detail_transition)
+        // TODO FIX return transtition
+//        sharedElementReturnTransition = TransitionInflater.from(requireContext())
+//            .inflateTransition(R.transition.vineyard_detail_transition)
     }
 
     private fun setSharedViewTransitionName(name: String?) {

@@ -26,7 +26,7 @@ class Current(
     val visibility: Float,
     val wind_speed: Float,
     val wind_deg: Float,
-    val wind_gust: Float,
+    val wind_gust: Float?,
     val weather: List<Weather>,
 )
 

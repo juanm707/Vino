@@ -57,7 +57,7 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        postponeEnterTransition()
+        //postponeEnterTransition()
 
         // text invisible until actual user (if) available
         binding.companyName.visibility = View.INVISIBLE
@@ -102,7 +102,7 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
 
     private fun setUpRecyclerView() {
         (view?.parent as? ViewGroup)?.doOnPreDraw {
-            startPostponedEnterTransition()
+            //startPostponedEnterTransition()
         }
 
         binding.vineyardRecyclerView.visibility = View.INVISIBLE // to show progress circle

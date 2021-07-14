@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.vino.databinding.ActivityMainBinding
@@ -35,14 +36,17 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(
-//                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_todos, R.id.navigation_login
-//            )
-//        )
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_todos
+            )
+        )
 
         setSupportActionBar(binding.appBar) // this is for the top bar, right item
-        navView.setupWithNavController(navController)
+
+        // Can use mix of both vvv
+        //setupActionBarWithNavController(navController, appBarConfiguration) // displays arrow and fragment title on non top navigation items
+        navView.setupWithNavController(navController) // to use with action bar, shows other fragments
 
         binding.appBar.setNavigationOnClickListener {
             //Toast.makeText(applicationContext, "Logo", Toast.LENGTH_SHORT).show()

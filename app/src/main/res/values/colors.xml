@@ -67,9 +67,6 @@
     <color name="positive30">#FC8014</color>
 
     <integer-array name="temperature_scale">
-        <item>@color/negative65</item>
-        <item>@color/negative55</item>
-        <item>@color/negative45</item>
         <item>@color/negative40</item>
         <item>@color/negative30</item>
         <item>@color/negative20</item>

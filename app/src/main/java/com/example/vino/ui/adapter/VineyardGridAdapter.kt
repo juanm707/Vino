@@ -13,6 +13,7 @@ import coil.load
 import coil.memory.MemoryCache
 import com.example.vino.R
 import com.example.vino.model.Vineyard
+import com.example.vino.ui.ImageShimmer
 import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
 import com.google.android.material.card.MaterialCardView
@@ -54,17 +55,9 @@ class VineyardGridAdapter(private val vineyards: List<Vineyard>, private val con
             vineyardName.text = vineyard.name
             val imgUri = vineyard.imageUrl.toUri().buildUpon().scheme("https").build()
 
-            val shimmer = Shimmer.AlphaHighlightBuilder()// The attributes for a ShimmerDrawable is set by this builder
-                .setDuration(1200) // how long the shimmering animation takes to do one full sweep
-                .setBaseAlpha(0.8f) //the alpha of the underlying children
-                .setHighlightAlpha(0.9f) // the shimmer alpha amount
-                .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
-                .setAutoStart(true)
-                .build()
-
             // This is the placeholder for the imageView
             val shimmerDrawable = ShimmerDrawable().apply {
-                setShimmer(shimmer)
+                setShimmer(ImageShimmer().shimmer)
             }
 
             // imageView.load uses the singleton ImageLoader to enqueue an ImageRequest.
