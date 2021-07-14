@@ -1,16 +1,13 @@
 package com.example.vino.ui.home
 
-import androidx.fragment.app.Fragment
-
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.example.vino.R
 import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentVineyardMapBinding
@@ -19,12 +16,10 @@ import com.google.android.gms.maps.*
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_HYBRID
 import com.google.android.gms.maps.model.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
+
 
 class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
@@ -40,6 +35,19 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
     private var clickedBlock: String? = null
 
+    var tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
+        override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
+
+            /* Define the URL pattern for the tile images */
+            val url3 = String.format(Locale.US, "https://tile.openweathermap.org/map/temp_new/%d/%d/%d.png?appid=ee79ad0d5b1a83ff07fce20435019619", zoom, x, y)
+            try {
+                return URL(url3)
+            } catch (e: MalformedURLException) {
+                throw AssertionError(e)
+            }
+        }
+    }
+
     private val callback = OnMapReadyCallback { googleMap ->
         /**
          * Manipulates the map once available.
@@ -52,25 +60,11 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
          */
         map = googleMap
 
-//        var tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
-//            override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
-//
-//                /* Define the URL pattern for the tile images */
-//                val url = "http://my.image.server/images/zoom/$x/$y.png"
-//                val url2 = "https://tile.openweathermap.org/map/temperature/$zoom/$x/$y.png?appid=ee79ad0d5b1a83ff07fce20435019619"
-//                val url3 = String.format(Locale.US, "https://tile.openweathermap.org/map/temperature/%d/%d/%d.png?appid=ee79ad0d5b1a83ff07fce20435019619", zoom, x, y)
-//                try {
-//                    return URL(url3)
-//                } catch (e: MalformedURLException) {
-//                    throw AssertionError(e)
-//                }
-//            }
-//        }
-//
-//        val tileOverlay = map.addTileOverlay(
-//            TileOverlayOptions()
-//                .tileProvider(tileProvider)
-//        )
+        // if displaying weather
+        val tileOverlay = map.addTileOverlay(
+            TileOverlayOptions()
+                .tileProvider(tileProvider)
+        )
 
         vineyardMapFragmentViewModel.vineyard.observe(viewLifecycleOwner, { vineyard ->
 
@@ -124,6 +118,11 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val gradientDrawable: GradientDrawable = GradientDrawable(
+            GradientDrawable.Orientation.LEFT_RIGHT, requireContext().resources.getIntArray(R.array.temperature_scale)
+        )
+        binding.temperatureScaleImage.setImageDrawable(gradientDrawable)
         vineyardMapFragmentViewModel.setVineyard(vineyardId)
 
         vineyardMapFragmentViewModel.vineyard.observe(viewLifecycleOwner, { vineyard ->

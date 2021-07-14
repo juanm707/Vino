@@ -12,12 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:messageTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:buttonLeftText="Dismiss"
         app:buttonRightText="View"
         app:icon="@drawable/ic_baseline_grass_24"
         app:iconTint="@color/purple_600"
-        app:messageText="Would you like to view the block info?" />
+        app:messageText="Would you like to view the block info?"
+        app:messageTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -43,6 +43,113 @@
             android:textStyle="bold"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:elevation="5dp"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/temperature_scale"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_gravity="start">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/temperature_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Temperature, °F"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/imageCardView"
+                    android:layout_width="0dp"
+                    android:layout_height="4dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/temperature_label">
+
+                    <ImageView
+                        android:id="@+id/temperature_scale_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@color/greyBackground" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/temp1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="2dp"
+                    android:text="-40"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toTopOf="@+id/imageCardView"
+                    app:layout_constraintStart_toEndOf="@+id/temperature_label"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/temp2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toTopOf="@+id/imageCardView"
+                    app:layout_constraintEnd_toStartOf="@+id/temp3"
+                    app:layout_constraintStart_toEndOf="@+id/temp1"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/temp3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="30"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toTopOf="@+id/imageCardView"
+                    app:layout_constraintEnd_toEndOf="@+id/imageCardView"
+                    app:layout_constraintStart_toStartOf="@+id/imageCardView"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/temp4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="2dp"
+                    android:text="70"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toTopOf="@+id/imageCardView"
+                    app:layout_constraintEnd_toStartOf="@+id/temp5"
+                    app:layout_constraintStart_toEndOf="@+id/temp3"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/temp5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="100"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toTopOf="@+id/imageCardView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </FrameLayout>
 

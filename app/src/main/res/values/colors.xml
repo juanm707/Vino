@@ -52,4 +52,32 @@
         <item>@color/chart_blue</item>
         <item>@color/chart_dodger_blue</item>
     </integer-array>
+
+    <color name="negative65">#821692</color>
+    <color name="negative55">#821692</color>
+    <color name="negative45">#821692</color>
+    <color name="negative40">#821692</color>
+    <color name="negative30">#8257DB</color>
+    <color name="negative20">#208CEC</color>
+    <color name="negative10">#20C4E8</color>
+    <color name="zero">#23DDDD</color>
+    <color name="positive10">#C2FF28</color>
+    <color name="positive20">#FFF028</color>
+    <color name="positive25">#FFC228</color>
+    <color name="positive30">#FC8014</color>
+
+    <integer-array name="temperature_scale">
+        <item>@color/negative65</item>
+        <item>@color/negative55</item>
+        <item>@color/negative45</item>
+        <item>@color/negative40</item>
+        <item>@color/negative30</item>
+        <item>@color/negative20</item>
+        <item>@color/negative10</item>
+        <item>@color/zero</item>
+        <item>@color/positive10</item>
+        <item>@color/positive20</item>
+        <item>@color/positive25</item>
+        <item>@color/positive30</item>
+    </integer-array>
 </resources>
