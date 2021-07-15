@@ -96,6 +96,10 @@ class VineyardDetailFragment : Fragment() {
                 setForecast(weatherBasic)
             })
 
+            binding.weatherButton.setOnClickListener {
+                val action = VineyardDetailFragmentDirections.actionVineyardDetailToWeatherDetailFragment()
+                findNavController().navigate(action)
+            }
 
             binding.mapButton.setOnClickListener {
                 val action =

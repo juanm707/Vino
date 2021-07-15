@@ -49,6 +49,9 @@
             app:enterAnim="@anim/slide_in"
             app:popExitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left" />
+        <action
+            android:id="@+id/action_vineyard_detail_to_weatherDetailFragment"
+            app:destination="@id/weatherDetailFragment" />
 
     </fragment>
 
@@ -73,5 +76,10 @@
             android:name="vineyardId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/weatherDetailFragment"
+        android:name="com.example.vino.WeatherDetailFragment"
+        android:label="weather_detail_fragment"
+        tools:layout="@layout/weather_detail_fragment" />
 
 </navigation>
