@@ -173,7 +173,7 @@ class VineyardDetailFragment : Fragment() {
 
     private fun setWeather(date: TextView, icon: ImageView, temp: TextView, daily: Daily) {
         val sdf = SimpleDateFormat("M/d", Locale.US)
-        sdf.timeZone = TimeZone.getTimeZone("UTC")
+        sdf.timeZone = TimeZone.getDefault()
         val weatherDate = sdf.format(Date(daily.dt * 1000L))
         date.text = weatherDate
 

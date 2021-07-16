@@ -20,7 +20,7 @@ class AlertRecyclerViewAdapter() : RecyclerView.Adapter<AlertRecyclerViewAdapter
     }
 
     override fun getItemCount(): Int {
-        return 1
+        return 0
     }
 
     class AlertViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -15,4 +15,7 @@
     <string name="humidity_value_percent">%1$d%%</string>
     <string name="completed_on">Completed on %1$s</string>
     <string name="due_by">Due by %1$s</string>
+    <string name="wind_speed">Wind speed %1$d mph</string>
+    <string name="feels_like">Feels like %1$d°</string>
+    <string name="clouds_percent">Clouds %1$d%%</string>
 </resources>

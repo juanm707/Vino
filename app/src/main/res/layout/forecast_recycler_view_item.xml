@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/day1"
+        android:id="@+id/day"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_margin="4dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/day1date"
+            android:id="@+id/dayDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -26,7 +26,7 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/day1icon"
+            android:id="@+id/dayIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -34,7 +34,7 @@
             android:src="@drawable/ic_baseline_wb_sunny_24" />
 
         <TextView
-            android:id="@+id/day1temp"
+            android:id="@+id/dayTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
