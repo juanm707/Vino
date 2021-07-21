@@ -10,5 +10,7 @@ class Vineyard(
     val name: String,
     val imageUrl: String,
     val latitude: Double = 0.0,
-    val longitude: Double = 0.0
+    val longitude: Double = 0.0,
+    val city: String,
+    val state: String,
 )

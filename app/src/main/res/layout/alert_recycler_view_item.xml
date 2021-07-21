@@ -48,6 +48,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
             android:text="6/1/21 3:00 PM - 6/5/21 3:00 PM"
             app:layout_constraintEnd_toEndOf="parent"

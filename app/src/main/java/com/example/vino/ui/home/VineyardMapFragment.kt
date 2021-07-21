@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,7 +14,7 @@ import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentVineyardMapBinding
 import com.example.vino.model.*
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.GoogleMap.MAP_TYPE_HYBRID
+import com.google.android.gms.maps.GoogleMap.*
 import com.google.android.gms.maps.model.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.net.MalformedURLException
@@ -32,6 +33,7 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
     private lateinit var map: GoogleMap
     private var vineyardId: Int = 0
+    private var viewTemperature: Boolean = false
 
     private var clickedBlock: String? = null
 
@@ -53,18 +55,19 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
          * Manipulates the map once available.
          * This callback is triggered when the map is ready to be used.
          * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
          * If Google Play services is not installed on the device, the user will be prompted to
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
          */
         map = googleMap
 
-        // if displaying weather
-        val tileOverlay = map.addTileOverlay(
-            TileOverlayOptions()
-                .tileProvider(tileProvider)
-        )
+        if (viewTemperature) {
+            // if displaying weather
+            val tileOverlay = map.addTileOverlay(
+                TileOverlayOptions()
+                    .tileProvider(tileProvider)
+            )
+        }
 
         vineyardMapFragmentViewModel.vineyard.observe(viewLifecycleOwner, { vineyard ->
 
@@ -73,7 +76,7 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
                 MarkerOptions()
                     .position(vineyardLocation)
                     .title(vineyard.name)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.grape_logo)) // must svg png etc not xml
+                    //.icon(BitmapDescriptorFactory.fromResource(R.drawable.grape_logo)) // must use svg png etc not xml
             )
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(vineyardLocation))
             googleMap.moveCamera(CameraUpdateFactory.zoomTo(18f))
@@ -104,6 +107,7 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
         super.onCreate(savedInstanceState)
         arguments?.let {
             vineyardId = it.getInt("vineyardId", 0)
+            viewTemperature = it.getBoolean("viewTemperature")
         }
     }
 
@@ -119,10 +123,16 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val gradientDrawable: GradientDrawable = GradientDrawable(
-            GradientDrawable.Orientation.LEFT_RIGHT, requireContext().resources.getIntArray(R.array.temperature_scale)
-        )
-        binding.temperatureScaleImage.setImageDrawable(gradientDrawable)
+        // get the temperature scale
+        if (viewTemperature) {
+            val gradientDrawable: GradientDrawable = GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                requireContext().resources.getIntArray(R.array.temperature_scale)
+            )
+            binding.temperatureScaleImage.setImageDrawable(gradientDrawable)
+        } else
+            binding.temperatureScale.visibility = View.GONE
+
         vineyardMapFragmentViewModel.setVineyard(vineyardId)
 
         vineyardMapFragmentViewModel.vineyard.observe(viewLifecycleOwner, { vineyard ->
@@ -155,11 +165,12 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
         binding.banner.setRightButtonListener {
             binding.banner.dismiss()
+
             MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog_Centered)
-                .setMessage(getBlockInfo())
                 .setNegativeButton("Dismiss") { dialog, which ->
                     // Respond to negative button press
                 }
+                .setView(getBlockInfoLayout(layoutInflater))
                 .show()
         }
     }
@@ -200,20 +211,20 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
         return newPolygon
     }
 
-    private fun getBlockInfo(): String {
+    private fun getBlockInfoLayout(inflater: LayoutInflater): View {
         val selectedBlock = vineyardMapFragmentViewModel.getBlockForName(clickedBlock)
-        return if (selectedBlock == null)
-            "No block info available..."
-        else {
-            "Name: ${selectedBlock.name}" + '\n' +
-                    "Variety: ${selectedBlock.variety}" + '\n' +
-                    "Acres: ${selectedBlock.acres}" + '\n' +
-                    "Vines: ${selectedBlock.vines}" + '\n' +
-                    "Rootstock: ${selectedBlock.rootstock}" + '\n' +
-                    "Clone: ${selectedBlock.clone}" + '\n' +
-                    "Year Planted: ${selectedBlock.yearPlanted}" + '\n' +
-                    "Row Spacing: ${selectedBlock.rowSpacing} ft." + '\n' +
-                    "Vine Spacing: ${selectedBlock.vineSpacing} ft."
+        val dialogLayout = inflater.inflate(R.layout.block_info_alert_dialog, null)
+        if (selectedBlock != null) {
+            dialogLayout.findViewById<TextView>(R.id.name_actual).text = selectedBlock.name
+            dialogLayout.findViewById<TextView>(R.id.variety_actual).text = selectedBlock.variety
+            dialogLayout.findViewById<TextView>(R.id.acres_actual).text = "${selectedBlock.acres} ac."
+            dialogLayout.findViewById<TextView>(R.id.vines_actual).text = "${selectedBlock.vines}"
+            dialogLayout.findViewById<TextView>(R.id.rootstock_actual).text = selectedBlock.rootstock
+            dialogLayout.findViewById<TextView>(R.id.clone_actual).text = selectedBlock.clone
+            dialogLayout.findViewById<TextView>(R.id.year_actual).text = "${selectedBlock.yearPlanted}"
+            dialogLayout.findViewById<TextView>(R.id.row_space_actual).text = "${selectedBlock.rowSpacing} ft."
+            dialogLayout.findViewById<TextView>(R.id.plant_space_actual).text = "${selectedBlock.vineSpacing} ft."
         }
+        return dialogLayout
     }
 }

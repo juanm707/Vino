@@ -42,7 +42,6 @@
                     android:maxLines="1"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@string/app_name" />
@@ -236,8 +235,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
-                                android:text="-/-"
-                                android:textStyle="bold" />
+                                android:text="-/-" />
 
                             <ImageView
                                 android:id="@+id/day1icon"
@@ -276,8 +274,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
-                                android:text="-/-"
-                                android:textStyle="bold" />
+                                android:text="-/-" />
 
                             <ImageView
                                 android:id="@+id/day2icon"
@@ -315,8 +312,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="-/-"
-                                android:layout_gravity="center_horizontal"
-                                android:textStyle="bold" />
+                                android:layout_gravity="center_horizontal" />
 
                             <ImageView
                                 android:id="@+id/day3icon"
@@ -354,8 +350,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="-/-"
-                                android:layout_gravity="center_horizontal"
-                                android:textStyle="bold" />
+                                android:layout_gravity="center_horizontal" />
 
                             <ImageView
                                 android:id="@+id/day4icon"
@@ -393,8 +388,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="-/-"
-                                android:layout_gravity="center_horizontal"
-                                android:textStyle="bold" />
+                                android:layout_gravity="center_horizontal" />
 
                             <ImageView
                                 android:id="@+id/day5icon"
@@ -432,8 +426,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="-/-"
-                                android:layout_gravity="center_horizontal"
-                                android:textStyle="bold" />
+                                android:layout_gravity="center_horizontal" />
 
                             <ImageView
                                 android:id="@+id/day6icon"
@@ -472,8 +465,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_horizontal"
-                                android:text="-/-"
-                                android:textStyle="bold" />
+                                android:text="-/-" />
 
                             <ImageView
                                 android:id="@+id/day7icon"

@@ -102,10 +102,7 @@ class VineyardDetailFragment : Fragment() {
             }
 
             binding.mapButton.setOnClickListener {
-                val action =
-                    VineyardDetailFragmentDirections.actionVineyardDetailToVineyardMapFragment(
-                        vineyard.vineyardId
-                    )
+                val action = VineyardDetailFragmentDirections.actionVineyardDetailToVineyardMapFragment(vineyard.vineyardId)
                 findNavController().navigate(action)
             }
 

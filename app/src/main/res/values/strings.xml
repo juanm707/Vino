@@ -18,4 +18,13 @@
     <string name="wind_speed">Wind speed %1$d mph</string>
     <string name="feels_like">Feels like %1$d°</string>
     <string name="clouds_percent">Clouds %1$d%%</string>
+    <string name="variety">Variety</string>
+    <string name="acres">Acres</string>
+    <string name="vines">Vines</string>
+    <string name="rootstock">Rootstock</string>
+    <string name="clone">Clone</string>
+    <string name="year_planted">Year Planted</string>
+    <string name="row">Row Spacing</string>
+    <string name="plant_spacing">Plant Spacing</string>
+    <string name="name">Name</string>
 </resources>

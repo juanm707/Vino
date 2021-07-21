@@ -69,6 +69,10 @@
         <argument
             android:name="vineyardId"
             app:argType="integer" />
+        <argument
+            android:name="viewTemperature"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/leafWaterPotentialFragment"
@@ -83,6 +87,13 @@
         android:id="@+id/weatherDetailFragment"
         android:name="com.example.vino.ui.home.WeatherDetailFragment"
         android:label="weather_detail_fragment"
-        tools:layout="@layout/weather_detail_fragment" />
+        tools:layout="@layout/fragment_weather_detail" >
+        <action
+            android:id="@+id/action_weatherDetailFragment_to_vineyardMapFragment"
+            app:destination="@id/vineyardMapFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left" />
+    </fragment>
 
 </navigation>
