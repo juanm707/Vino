@@ -27,4 +27,11 @@
     <string name="row">Row Spacing</string>
     <string name="plant_spacing">Plant Spacing</string>
     <string name="name">Name</string>
+    <string name="map_type">Map type</string>
+    <string name="satellite">Satellite</string>
+    <string name="terrain">Terrain</string>
+    <string name="map_default">Default</string>
+    <string name="temperature">Temperature</string>
+    <string name="wind">Wind</string>
+    <string name="rain">Rain</string>
 </resources>

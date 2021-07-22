@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,13 +17,17 @@ import com.example.vino.model.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.GoogleMap.*
 import com.google.android.gms.maps.model.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
 
+const val MAP_TYPE = "mapType"
+const val MAP_DETAIL = "mapDetail"
 
-class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
+class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener, MapLayersBottomSheetDialogFragment.MapItemClickListener {
 
     private val vineyardMapFragmentViewModel: VineyardMapFragmentViewModel by viewModels {
         VineyardMapFragmentViewModelFactory((requireActivity().application as VinoApplication).repository)
@@ -37,18 +42,11 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
 
     private var clickedBlock: String? = null
 
-    var tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
-        override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
 
-            /* Define the URL pattern for the tile images */
-            val url3 = String.format(Locale.US, "https://tile.openweathermap.org/map/temp_new/%d/%d/%d.png?appid=ee79ad0d5b1a83ff07fce20435019619", zoom, x, y)
-            try {
-                return URL(url3)
-            } catch (e: MalformedURLException) {
-                throw AssertionError(e)
-            }
-        }
-    }
+    private var currentMapType = MAP_TYPE_HYBRID
+    private var currentMapDetail = MapLayer.NONE
+    private var currentTileOverlay: TileOverlay? = null
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -61,11 +59,15 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
          */
         map = googleMap
 
+        setUpBottomSheet()
+
         if (viewTemperature) {
             // if displaying weather
-            val tileOverlay = map.addTileOverlay(
+            currentMapType = MAP_TYPE_HYBRID
+            currentMapDetail = MapLayer.TEMPERATURE
+            currentTileOverlay = map.addTileOverlay(
                 TileOverlayOptions()
-                    .tileProvider(tileProvider)
+                    .tileProvider(MapTileProvider("temp").getProvider())
             )
         }
 
@@ -80,15 +82,16 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
             )
             googleMap.moveCamera(CameraUpdateFactory.newLatLng(vineyardLocation))
             googleMap.moveCamera(CameraUpdateFactory.zoomTo(18f))
-            googleMap.mapType = MAP_TYPE_HYBRID
-            googleMap.uiSettings.apply {
-                isZoomControlsEnabled = true
-                isCompassEnabled = true
-            }
-            googleMap.setOnPolygonClickListener(this)
-
             addPolygonBlocks(googleMap)
         })
+
+        googleMap.mapType = currentMapType
+        googleMap.uiSettings.apply {
+            isZoomControlsEnabled = true
+            isCompassEnabled = true
+        }
+        googleMap.setOnPolygonClickListener(this)
+
     }
 
     /*
@@ -226,5 +229,65 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener {
             dialogLayout.findViewById<TextView>(R.id.plant_space_actual).text = "${selectedBlock.vineSpacing} ft."
         }
         return dialogLayout
+    }
+
+    private fun setUpBottomSheet() {
+        binding.mapLayerSelectFab.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putInt(MAP_TYPE, currentMapType)
+            bundle.putInt(MAP_DETAIL, currentMapDetail.ordinal)
+
+            val mapLayerBottomSheetFragment = MapLayersBottomSheetDialogFragment.newInstance(bundle)
+            mapLayerBottomSheetFragment.setListener(this)
+            mapLayerBottomSheetFragment.show(parentFragmentManager, "MapLayerBottomSheetFragment")
+        }
+    }
+
+    override fun onMapTypeItemClick(mapTypeItem: Int) {
+        if (currentMapType != mapTypeItem) {
+            when (mapTypeItem) {
+                MAP_TYPE_NORMAL -> map.mapType = MAP_TYPE_NORMAL
+                MAP_TYPE_HYBRID -> map.mapType = MAP_TYPE_HYBRID
+                MAP_TYPE_TERRAIN -> map.mapType = MAP_TYPE_TERRAIN
+            }
+            currentMapType = mapTypeItem
+        }
+    }
+
+    override fun onMapDetailItemClick(mapDetailItem: MapLayer) {
+        if (currentMapDetail != mapDetailItem) {
+            when(mapDetailItem) {
+                MapLayer.TEMPERATURE -> {
+                    setMapTileProvider("temp")
+                    binding.temperatureScale.visibility = View.VISIBLE
+                }
+                MapLayer.WIND -> {
+                    setMapTileProvider("wind")
+                    binding.temperatureScale.visibility = View.GONE
+                }
+                MapLayer.RAIN -> {
+                    setMapTileProvider("precipitation")
+                    binding.temperatureScale.visibility = View.GONE
+                }
+                else -> {}
+            }
+            currentMapDetail = mapDetailItem
+        } else {
+            // if they are the same remove it
+            if (currentMapDetail == MapLayer.TEMPERATURE)
+                binding.temperatureScale.visibility = View.GONE
+
+            currentMapDetail = MapLayer.NONE
+            currentTileOverlay?.remove()
+        }
+    }
+
+    private fun setMapTileProvider(type: String) {
+        currentTileOverlay?.remove() // remove old one
+        val newTileProvider = MapTileProvider(type)
+        currentTileOverlay = map.addTileOverlay(
+            TileOverlayOptions()
+                .tileProvider(newTileProvider.getProvider())
+        )
     }
 }

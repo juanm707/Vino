@@ -34,6 +34,8 @@
 
     <color name="target_line">#9FE53935</color>
 
+    <color name="map_type_select">#0578D3</color>
+
     <!-- Random generated colors on website -->
     <color name="chart_dark_green">#006400</color>
     <color name="chart_gold">#ffd700</color>
