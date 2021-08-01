@@ -81,6 +81,7 @@ class VineyardDetailFragment : Fragment() {
             setSharedViewTransitionName(vineyard.name)
 
             binding.vineyardNameEnd.text = vineyard.name
+            binding.currentJobText.text = getString(R.string.current_job, vineyard.job)
 
             vineyardDetailFragmentViewModel.weather.observe(viewLifecycleOwner, { weatherBasic ->
 
@@ -199,7 +200,6 @@ class VineyardDetailFragment : Fragment() {
         binding.vineyardItemLinearLayoutEnd.transitionName = "vineyardLinearLayout$name"
         binding.vineyardImageEnd.transitionName = "vineyardImage$name"
         binding.vineyardNameEnd.transitionName = "vineyardName$name"
-        binding.vineyardTempEnd.transitionName = "vineyardTemperature$name"
-        binding.vineyardHumidityEnd.transitionName = "vineyardHumidity$name"
+        binding.currentJobText.transitionName = "vineyardJob$name"
     }
 }

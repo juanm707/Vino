@@ -72,14 +72,12 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
     }
 
     override fun onVineyardClick(
-        position: Int,
         vineyardId: Int,
         vineyardCardView: MaterialCardView,
         vineyardLinearLayout: LinearLayout,
         vineyardName: TextView,
+        vineyardJob: TextView,
         vineyardImage: ImageView,
-        temperature: TextView,
-        humidity: TextView,
         imageCacheKey: MemoryCache.Key?
     ) {
 
@@ -88,8 +86,7 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
             vineyardLinearLayout to vineyardLinearLayout.transitionName,
             vineyardName to vineyardName.transitionName,
             vineyardImage to vineyardImage.transitionName,
-            temperature to temperature.transitionName,
-            humidity to humidity.transitionName,
+            vineyardJob to vineyardJob.transitionName
         )
 
         vinoUserModel.selectedVineyard = homeFragmentViewModel.getVineyardById(vineyardId)

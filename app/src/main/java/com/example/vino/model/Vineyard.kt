@@ -2,7 +2,6 @@ package com.example.vino.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.lang.StringBuilder
 
 @Entity(tableName = "Vineyard")
 class Vineyard(
@@ -13,4 +12,8 @@ class Vineyard(
     val longitude: Double = 0.0,
     val city: String,
     val state: String,
+    val job: String,
+    val sprayed: Boolean,
+    val type: String?,
+    val material: String?
 )

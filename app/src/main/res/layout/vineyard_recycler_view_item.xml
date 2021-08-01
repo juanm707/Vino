@@ -29,26 +29,54 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Vineyard Name"
+            android:textColor="@color/black"
             android:maxLines="1"
             android:ellipsize="end"
-            android:padding="3dp"
+            android:padding="4dp"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Overline" />
 
         <TextView
-            android:id="@+id/vineyard_temp"
+            android:id="@+id/current_job"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Temperature: 100°"
-            android:paddingStart="3dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+            android:text="Job: Pruning"
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingStart="4dp"
+            android:paddingBottom="4dp"/>
 
-        <TextView
-            android:id="@+id/vineyard_humidity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Humidity: 30%"
-            android:paddingStart="3dp"
-            android:paddingBottom="3dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/spray_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="start"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/paint_spray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/design_default_color_error" />
+
+            <TextView
+                android:id="@+id/spray_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textStyle="bold"
+                android:text="Fungicide - Serenade Optimum"
+                app:layout_constraintBottom_toBottomOf="@id/spray_icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/spray_icon"
+                app:layout_constraintTop_toTopOf="@id/spray_icon" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

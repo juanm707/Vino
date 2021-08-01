@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -84,6 +86,11 @@ class WeatherDetailFragment : Fragment() {
 
             setTabSelectedListener(weather)
         })
+
+        weatherViewModel.isWhiteText.observe(viewLifecycleOwner, { isWhiteText ->
+            if (isWhiteText)
+                setWhiteTextAll()
+        })
     }
 
     private fun setAlerts(alerts: List<Alert>?) {
@@ -127,7 +134,7 @@ class WeatherDetailFragment : Fragment() {
         binding.temperature.text = weather.current.temp.toInt().toString()
         val (description, backgroundCode) = getWeatherDescription(weather.current.weather[0].description)
         binding.description.text = description
-        binding.mainConstraintLayout.background = getWeatherBackground(backgroundCode)
+        binding.mainConstraintLayout.background = getWeatherBackground(backgroundCode, weather.current.sunset)
         binding.sunriseText.text = getSunTime(weather.current.sunrise)
         binding.sunsetText.text = getSunTime(weather.current.sunset)
         binding.windSpeedText.text = getString(R.string.wind_speed, weather.current.wind_speed.toInt())
@@ -136,13 +143,44 @@ class WeatherDetailFragment : Fragment() {
         binding.cloudText.text = getString(R.string.clouds_percent, weather.current.clouds.toInt())
     }
 
-    private fun getWeatherBackground(backgroundCode: WeatherCode): Drawable? {
+    private fun getWeatherBackground(backgroundCode: WeatherCode, sunset: Long): Drawable? {
         // TODO add smoke and snow
+        if (Calendar.getInstance().timeInMillis >= (sunset * 1000L)) {
+            weatherViewModel.setWhiteText(true)
+            return ContextCompat.getDrawable(requireContext(), R.drawable.weather_night_clear) // and set text to white
+        }
+
+        weatherViewModel.setWhiteText(false)
         return when (backgroundCode) {
             WeatherCode.GREY -> ContextCompat.getDrawable(requireContext(), R.drawable.weather_clouds)
             WeatherCode.CLOUDS -> ContextCompat.getDrawable(requireContext(), R.drawable.weather_sunny_cloudy)
             else -> ContextCompat.getDrawable(requireContext(), R.drawable.weather_sunny_clear)
         }
+    }
+
+    private fun setWhiteTextAll() {
+        setWhiteTextColor(binding.degree)
+        setWhiteTextColor(binding.temperature)
+        setWhiteTextColor(binding.description)
+        setWhiteTextColor(binding.sunriseText)
+        setWhiteTextColor(binding.sunsetText)
+        setWhiteTextColor(binding.vineyard)
+        setWhiteTextColor(binding.town)
+        setWhiteDrawableTint(binding.sunriseIcon.drawable)
+        setWhiteDrawableTint(binding.sunsetIcon.drawable)
+        setWhiteDrawableTint(binding.temperatureMapButton.drawable)
+
+    }
+
+    private fun setWhiteDrawableTint(drawable: Drawable) {
+        DrawableCompat.setTint(
+            DrawableCompat.wrap(drawable),
+            ContextCompat.getColor(requireContext(), R.color.white)
+        )
+    }
+
+    private fun setWhiteTextColor(text: TextView) {
+        text.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
     }
 
     private fun getSunTime(sunTime: Long): String {

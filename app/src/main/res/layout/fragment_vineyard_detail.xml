@@ -64,11 +64,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginBottom="8dp"
-                    android:text="Current Job: 039 Pruning"
+                    android:text="Job: 039 Pruning"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/vineyard_name_end"
-                    tools:text="Current Job: 039 Pruning" />
+                    tools:text="Job: 039 Pruning" />
 
                 <ImageView
                     android:id="@+id/temperature_image_end"

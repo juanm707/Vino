@@ -10,15 +10,21 @@ class WeatherDetailViewModel(private val repository: VinoRepository) : ViewModel
 
     private val _vineyard = MutableLiveData<Vineyard>()
     private val _weather = MutableLiveData<WeatherBasic>()
+    private val _whiteText = MutableLiveData(false)
 
     val vineyard: LiveData<Vineyard> = _vineyard
     val weather: LiveData<WeatherBasic> = _weather
+    val isWhiteText: LiveData<Boolean> = _whiteText
 
     fun setVineyard(vineyard: Vineyard) {
         _vineyard.value = vineyard
         viewModelScope.launch {
             _weather.value = repository.getAdvancedWeather(vineyard.latitude, vineyard.longitude)
         }
+    }
+
+    fun setWhiteText(setWhiteText: Boolean) {
+        _whiteText.value = setWhiteText
     }
 }
 

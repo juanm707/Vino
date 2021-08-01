@@ -37,7 +37,9 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener, MapLay
     private val binding get() = _binding!!
 
     private lateinit var map: GoogleMap
+
     private var vineyardId: Int = 0
+
     private var viewTemperature: Boolean = false
 
     private var clickedBlock: String? = null
@@ -128,11 +130,7 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener, MapLay
 
         // get the temperature scale
         if (viewTemperature) {
-            val gradientDrawable: GradientDrawable = GradientDrawable(
-                GradientDrawable.Orientation.LEFT_RIGHT,
-                requireContext().resources.getIntArray(R.array.temperature_scale)
-            )
-            binding.temperatureScaleImage.setImageDrawable(gradientDrawable)
+            setTemperatureScale()
         } else
             binding.temperatureScale.visibility = View.GONE
 
@@ -260,6 +258,7 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener, MapLay
                 MapLayer.TEMPERATURE -> {
                     setMapTileProvider("temp")
                     binding.temperatureScale.visibility = View.VISIBLE
+                    setTemperatureScale()
                 }
                 MapLayer.WIND -> {
                     setMapTileProvider("wind")
@@ -289,5 +288,13 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener, MapLay
             TileOverlayOptions()
                 .tileProvider(newTileProvider.getProvider())
         )
+    }
+
+    private fun setTemperatureScale() {
+        val gradientDrawable = GradientDrawable(
+            GradientDrawable.Orientation.LEFT_RIGHT,
+            requireContext().resources.getIntArray(R.array.temperature_scale)
+        )
+        binding.temperatureScaleImage.setImageDrawable(gradientDrawable)
     }
 }
