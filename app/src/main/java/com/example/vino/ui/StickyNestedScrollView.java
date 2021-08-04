@@ -19,7 +19,7 @@ import com.example.vino.R;
 /**
  *
  * @author Emil Sj�lander - sjolander.emil@gmail.com
- * All credit to the authos, I simply just extended from NestedScrollView
+ * All credit to the author, I simply just extended from NestedScrollView
  *
  */
 public class StickyNestedScrollView extends NestedScrollView {

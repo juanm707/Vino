@@ -15,5 +15,6 @@ class Vineyard(
     val job: String,
     val sprayed: Boolean,
     val type: String?,
-    val material: String?
+    val material: String?,
+    val rei: Int?
 )

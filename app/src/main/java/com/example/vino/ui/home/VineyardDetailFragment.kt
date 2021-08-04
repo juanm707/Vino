@@ -22,11 +22,10 @@ import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentVineyardDetailBinding
 import com.example.vino.model.UserViewModel
 import com.example.vino.model.UserViewModelFactory
+import com.example.vino.model.Vineyard
 import com.example.vino.network.Daily
 import com.example.vino.network.WeatherBasic
 import com.example.vino.ui.ImageShimmer
-import com.example.vino.ui.adapter.VineyardGridAdapter
-import com.facebook.shimmer.Shimmer
 import com.facebook.shimmer.ShimmerDrawable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -114,8 +113,21 @@ class VineyardDetailFragment : Fragment() {
                     )
                 findNavController().navigate(action)
             }
-        }
 
+            if (vineyard.sprayed)
+                setSpray(vineyard)
+            else
+                binding.sprayCardView.visibility = View.GONE
+        }
+        setBackgroundImage(vineyard)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setBackgroundImage(vineyard: Vineyard?) {
         // imageView.load uses the singleton ImageLoader to enqueue an ImageRequest.
         // The singleton ImageLoader can be accessed using
         // val imageLoader = context.imageLoader
@@ -147,11 +159,23 @@ class VineyardDetailFragment : Fragment() {
         }
     }
 
+    private fun setSpray(vineyard: Vineyard) {
+        binding.sprayCardView.visibility = View.VISIBLE
+        binding.sprayText.text = "${vineyard.type} - ${vineyard.material}"
+        val rei = if (vineyard.rei == 0) {
+            "None"
+        } else {
+            "${vineyard.rei.toString()} hrs"
+        }
+        binding.reiText.text = "REI: $rei"
+
+    }
+
     private fun setForecast(weatherBasic: WeatherBasic?) {
         if (weatherBasic != null) {
             val dailyForecasts = weatherBasic.dailyTemperatures //should only be 8
             dailyForecasts.forEachIndexed { index, daily ->
-                if (index != 0) // don't do first which is today
+                if (index != 0) // don't do first which is today/current
                     setWeatherForDay(index, daily)
             }
         }
@@ -179,11 +203,6 @@ class VineyardDetailFragment : Fragment() {
             R.string.temperature_value_degreee,
             daily.temp.max.toInt()
         )
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun inflateTransitions() {
