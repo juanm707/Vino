@@ -156,28 +156,27 @@
                 app:layout_constraintStart_toEndOf="@+id/guideline3"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <LinearLayout
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="89dp"
+                    android:adjustViewBounds="true"
+                    android:rotation="185"
+                    android:scaleType="centerCrop"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2"
+                    android:src="@drawable/animated_chart"
+                    android:translationY="25dp" />
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:background="@color/purple_600"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Leaf Stress"
-                        android:textStyle="bold"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                        android:textColor="@color/white" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/linegraphsample2" />
-                </LinearLayout>
+                    android:background="@drawable/vineyard_card_background"
+                    android:gravity="center|top"
+                    android:paddingTop="8dp"
+                    android:text="Leaf Stress"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:textColor="#3C0150"
+                    android:textStyle="bold" />
 
             </com.google.android.material.card.MaterialCardView>
 
