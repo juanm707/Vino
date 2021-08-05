@@ -16,5 +16,6 @@ class Vineyard(
     val sprayed: Boolean,
     val type: String?,
     val material: String?,
-    val rei: Int?
+    val rei: Int?,
+    val sprayOrderUrl: String?
 )

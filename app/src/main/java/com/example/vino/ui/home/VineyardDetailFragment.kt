@@ -1,7 +1,9 @@
 package com.example.vino.ui.home
 
 import android.animation.LayoutTransition
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.view.LayoutInflater
@@ -168,6 +170,16 @@ class VineyardDetailFragment : Fragment() {
             "${vineyard.rei.toString()} hrs"
         }
         binding.reiText.text = "REI: $rei"
+
+        binding.sprayOrderButton.setOnClickListener {
+            val pdfIntent: Intent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                setDataAndType(Uri.parse(vineyard.sprayOrderUrl), "application/pdf")
+            }
+
+            val chooser: Intent = Intent.createChooser(pdfIntent, null)
+            startActivity(chooser)
+        }
 
     }
 
