@@ -3,8 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/fragment_vineyard_detail.xml" value="0.14002732240437157" />
+        <entry key="app/src/main/res/layout/block_info_alert_dialog.xml" value="0.242578125" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.21618852459016394" />
+        <entry key="app/src/main/res/layout/fragment_vineyard_detail.xml" value="0.21" />
         <entry key="app/src/main/res/layout/fragment_vineyard_map.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/vineyard_recycler_view_item.xml" value="0.25" />
       </map>
     </option>
   </component>
