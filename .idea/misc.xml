@@ -3,11 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/map_select_background.xml" value="0.2546875" />
+        <entry key="app/src/main/res/drawable/map_title_background.xml" value="0.2546875" />
+        <entry key="app/src/main/res/drawable/map_types_slider_background.xml" value="0.2546875" />
+        <entry key="app/src/main/res/drawable/untitled__1_.xml" value="0.2546875" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.16222677595628415" />
         <entry key="app/src/main/res/layout/block_info_alert_dialog.xml" value="0.242578125" />
+        <entry key="app/src/main/res/layout/custom_tab.xml" value="0.16222677595628415" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.21618852459016394" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.242578125" />
         <entry key="app/src/main/res/layout/fragment_vineyard_detail.xml" value="0.21" />
-        <entry key="app/src/main/res/layout/fragment_vineyard_map.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_vineyard_map.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/map_layer_select_bottom_sheet.xml" value="0.9" />
+        <entry key="app/src/main/res/layout/purchase_items.xml" value="0.22" />
         <entry key="app/src/main/res/layout/vineyard_recycler_view_item.xml" value="0.25" />
+        <entry key="app/src/main/res/menu/settings_menu.xml" value="0.242578125" />
+        <entry key="app/src/main/res/menu/top_menu.xml" value="0.242578125" />
       </map>
     </option>
   </component>
@@ -20,7 +32,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.1" />
+        <option name="scale" value="0.33" />
       </ProjectState>
     </option>
   </component>

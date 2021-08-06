@@ -1,20 +1,16 @@
 package com.example.vino
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
-import android.widget.Toast
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.vino.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         // Can use mix of both vvv
         //setupActionBarWithNavController(navController, appBarConfiguration) // displays arrow and fragment title on non top navigation items
-        navView.setupWithNavController(navController) // to use with action bar, shows other fragments
+        navView.setupWithNavController(navController) // to use with bottom bar, shows other fragments
 
         binding.appBar.setNavigationOnClickListener {
             //Toast.makeText(applicationContext, "Logo", Toast.LENGTH_SHORT).show()
@@ -59,7 +55,21 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_bar_account -> {
+                showSettingsDialog()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
 //    override fun onSupportNavigateUp(): Boolean {
 //        return navController.navigateUp() || super.onSupportNavigateUp()
 //    }
+
+    private fun showSettingsDialog() {
+        SettingsDialogFragment.display(supportFragmentManager);
+    }
 }
