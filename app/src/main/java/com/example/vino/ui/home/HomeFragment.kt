@@ -39,6 +39,7 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
     }
 
     private lateinit var userVineyards: List<Vineyard>
+    private lateinit var adapter: VineyardGridAdapter
 
     private var _binding: FragmentHomeBinding? = null
     // This property is only valid between onCreateView and
@@ -102,10 +103,11 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
             //startPostponedEnterTransition()
         }
 
-        binding.vineyardRecyclerView.itemAnimator = SlideInRightAnimator()
-
         binding.vineyardRecyclerView.visibility = View.INVISIBLE // to show progress circle
-        binding.vineyardRecyclerView.adapter = VineyardGridAdapter(listOf(), requireContext(), this@HomeFragment)
+        binding.vineyardRecyclerView.itemAnimator = SlideInRightAnimator()
+        adapter = VineyardGridAdapter(requireContext(), this@HomeFragment)
+        binding.vineyardRecyclerView.adapter = adapter
+        binding.vineyardRecyclerView.setHasFixedSize(true)
         // will update after get user request
         vinoUserModel.vinoUser.observe(viewLifecycleOwner, { user ->
             setAccountName("${user.firstName} ${user.lastName}", user.company)
@@ -122,8 +124,7 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
                 userVineyards = homeFragmentViewModel.sortVineyardsByName(vineyards)
 
                 activity?.runOnUiThread {
-                    binding.vineyardRecyclerView.adapter = VineyardGridAdapter(userVineyards, requireContext(), this@HomeFragment) // Todo change with list adapter, submit list
-                    binding.vineyardRecyclerView.setHasFixedSize(true)
+                    adapter.submitList(userVineyards)
                 }
             }
         })

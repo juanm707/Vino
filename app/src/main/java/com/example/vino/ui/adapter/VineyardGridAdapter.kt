@@ -11,10 +11,13 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.memory.MemoryCache
 import com.example.vino.R
+import com.example.vino.model.Todo
 import com.example.vino.model.Vineyard
 import com.example.vino.ui.ImageShimmer
 import com.facebook.shimmer.Shimmer
@@ -22,7 +25,18 @@ import com.facebook.shimmer.ShimmerDrawable
 import com.google.android.material.card.MaterialCardView
 import java.util.*
 
-class VineyardGridAdapter(private val vineyards: List<Vineyard>, private val context: Context, private val onVineyardListener: OnVineyardListener) : RecyclerView.Adapter<VineyardGridAdapter.VineyardCardViewHolder>() {
+class VineyardGridAdapter(private val context: Context, private val onVineyardListener: OnVineyardListener) : ListAdapter<Vineyard, VineyardGridAdapter.VineyardCardViewHolder>(DiffCallback) {
+
+    companion object DiffCallback : DiffUtil.ItemCallback<Vineyard>() {
+        override fun areItemsTheSame(oldItem: Vineyard, newItem: Vineyard): Boolean {
+            return oldItem.vineyardId == newItem.vineyardId
+        }
+
+        override fun areContentsTheSame(oldItem: Vineyard, newItem: Vineyard): Boolean {
+            return ((oldItem.name == newItem.name) && (oldItem.job == newItem.job) && (oldItem.sprayed == newItem.sprayed))
+        }
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VineyardCardViewHolder {
         val layout = LayoutInflater
@@ -32,12 +46,8 @@ class VineyardGridAdapter(private val vineyards: List<Vineyard>, private val con
     }
 
     override fun onBindViewHolder(holder: VineyardCardViewHolder, position: Int) {
-        val vineyard = vineyards[position]
+        val vineyard = getItem(position)
         holder.bind(vineyard, context)
-    }
-
-    override fun getItemCount(): Int {
-        return vineyards.size
     }
 
     class VineyardCardViewHolder(itemView: View, private val onVineyardListener: OnVineyardListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
@@ -75,13 +85,14 @@ class VineyardGridAdapter(private val vineyards: List<Vineyard>, private val con
             vineyardName.text = vineyard.name
             vineyardJob.text = context.getString(R.string.current_job, vineyard.job)
 
-            val imgUri = vineyard.imageUrl.toUri().buildUpon().scheme("https").build()
-
             // This is the placeholder for the imageView
             val shimmerDrawable = ShimmerDrawable().apply {
                 setShimmer(ImageShimmer().shimmer)
             }
 
+            val imgUri = vineyard.imageUrl.toUri().buildUpon().scheme("https").build()
+
+            // For caching
             // imageView.load uses the singleton ImageLoader to enqueue an ImageRequest.
             // The singleton ImageLoader can be accessed using an extension function:
             // val imageLoader = context.imageLoader USED IN VINEYARD DETAIL FRAGMENT
