@@ -24,6 +24,7 @@ import com.example.vino.model.Vineyard
 import com.example.vino.network.VinoApiStatus
 import com.example.vino.ui.adapter.VineyardGridAdapter
 import com.google.android.material.card.MaterialCardView
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -100,6 +101,8 @@ class HomeFragment : Fragment(), VineyardGridAdapter.OnVineyardListener {
         (view?.parent as? ViewGroup)?.doOnPreDraw {
             //startPostponedEnterTransition()
         }
+
+        binding.vineyardRecyclerView.itemAnimator = SlideInRightAnimator()
 
         binding.vineyardRecyclerView.visibility = View.INVISIBLE // to show progress circle
         binding.vineyardRecyclerView.adapter = VineyardGridAdapter(listOf(), requireContext(), this@HomeFragment)

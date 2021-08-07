@@ -1,5 +1,6 @@
 package com.example.vino
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -9,6 +10,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.vino.databinding.ActivityMainBinding
+import com.example.vino.ui.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
@@ -59,6 +61,8 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_bar_account -> {
                 showSettingsDialog()
+//                val intent = Intent(this, SettingsActivity::class.java)
+//                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)

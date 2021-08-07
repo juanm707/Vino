@@ -41,18 +41,21 @@
             android:id="@+id/action_vineyard_detail_to_vineyardMapFragment"
             app:destination="@id/vineyardMapFragment"
             app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
             app:popExitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left" />
         <action
             android:id="@+id/action_vineyard_detail_to_leafWaterPotentialFragment"
             app:destination="@id/leafWaterPotentialFragment"
             app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
             app:popExitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left" />
         <action
             android:id="@+id/action_vineyard_detail_to_weatherDetailFragment"
             app:destination="@id/weatherDetailFragment"
             app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
             app:popExitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left" />
 
@@ -92,6 +95,7 @@
             android:id="@+id/action_weatherDetailFragment_to_vineyardMapFragment"
             app:destination="@id/vineyardMapFragment"
             app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
             app:popExitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left" />
     </fragment>

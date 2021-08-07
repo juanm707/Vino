@@ -1,5 +1,6 @@
 package com.example.vino
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -43,6 +44,10 @@ class SettingsDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar()
         setUpSettings()
+        binding.mainConstraintLayout.alpha = 0f
+        binding.mainConstraintLayout.visibility = View.VISIBLE
+        getFadeViewAnimation(0f, 1f, binding.mainConstraintLayout)
+            .start()
     }
 
     override fun onStart() {
@@ -91,5 +96,15 @@ class SettingsDialogFragment : DialogFragment() {
             binding.name.text = "${user.firstName} ${user.lastName}"
             binding.company.text = "${user.company}"
         })
+    }
+
+    private fun getFadeViewAnimation(startAlpha: Float, endAlpha: Float, view: View): ValueAnimator {
+        val anim = ValueAnimator.ofFloat(startAlpha, endAlpha)
+        anim.addUpdateListener { valueAnimator ->
+            val value = valueAnimator.animatedValue as Float
+            view.alpha = value
+        }
+        anim.duration = 500
+        return anim
     }
 }
