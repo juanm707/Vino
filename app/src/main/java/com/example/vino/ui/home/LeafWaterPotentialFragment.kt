@@ -17,6 +17,7 @@ import com.example.vino.R
 import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentLeafWaterPotentialBinding
 import com.example.vino.ui.formatter.LWPXAxisValueFormatter
+import com.example.vino.ui.imarker.LWPChartMarker
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
@@ -95,7 +96,7 @@ class LeafWaterPotentialFragment : Fragment() {
         xAxis.textSize = 12F
 
         val yAxis = chart.axisLeft
-        yAxis.axisLineWidth = 3F
+        yAxis.axisLineWidth = 2F
         yAxis.axisLineColor = ContextCompat.getColor(requireContext(), R.color.black)
         yAxis.textSize = 12F
 
@@ -113,6 +114,10 @@ class LeafWaterPotentialFragment : Fragment() {
         chart.description.isEnabled = false
         chart.legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
         chart.animateXY(1500, 1500, Easing.EaseInOutBack)
+
+        chart.marker = LWPChartMarker(requireContext(), R.layout.lwp_marker)
+
+        //chart.getLegend().setWordWrapEnabled(true);
     }
 
     @RequiresApi(Build.VERSION_CODES.N)

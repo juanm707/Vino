@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/lwp_chart_background.xml" value="0.255078125" />
+        <entry key="app/src/main/res/drawable/lwp_marker_background.xml" value="0.255078125" />
         <entry key="app/src/main/res/drawable/map_select_background.xml" value="0.2546875" />
         <entry key="app/src/main/res/drawable/map_title_background.xml" value="0.2546875" />
         <entry key="app/src/main/res/drawable/map_types_slider_background.xml" value="0.2546875" />
@@ -15,10 +17,11 @@
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.21618852459016394" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.14002732240437157" />
-        <entry key="app/src/main/res/layout/fragment_vineyard_detail.xml" value="0.21" />
+        <entry key="app/src/main/res/layout/fragment_vineyard_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_vineyard_map.xml" value="0.18" />
         <entry key="app/src/main/res/layout/fragment_weather_detail.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/map_layer_select_bottom_sheet.xml" value="0.9" />
+        <entry key="app/src/main/res/layout/lwp_marker.xml" value="1.5" />
+        <entry key="app/src/main/res/layout/map_layer_select_bottom_sheet.xml" value="0.5" />
         <entry key="app/src/main/res/layout/purchase_items.xml" value="0.22" />
         <entry key="app/src/main/res/layout/settings_activity.xml" value="0.259765625" />
         <entry key="app/src/main/res/layout/todo_fragment_collection_object.xml" value="0.16598360655737704" />
@@ -38,7 +41,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="1.5" />
+        <option name="scale" value="0.164275956284153" />
       </ProjectState>
     </option>
   </component>

@@ -60,10 +60,12 @@
                 android:id="@+id/default_map_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:adjustViewBounds="true"
                 android:cropToPadding="true"
+                android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/mapsample" />
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                android:src="@drawable/outstanding_road_map_vectors_3" />
 
         </com.google.android.material.card.MaterialCardView>
 
