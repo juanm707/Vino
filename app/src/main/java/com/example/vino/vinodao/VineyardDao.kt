@@ -1,5 +1,6 @@
 package com.example.vino.vinodao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.vino.model.Vineyard
 import com.example.vino.network.VineyardManagerUser
@@ -12,6 +13,12 @@ interface VineyardDao {
 
     @Query("SELECT * FROM Vineyard WHERE vineyardId = :vineyardId")
     suspend fun getVineyardForVineyardId(vineyardId: Int): Vineyard
+
+    @Query("SELECT COUNT(*) FROM VINEYARD WHERE sprayed = 1")
+    suspend fun getNumberOfVineyardsSprayed(): Int
+
+    @Query("SELECT name FROM VINEYARD WHERE sprayed = 1")
+    suspend fun getVineyardsSprayed(): List<String>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vineyard: Vineyard)

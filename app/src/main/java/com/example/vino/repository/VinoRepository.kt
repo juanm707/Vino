@@ -1,6 +1,7 @@
 package com.example.vino.repository
 
 import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
 import com.example.vino.database.UserVineyardCrossRef
 import com.example.vino.model.*
 import com.example.vino.network.VineyardManagerUser
@@ -93,6 +94,14 @@ class VinoRepository(private val todoDao: TodoDao,
             insert(UserVineyardCrossRef(userId, vineyard.vineyardId))
         }
 
+    }
+
+    suspend fun getNumberOfVineyardsSprayed(): Int {
+        return vineyardDao.getNumberOfVineyardsSprayed()
+    }
+
+    suspend fun getVineyardsSprayed(): List<String> {
+        return vineyardDao.getVineyardsSprayed()
     }
 
     // This method to make api request for user

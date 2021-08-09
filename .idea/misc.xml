@@ -14,9 +14,11 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16222677595628415" />
         <entry key="app/src/main/res/layout/block_info_alert_dialog.xml" value="0.242578125" />
         <entry key="app/src/main/res/layout/custom_tab.xml" value="0.16222677595628415" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.21618852459016394" />
+        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.39854014598540144" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.14002732240437157" />
+        <entry key="app/src/main/res/layout/fragment_todos.xml" value="0.164275956284153" />
         <entry key="app/src/main/res/layout/fragment_vineyard_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_vineyard_map.xml" value="0.18" />
         <entry key="app/src/main/res/layout/fragment_weather_detail.xml" value="0.25" />
@@ -41,7 +43,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.164275956284153" />
+        <option name="scale" value="0.33" />
       </ProjectState>
     </option>
   </component>
