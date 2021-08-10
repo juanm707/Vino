@@ -1,13 +1,24 @@
 package com.example.vino.ui.dashboard
 
+import android.animation.AnimatorSet
+import android.animation.TimeInterpolator
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.BounceInterpolator
+import android.view.animation.DecelerateInterpolator
+import android.view.animation.OvershootInterpolator
+import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnRepeat
+import androidx.core.animation.doOnResume
+import androidx.core.animation.doOnStart
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentDashboardBinding
@@ -15,6 +26,7 @@ import com.example.vino.model.UserViewModel
 import com.example.vino.model.UserViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class DashboardFragment : Fragment() {
 
@@ -25,6 +37,9 @@ class DashboardFragment : Fragment() {
     private val vinoUserModel: UserViewModel by activityViewModels {
         UserViewModelFactory((requireActivity().application as VinoApplication).repository)
     }
+
+    private var sprayClosed = true
+    private var density = 0F
 
     private var _binding: FragmentDashboardBinding? = null
 
@@ -37,7 +52,7 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        density = resources.displayMetrics.density
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -70,6 +85,7 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setSprayInfo() {
+
         dashboardFragmentViewModel.getSprayCount()
 
         dashboardFragmentViewModel.sprayCount.observe(viewLifecycleOwner, { sprayCount ->
@@ -81,6 +97,89 @@ class DashboardFragment : Fragment() {
         dashboardFragmentViewModel.sprayedVineyards.observe(viewLifecycleOwner, { sprayText ->
             binding.vineyardPreviewText.text = sprayText
         })
+
+        binding.sprayCardViewDashboard.setOnClickListener {
+            sprayClosed = if (sprayClosed) {
+                openSprayContent()
+                false
+            } else {
+                // spray is open, need to close
+                closeSprayContent()
+                true
+            }
+        }
+    }
+
+    private fun closeSprayContent() {
+        // setting isClickable causes the card view to flicker as if it was clicked so I set ripple to transparent
+        binding.sprayCardViewDashboard.isClickable = false
+        val arrowAnimation = getAnimationForArrow(binding.sprayArrow, 270F, 90F)
+
+        // animate
+        val contentAnimation = getAnimationForContent(binding.sprayContent, (300*density).toInt(), 0, DecelerateInterpolator())
+        val animationSet = AnimatorSet()
+        animationSet.playTogether(
+            arrowAnimation,
+            contentAnimation
+        )
+        animationSet.doOnEnd {
+            binding.sprayContent.visibility = View.GONE
+            binding.sprayCardViewDashboard.isClickable = true
+        }
+        changeConstraint(binding.todoCardViewDashboard.id, ConstraintSet.TOP, binding.sprayContent.id, ConstraintSet.BOTTOM, 8)
+        animationSet.start()
+
+    }
+
+    private fun openSprayContent() {
+        binding.sprayCardViewDashboard.isClickable = false
+        val arrowAnimation = getAnimationForArrow(binding.sprayArrow, 90F, 270F)
+
+        binding.sprayContent.visibility = View.VISIBLE
+
+        // animate
+        val animatorSet = AnimatorSet()
+        val contentAnimation = getAnimationForContent(binding.sprayContent, 0, (300*density).toInt(), OvershootInterpolator())
+        animatorSet.playTogether(
+            arrowAnimation,
+            contentAnimation
+        )
+        animatorSet.doOnEnd {
+            changeConstraint(binding.todoCardViewDashboard.id, ConstraintSet.TOP, binding.sprayContent.id, ConstraintSet.BOTTOM, 5)
+            binding.sprayCardViewDashboard.isClickable = true
+        }
+        animatorSet.start()
+    }
+
+    private fun getAnimationForContent(view: View, fromHeight: Int, toHeightInt: Int, interpolator: TimeInterpolator): ValueAnimator {
+        val anim = ValueAnimator.ofInt(fromHeight, toHeightInt)
+        anim.addUpdateListener { valueAnimator ->
+            val newHeight = valueAnimator.animatedValue as Int
+            val layoutParams: ViewGroup.LayoutParams = view.layoutParams
+            layoutParams.height = newHeight
+            view.layoutParams = layoutParams
+        }
+        anim.duration = 300
+        anim.interpolator = interpolator
+        return anim
+    }
+
+    private fun getAnimationForArrow(icon: ImageView, startRotation: Float, endRotation: Float): ValueAnimator {
+        val anim = ValueAnimator.ofFloat(startRotation, endRotation)
+        anim.addUpdateListener { valueAnimator ->
+            val newRotationValue = valueAnimator.animatedValue as Float
+            icon.rotation = newRotationValue
+        }
+        anim.duration = 300
+        return anim
+    }
+
+    private fun changeConstraint(fromViewId: Int, constraintSetFrom: Int, toViewId: Int, constraintSetTo: Int, margin: Int) {
+        val mainConstraints = binding.mainConstraintLayout
+        val newConstraint = ConstraintSet()
+        newConstraint.clone(mainConstraints)
+        newConstraint.connect(fromViewId, constraintSetFrom, toViewId, constraintSetTo, (margin*density).toInt())
+        newConstraint.applyTo(mainConstraints)
     }
 
     private fun setTodoInfo() {

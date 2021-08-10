@@ -34,4 +34,16 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <style name="ShapeAppearance.Vino.Dashboard.CardView" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeBottomLeft">4dp</item>
+        <item name="cornerSizeBottomRight">4dp</item>
+    </style>
+
+    <style name="Widget.Vino.Dashboard.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/ShapeAppearance.Vino.Dashboard.CardView</item>
+    </style>
+
 </resources>
