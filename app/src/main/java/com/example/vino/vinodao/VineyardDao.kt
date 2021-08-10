@@ -17,8 +17,8 @@ interface VineyardDao {
     @Query("SELECT COUNT(*) FROM VINEYARD WHERE sprayed = 1")
     suspend fun getNumberOfVineyardsSprayed(): Int
 
-    @Query("SELECT name FROM VINEYARD WHERE sprayed = 1")
-    suspend fun getVineyardsSprayed(): List<String>
+    @Query("SELECT * FROM VINEYARD WHERE sprayed = 1")
+    suspend fun getVineyardsSprayed(): List<Vineyard>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vineyard: Vineyard)

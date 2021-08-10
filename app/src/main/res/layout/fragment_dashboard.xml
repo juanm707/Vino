@@ -110,19 +110,21 @@
                 android:id="@+id/sprayContent"
                 style="@style/Widget.Vino.Dashboard.CardView"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="300dp"
                 android:translationY="-4dp"
                 android:visibility="gone"
-                android:animateLayoutChanges="true"
                 app:layout_constraintEnd_toEndOf="@id/sprayCardViewDashboard"
                 app:layout_constraintStart_toStartOf="@id/sprayCardViewDashboard"
                 app:layout_constraintTop_toBottomOf="@id/sprayCardViewDashboard">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Hello World" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/sprayRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="4dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/spray_dashboard_item" />
+
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
@@ -191,14 +193,16 @@
 
                     <TextView
                         android:id="@+id/vineyardPreviewText"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
                         android:text=""
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/sprayArrow"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/dividerSpray" />
 

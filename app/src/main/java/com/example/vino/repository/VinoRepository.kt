@@ -100,7 +100,7 @@ class VinoRepository(private val todoDao: TodoDao,
         return vineyardDao.getNumberOfVineyardsSprayed()
     }
 
-    suspend fun getVineyardsSprayed(): List<String> {
+    suspend fun getVineyardsSprayed(): List<Vineyard> {
         return vineyardDao.getVineyardsSprayed()
     }
 

@@ -2,6 +2,7 @@ package com.example.vino.ui.dashboard
 
 import androidx.lifecycle.*
 import com.example.vino.model.Todo
+import com.example.vino.model.Vineyard
 import com.example.vino.repository.VinoRepository
 import kotlinx.coroutines.launch
 import java.util.*
@@ -11,27 +12,32 @@ class DashboardFragmentViewModel(private val repository: VinoRepository) : ViewM
     private val _sprayCount: MutableLiveData<Int> = MutableLiveData(0)
     val sprayCount: LiveData<Int> = _sprayCount
 
-    private val _sprayedVineyards: MutableLiveData<String> = MutableLiveData()
-    val sprayedVineyards: LiveData<String> = _sprayedVineyards
+    private val _sprayedVineyardNames: MutableLiveData<String> = MutableLiveData()
+    val sprayedVineyardNames: LiveData<String> = _sprayedVineyardNames
+
+    private val _sprayedVineyards: MutableLiveData<List<Vineyard>> = MutableLiveData()
+    val sprayedVineyards: LiveData<List<Vineyard>> = _sprayedVineyards
+
 
     fun getSprayCount() {
         viewModelScope.launch {
             _sprayCount.value = repository.getNumberOfVineyardsSprayed()
-            _sprayedVineyards.value = getSprayedTextPreview(repository.getVineyardsSprayed())
+            _sprayedVineyards.value = repository.getVineyardsSprayed()
+            _sprayedVineyardNames.value = getSprayedTextPreview(_sprayedVineyards.value)
         }
     }
 
-    private fun getSprayedTextPreview(vineyardsSprayed: List<String>): String {
-        return if (vineyardsSprayed.isEmpty())
+    private fun getSprayedTextPreview(vineyardsSprayed: List<Vineyard>?): String {
+        return if (vineyardsSprayed.isNullOrEmpty())
             "No sprays"
         else if (vineyardsSprayed.size == 1)
-            vineyardsSprayed[0]
+            vineyardsSprayed[0].name
         else {
-            "${vineyardsSprayed[0]}, ${vineyardsSprayed[1]}${moreThanTwoSprayed(vineyardsSprayed)}"
+            "${vineyardsSprayed[0].name}, ${vineyardsSprayed[1].name}${moreThanTwoSprayed(vineyardsSprayed)}"
         }
     }
 
-    private fun moreThanTwoSprayed(vineyardsSprayed: List<String>): String {
+    private fun moreThanTwoSprayed(vineyardsSprayed: List<Vineyard>): String {
         return if (vineyardsSprayed.size == 2)
             ""
         else

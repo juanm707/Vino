@@ -24,6 +24,7 @@ import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentDashboardBinding
 import com.example.vino.model.UserViewModel
 import com.example.vino.model.UserViewModelFactory
+import com.example.vino.ui.adapter.DashboardSprayAdapter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -85,6 +86,10 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setSprayInfo() {
+        binding.sprayRecyclerView.setHasFixedSize(true)
+        dashboardFragmentViewModel.sprayedVineyards.observe(viewLifecycleOwner, { sprayedVineyardList ->
+            binding.sprayRecyclerView.adapter = DashboardSprayAdapter(requireContext(), sprayedVineyardList)
+        })
 
         dashboardFragmentViewModel.getSprayCount()
 
@@ -94,7 +99,7 @@ class DashboardFragment : Fragment() {
             binding.sprayNumber.text = "$sprayCount"
         })
 
-        dashboardFragmentViewModel.sprayedVineyards.observe(viewLifecycleOwner, { sprayText ->
+        dashboardFragmentViewModel.sprayedVineyardNames.observe(viewLifecycleOwner, { sprayText ->
             binding.vineyardPreviewText.text = sprayText
         })
 
