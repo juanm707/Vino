@@ -115,7 +115,7 @@ class WeatherDetailFragment : Fragment() {
                             binding.forecastRecyclerView.adapter = WeatherForecastRecyclerViewAdapter(weather.hourlyTemperatures.subList(0, 25), requireContext())
                     }
                     else
-                        if (weather.hourlyTemperatures != null)
+                        if (weather.dailyTemperatures != null)
                             binding.forecastRecyclerView.adapter = WeatherForecastRecyclerViewAdapter(weather.dailyTemperatures.drop(1), requireContext())
                 }
             }

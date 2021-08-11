@@ -10,7 +10,7 @@ class WeatherBasic (
     val timezone: String,
     val timezone_offset: Int,
     val current: Current,
-    @Json(name = "daily") val dailyTemperatures: List<Daily>,
+    @Json(name = "daily") val dailyTemperatures: List<Daily>?,
     @Json(name="hourly") val hourlyTemperatures: List<Hourly>?,
     val alerts: List<Alert>?
 )

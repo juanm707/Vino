@@ -3,6 +3,7 @@ package com.example.vino.ui.dashboard
 import androidx.lifecycle.*
 import com.example.vino.model.Todo
 import com.example.vino.model.Vineyard
+import com.example.vino.network.WeatherBasic
 import com.example.vino.repository.VinoRepository
 import kotlinx.coroutines.launch
 import java.util.*
@@ -18,6 +19,8 @@ class DashboardFragmentViewModel(private val repository: VinoRepository) : ViewM
     private val _sprayedVineyards: MutableLiveData<List<Vineyard>> = MutableLiveData()
     val sprayedVineyards: LiveData<List<Vineyard>> = _sprayedVineyards
 
+    private val _alerts: MutableLiveData<WeatherBasic> = MutableLiveData()
+    val alerts: LiveData<WeatherBasic> = _alerts
 
     fun getSprayCount() {
         viewModelScope.launch {
@@ -25,6 +28,12 @@ class DashboardFragmentViewModel(private val repository: VinoRepository) : ViewM
             _sprayCount.value = sprays.size
             _sprayedVineyards.value = sprays
             _sprayedVineyardNames.value = getSprayedTextPreview(_sprayedVineyards.value)
+        }
+    }
+
+    fun getCurrentLocationAlerts(latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            _alerts.value = repository.getCurrentLocationAlerts(latitude, longitude)
         }
     }
 

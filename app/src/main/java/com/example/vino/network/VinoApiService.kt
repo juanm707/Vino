@@ -66,6 +66,9 @@ interface VinoWeatherService {
 
     @GET("data/2.5/onecall?exclude=minutely&units=imperial&appid=ee79ad0d5b1a83ff07fce20435019619")
     suspend fun getAdvanceWeather(@Query("lat") latitude: Double, @Query("lon") longitude: Double): WeatherBasic
+
+    @GET("data/2.5/onecall?exclude=hourly,daily,minutely&units=imperial&appid=ee79ad0d5b1a83ff07fce20435019619")
+    suspend fun getCurrentLocationAlerts(@Query("lat") latitude: Double, @Query("lon") longitude: Double): WeatherBasic
 }
 
 /**

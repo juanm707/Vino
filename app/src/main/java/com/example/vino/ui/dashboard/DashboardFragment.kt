@@ -1,9 +1,13 @@
 package com.example.vino.ui.dashboard
 
+import android.Manifest
 import android.animation.AnimatorSet
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,20 +15,25 @@ import android.view.animation.BounceInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnRepeat
 import androidx.core.animation.doOnResume
 import androidx.core.animation.doOnStart
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.vino.R
 import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentDashboardBinding
 import com.example.vino.model.UserViewModel
 import com.example.vino.model.UserViewModelFactory
 import com.example.vino.ui.adapter.DashboardSprayAdapter
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,8 +48,9 @@ class DashboardFragment : Fragment() {
         UserViewModelFactory((requireActivity().application as VinoApplication).repository)
     }
 
-    private var sprayClosed = true
+    private var sprayContentClosed = true
     private var density = 0F
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private var _binding: FragmentDashboardBinding? = null
 
@@ -55,6 +65,7 @@ class DashboardFragment : Fragment() {
     ): View? {
         density = resources.displayMetrics.density
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
         return binding.root
     }
 
@@ -64,6 +75,7 @@ class DashboardFragment : Fragment() {
         setTodaysDate()
         setSprayInfo()
         setTodoInfo()
+        setWeatherInfo()
     }
 
     override fun onDestroyView() {
@@ -104,7 +116,7 @@ class DashboardFragment : Fragment() {
         })
 
         binding.sprayCardViewDashboard.setOnClickListener {
-            sprayClosed = if (sprayClosed) {
+            sprayContentClosed = if (sprayContentClosed) {
                 openSprayContent()
                 false
             } else {
@@ -197,6 +209,30 @@ class DashboardFragment : Fragment() {
             if (todosDueToday == 1)
                 binding.todosSubtitle.text = "todo due today"
             binding.todosDueToday.text = "$todosDueToday"
+        })
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun setWeatherInfo() {
+
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                dashboardFragmentViewModel.getCurrentLocationAlerts(location.latitude, location.longitude)
+            }
+        } else {
+            binding.weatherAlerts.text = ""
+            binding.weatherAlertsText.text = "Location error"
+        }
+
+        dashboardFragmentViewModel.alerts.observe(viewLifecycleOwner, { alerts ->
+           if (!(alerts.alerts.isNullOrEmpty())) {
+               val numAlerts = alerts.alerts.size
+               if (numAlerts == 1)
+                   binding.weatherAlertsText.text = "weather alert"
+
+               binding.weatherAlerts.text = "$numAlerts"
+               binding.weatherPreview.text = alerts.alerts[0].event
+           }
         })
     }
 }

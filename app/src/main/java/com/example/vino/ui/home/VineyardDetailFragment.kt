@@ -186,7 +186,7 @@ class VineyardDetailFragment : Fragment() {
     private fun setForecast(weatherBasic: WeatherBasic?) {
         if (weatherBasic != null) {
             val dailyForecasts = weatherBasic.dailyTemperatures //should only be 8
-            dailyForecasts.forEachIndexed { index, daily ->
+            dailyForecasts?.forEachIndexed { index, daily ->
                 if (index != 0) // don't do first which is today/current
                     setWeatherForDay(index, daily)
             }

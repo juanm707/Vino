@@ -1,6 +1,7 @@
 package com.example.vino.ui.home
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -112,6 +113,7 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener, MapLay
         return zoom in minZoom..maxZoom
     }
 
+    @SuppressLint("MissingPermission")
     private fun enableMyLocation() {
         if (!::map.isInitialized) return
         if (ContextCompat.checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {

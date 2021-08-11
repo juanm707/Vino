@@ -146,4 +146,8 @@ class VinoRepository(private val todoDao: TodoDao,
     suspend fun getAdvancedWeather(latitude: Double, longitude: Double): WeatherBasic {
         return vinoWeatherService.getAdvanceWeather(latitude, longitude)
     }
+
+    suspend fun getCurrentLocationAlerts(latitude: Double, longitude: Double): WeatherBasic {
+        return vinoWeatherService.getCurrentLocationAlerts(latitude, longitude)
+    }
 }
