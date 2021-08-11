@@ -1,11 +1,14 @@
 package com.example.vino.ui.home
 
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -91,9 +94,10 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener, MapLay
         googleMap.uiSettings.apply {
             isZoomControlsEnabled = true
             isCompassEnabled = true
+            isMyLocationButtonEnabled = true
         }
         googleMap.setOnPolygonClickListener(this)
-
+        enableMyLocation()
     }
 
     /*
@@ -106,6 +110,13 @@ class VineyardMapFragment : Fragment(), GoogleMap.OnPolygonClickListener, MapLay
         val minZoom = 12
         val maxZoom = 16
         return zoom in minZoom..maxZoom
+    }
+
+    private fun enableMyLocation() {
+        if (!::map.isInitialized) return
+        if (ContextCompat.checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
+            map.isMyLocationEnabled = true
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

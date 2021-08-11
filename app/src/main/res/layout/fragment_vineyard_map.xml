@@ -39,13 +39,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginTop="110dp"
-                android:layout_gravity="end"
+                android:layout_gravity="center|end"
                 android:backgroundTint="@color/white"
                 app:borderWidth="0dp"
                 app:tint="@color/greyText"
                 app:srcCompat="@drawable/ic_round_layers_24"
-                app:fabSize="mini"/>
+                app:fabSize="mini"
+                android:contentDescription="Layer button" />
 
             <TextView
                 android:id="@+id/vineyard_name_map_title"
@@ -58,7 +58,7 @@
                 android:paddingBottom="4dp"
                 android:text="Vineyard Name"
                 android:textStyle="bold"
-                android:layout_gravity="end"
+                android:layout_gravity="center_horizontal"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 android:elevation="5dp"/>
 
