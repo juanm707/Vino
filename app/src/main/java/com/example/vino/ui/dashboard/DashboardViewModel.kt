@@ -21,8 +21,9 @@ class DashboardFragmentViewModel(private val repository: VinoRepository) : ViewM
 
     fun getSprayCount() {
         viewModelScope.launch {
-            _sprayCount.value = repository.getNumberOfVineyardsSprayed()
-            _sprayedVineyards.value = repository.getVineyardsSprayed()
+            val sprays = repository.getVineyardsSprayed()
+            _sprayCount.value = sprays.size
+            _sprayedVineyards.value = sprays
             _sprayedVineyardNames.value = getSprayedTextPreview(_sprayedVineyards.value)
         }
     }

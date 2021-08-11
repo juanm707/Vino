@@ -14,9 +14,6 @@ interface VineyardDao {
     @Query("SELECT * FROM Vineyard WHERE vineyardId = :vineyardId")
     suspend fun getVineyardForVineyardId(vineyardId: Int): Vineyard
 
-    @Query("SELECT COUNT(*) FROM VINEYARD WHERE sprayed = 1")
-    suspend fun getNumberOfVineyardsSprayed(): Int
-
     @Query("SELECT * FROM VINEYARD WHERE sprayed = 1")
     suspend fun getVineyardsSprayed(): List<Vineyard>
 
