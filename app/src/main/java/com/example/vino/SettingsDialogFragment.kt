@@ -8,12 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import coil.load
 import com.example.vino.databinding.FragmentSettingsBinding
 import com.example.vino.model.UserViewModel
 import com.example.vino.model.UserViewModelFactory
+import com.example.vino.ui.ImageShimmer
+import com.facebook.shimmer.ShimmerDrawable
 
 class SettingsDialogFragment : DialogFragment() {
 
@@ -95,6 +99,15 @@ class SettingsDialogFragment : DialogFragment() {
         vinoUserModel.vinoUser.observe(viewLifecycleOwner, { user ->
             binding.name.text = "${user.firstName} ${user.lastName}"
             binding.company.text = "${user.company}"
+
+            val imgUri = user.picUrl.toUri().buildUpon().scheme("http").build()
+            val shimmerDrawable = ShimmerDrawable().apply {
+                setShimmer(ImageShimmer().shimmer)
+            }
+            binding.avatar.load(imgUri) {
+                placeholder(shimmerDrawable)
+                error(R.drawable.ic_baseline_account_circle_28)
+            }
         })
     }
 

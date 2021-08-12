@@ -14,5 +14,6 @@ class VineyardManagerUser(
     val joinDate: String,
     val active: Boolean,
     val phone: String,
-    val email: String
+    val email: String,
+    val picUrl: String
 )
