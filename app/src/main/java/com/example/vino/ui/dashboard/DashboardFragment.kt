@@ -6,6 +6,7 @@ import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.media.Image
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
@@ -31,9 +32,11 @@ import com.example.vino.VinoApplication
 import com.example.vino.databinding.FragmentDashboardBinding
 import com.example.vino.model.UserViewModel
 import com.example.vino.model.UserViewModelFactory
+import com.example.vino.ui.adapter.AlertRecyclerViewAdapter
 import com.example.vino.ui.adapter.DashboardSprayAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,6 +52,7 @@ class DashboardFragment : Fragment() {
     }
 
     private var sprayContentClosed = true
+    private var weatherContentClosed = true
     private var density = 0F
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -128,75 +132,19 @@ class DashboardFragment : Fragment() {
     }
 
     private fun closeSprayContent() {
-        // setting isClickable causes the card view to flicker as if it was clicked so I set ripple to transparent
-        binding.sprayCardViewDashboard.isClickable = false
-        val arrowAnimation = getAnimationForArrow(binding.sprayArrow, 270F, 90F)
-
-        // animate
-        val contentAnimation = getAnimationForContent(binding.sprayContent, (300*density).toInt(), 0, DecelerateInterpolator())
-        val animationSet = AnimatorSet()
-        animationSet.playTogether(
-            arrowAnimation,
-            contentAnimation
-        )
-        animationSet.doOnEnd {
-            binding.sprayContent.visibility = View.GONE
-            binding.sprayCardViewDashboard.isClickable = true
-        }
+        val animationSet = getCloseContentAnimatorSet(binding.sprayCardViewDashboard, binding.sprayContent, binding.sprayArrow)
         changeConstraint(binding.todoCardViewDashboard.id, ConstraintSet.TOP, binding.sprayContent.id, ConstraintSet.BOTTOM, 8)
         animationSet.start()
 
     }
 
     private fun openSprayContent() {
-        binding.sprayCardViewDashboard.isClickable = false
-        val arrowAnimation = getAnimationForArrow(binding.sprayArrow, 90F, 270F)
-
-        binding.sprayContent.visibility = View.VISIBLE
-
-        // animate
-        val animatorSet = AnimatorSet()
-        val contentAnimation = getAnimationForContent(binding.sprayContent, 0, (300*density).toInt(), OvershootInterpolator())
-        animatorSet.playTogether(
-            arrowAnimation,
-            contentAnimation
-        )
+        val animatorSet = getOpenContentAnimatorSet(binding.sprayCardViewDashboard, binding.sprayContent, binding.sprayArrow)
         animatorSet.doOnEnd {
             changeConstraint(binding.todoCardViewDashboard.id, ConstraintSet.TOP, binding.sprayContent.id, ConstraintSet.BOTTOM, 5)
             binding.sprayCardViewDashboard.isClickable = true
         }
         animatorSet.start()
-    }
-
-    private fun getAnimationForContent(view: View, fromHeight: Int, toHeightInt: Int, interpolator: TimeInterpolator): ValueAnimator {
-        val anim = ValueAnimator.ofInt(fromHeight, toHeightInt)
-        anim.addUpdateListener { valueAnimator ->
-            val newHeight = valueAnimator.animatedValue as Int
-            val layoutParams: ViewGroup.LayoutParams = view.layoutParams
-            layoutParams.height = newHeight
-            view.layoutParams = layoutParams
-        }
-        anim.duration = 300
-        anim.interpolator = interpolator
-        return anim
-    }
-
-    private fun getAnimationForArrow(icon: ImageView, startRotation: Float, endRotation: Float): ValueAnimator {
-        val anim = ValueAnimator.ofFloat(startRotation, endRotation)
-        anim.addUpdateListener { valueAnimator ->
-            val newRotationValue = valueAnimator.animatedValue as Float
-            icon.rotation = newRotationValue
-        }
-        anim.duration = 300
-        return anim
-    }
-
-    private fun changeConstraint(fromViewId: Int, constraintSetFrom: Int, toViewId: Int, constraintSetTo: Int, margin: Int) {
-        val mainConstraints = binding.mainConstraintLayout
-        val newConstraint = ConstraintSet()
-        newConstraint.clone(mainConstraints)
-        newConstraint.connect(fromViewId, constraintSetFrom, toViewId, constraintSetTo, (margin*density).toInt())
-        newConstraint.applyTo(mainConstraints)
     }
 
     private fun setTodoInfo() {
@@ -214,15 +162,27 @@ class DashboardFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     private fun setWeatherInfo() {
+        binding.weatherAlertCardView.setOnClickListener {
+            weatherContentClosed = if (weatherContentClosed) {
+                openWeatherContent()
+                false
+            } else {
+                // spray is open, need to close
+                closeWeatherContent()
+                true
+            }
+        }
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                dashboardFragmentViewModel.getCurrentLocationAlerts(location.latitude, location.longitude)
+                dashboardFragmentViewModel.getCurrentLocationAlerts(37.2090, -93.2923)
             }
         } else {
             binding.weatherAlerts.text = ""
             binding.weatherAlertsText.text = "Location error"
         }
+
+        binding.weatherRecyclerView.setHasFixedSize(true)
 
         dashboardFragmentViewModel.alerts.observe(viewLifecycleOwner, { alerts ->
            if (!(alerts.alerts.isNullOrEmpty())) {
@@ -232,7 +192,87 @@ class DashboardFragment : Fragment() {
 
                binding.weatherAlerts.text = "$numAlerts"
                binding.weatherPreview.text = alerts.alerts[0].event
+               binding.weatherRecyclerView.adapter = AlertRecyclerViewAdapter(alerts.alerts)
            }
         })
+    }
+
+    private fun closeWeatherContent() {
+        val animationSet = getCloseContentAnimatorSet(binding.weatherAlertCardView, binding.weatherContent, binding.weatherArrow)
+        animationSet.start()
+    }
+
+    private fun openWeatherContent() {
+        val animatorSet = getOpenContentAnimatorSet(binding.weatherAlertCardView, binding.weatherContent, binding.weatherArrow)
+        animatorSet.doOnEnd {
+            binding.weatherAlertCardView.isClickable = true
+        }
+        animatorSet.start()
+    }
+
+    private fun getAnimationForArrow(icon: ImageView, startRotation: Float, endRotation: Float, duration: Long): ValueAnimator {
+        val anim = ValueAnimator.ofFloat(startRotation, endRotation)
+        anim.addUpdateListener { valueAnimator ->
+            val newRotationValue = valueAnimator.animatedValue as Float
+            icon.rotation = newRotationValue
+        }
+        anim.duration = duration
+        return anim
+    }
+
+    private fun getAnimationForContent(view: View, fromHeight: Int, toHeightInt: Int, interpolator: TimeInterpolator): ValueAnimator {
+        val anim = ValueAnimator.ofInt(fromHeight, toHeightInt)
+        anim.addUpdateListener { valueAnimator ->
+            val newHeight = valueAnimator.animatedValue as Int
+            val layoutParams: ViewGroup.LayoutParams = view.layoutParams
+            layoutParams.height = newHeight
+            view.layoutParams = layoutParams
+        }
+        anim.duration = 400
+        anim.interpolator = interpolator
+        return anim
+    }
+
+    private fun changeConstraint(fromViewId: Int, constraintSetFrom: Int, toViewId: Int, constraintSetTo: Int, margin: Int) {
+        val mainConstraints = binding.mainConstraintLayout
+        val newConstraint = ConstraintSet()
+        newConstraint.clone(mainConstraints)
+        newConstraint.connect(fromViewId, constraintSetFrom, toViewId, constraintSetTo, (margin*density).toInt())
+        newConstraint.applyTo(mainConstraints)
+    }
+
+    private fun getCloseContentAnimatorSet(mainCardView: MaterialCardView, content: MaterialCardView, arrow: ImageView): AnimatorSet {
+        // setting isClickable causes the card view to flicker as if it was clicked so I set ripple to transparent
+        mainCardView.isClickable = false
+        val arrowAnimation = getAnimationForArrow(arrow, 270F, 90F, 300)
+
+        // animate
+        val animationSet = AnimatorSet()
+        val contentAnimation = getAnimationForContent(content, (300*density).toInt(), 0, DecelerateInterpolator())
+        animationSet.playTogether(
+            arrowAnimation,
+            contentAnimation
+        )
+        animationSet.doOnEnd {
+            content.visibility = View.GONE
+            mainCardView.isClickable = true
+        }
+        return animationSet
+    }
+
+    private fun getOpenContentAnimatorSet(mainCardView: MaterialCardView, content: MaterialCardView, arrow: ImageView): AnimatorSet {
+        mainCardView.isClickable = false
+        val arrowAnimation = getAnimationForArrow(arrow, 90F, 270F, 200)
+
+        content.visibility = View.VISIBLE
+
+        // animate
+        val animatorSet = AnimatorSet()
+        val contentAnimation = getAnimationForContent(content, 0, (300*density).toInt(), OvershootInterpolator())
+        animatorSet.playTogether(
+            arrowAnimation,
+            contentAnimation
+        )
+        return animatorSet
     }
 }

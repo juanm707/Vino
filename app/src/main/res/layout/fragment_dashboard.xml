@@ -82,331 +82,356 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/mainConstraintLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/dateText"
-                android:layout_width="0dp"
+                android:id="@+id/mainConstraintLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="Wed April 7th, 2021"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
-                android:textColor="@color/purple_600"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:paddingBottom="8dp"
+                android:clipToPadding="false">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/sprayContent"
-                style="@style/Widget.Vino.Dashboard.CardView"
-                android:layout_width="0dp"
-                android:layout_height="300dp"
-                android:translationY="-4dp"
-                android:visibility="gone"
-                app:cardBackgroundColor="@color/design_default_color_error"
-                app:layout_constraintEnd_toEndOf="@id/sprayCardViewDashboard"
-                app:layout_constraintStart_toStartOf="@id/sprayCardViewDashboard"
-                app:layout_constraintTop_toBottomOf="@id/sprayCardViewDashboard">
+                <TextView
+                    android:id="@+id/dateText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text=""
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                    android:textColor="@color/purple_600"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/sprayRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="4dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/spray_dashboard_item" />
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/sprayContent"
+                    style="@style/Widget.Vino.Dashboard.CardView"
+                    android:layout_width="0dp"
+                    android:layout_height="300dp"
+                    android:translationY="-4dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/design_default_color_error"
+                    app:layout_constraintEnd_toEndOf="@id/sprayCardViewDashboard"
+                    app:layout_constraintStart_toStartOf="@id/sprayCardViewDashboard"
+                    app:layout_constraintTop_toBottomOf="@id/sprayCardViewDashboard">
 
-            </com.google.android.material.card.MaterialCardView>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/sprayRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="4dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/spray_dashboard_item" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/sprayCardViewDashboard"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                app:rippleColor="#00000000"
-                app:cardBackgroundColor="@color/design_default_color_error"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dateText">
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/sprayCardViewDashboard"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:cardBackgroundColor="@color/design_default_color_error"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dateText"
+                    app:rippleColor="#00000000">
 
-                    <TextView
-                        android:id="@+id/sprayNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:text="0"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                        android:textColor="@color/white"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/spraysThisMorning"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="sprays this morning"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                        android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="@id/sprayNumber"
-                        app:layout_constraintEnd_toStartOf="@id/sprayIcon"
-                        app:layout_constraintStart_toEndOf="@id/sprayNumber"
-                        app:layout_constraintTop_toTopOf="@id/sprayNumber" />
+                        <TextView
+                            android:id="@+id/sprayNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:text="0"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                            android:textColor="@color/white"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/sprayIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginEnd="8dp"
-                        android:src="@drawable/paint_spray"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/sprayNumber"
-                        app:tint="@color/white" />
+                        <TextView
+                            android:id="@+id/spraysThisMorning"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="sprays this morning"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="@id/sprayNumber"
+                            app:layout_constraintEnd_toStartOf="@id/sprayIcon"
+                            app:layout_constraintStart_toEndOf="@id/sprayNumber"
+                            app:layout_constraintTop_toTopOf="@id/sprayNumber" />
 
-                    <View
-                        android:id="@+id/dividerSpray"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/white"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/sprayNumber" />
+                        <ImageView
+                            android:id="@+id/sprayIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/paint_spray"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/sprayNumber"
+                            app:tint="@color/white" />
 
-                    <TextView
-                        android:id="@+id/vineyardPreviewText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:text=""
-                        android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/sprayArrow"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/dividerSpray" />
+                        <View
+                            android:id="@+id/dividerSpray"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:background="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/sprayNumber" />
 
-                    <ImageView
-                        android:id="@+id/sprayArrow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:rotation="90"
-                        android:src="@drawable/ic_round_navigate_next_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/dividerSpray" />
+                        <TextView
+                            android:id="@+id/vineyardPreviewText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:text=""
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/sprayArrow"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/dividerSpray" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <ImageView
+                            android:id="@+id/sprayArrow"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:rotation="90"
+                            android:src="@drawable/ic_round_navigate_next_24"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/dividerSpray" />
 
-            </com.google.android.material.card.MaterialCardView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/todoCardViewDashboard"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                app:cardBackgroundColor="@color/negative65"
-                app:layout_constraintEnd_toStartOf="@+id/guideline5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/sprayContent">
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/todoCardViewDashboard"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    app:cardBackgroundColor="@color/negative65"
+                    app:layout_constraintEnd_toStartOf="@id/guideline5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sprayContent">
 
-                    <TextView
-                        android:id="@+id/todosDueToday"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:text="0"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                        android:textColor="@color/white"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/todosSubtitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="todos due today"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                        android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="@id/todosDueToday"
-                        app:layout_constraintEnd_toStartOf="@id/todoIcon"
-                        app:layout_constraintStart_toEndOf="@id/todosDueToday"
-                        app:layout_constraintTop_toTopOf="@id/todosDueToday" />
+                        <TextView
+                            android:id="@+id/todosDueToday"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:text="0"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                            android:textColor="@color/white"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/todoIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginEnd="8dp"
-                        android:src="@drawable/ic_baseline_checklist_rtl_24"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/todosDueToday"
-                        app:tint="@color/white" />
+                        <TextView
+                            android:id="@+id/todosSubtitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="todos due today"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="@id/todosDueToday"
+                            app:layout_constraintEnd_toStartOf="@id/todoIcon"
+                            app:layout_constraintStart_toEndOf="@id/todosDueToday"
+                            app:layout_constraintTop_toTopOf="@id/todosDueToday" />
 
-                    <View
-                        android:id="@+id/dividerTodo"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/white"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/todosDueToday" />
+                        <ImageView
+                            android:id="@+id/todoIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/ic_baseline_checklist_rtl_24"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/todosDueToday"
+                            app:tint="@color/white" />
 
-                    <TextView
-                        android:id="@+id/todoViewText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="View"
-                        android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/imageView"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/dividerTodo" />
+                        <View
+                            android:id="@+id/dividerTodo"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:background="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/todosDueToday" />
 
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_round_navigate_next_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/dividerTodo" />
+                        <TextView
+                            android:id="@+id/todoViewText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="View"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/imageView"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/dividerTodo" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:src="@drawable/ic_round_navigate_next_24"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/dividerTodo" />
 
-            </com.google.android.material.card.MaterialCardView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/harvestCardViewDashboard"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                app:cardBackgroundColor="@color/light_green_600"
-                app:layout_constraintEnd_toStartOf="@+id/guideline5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/todoCardViewDashboard">
+                </com.google.android.material.card.MaterialCardView>
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/harvestCardViewDashboard"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    app:cardBackgroundColor="@color/light_green_600"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/todoCardViewDashboard">
 
-                    <TextView
-                        android:id="@+id/harvestData"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:text="2"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                        android:textColor="@color/white"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="harvest updates"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                        android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="@id/harvestData"
-                        app:layout_constraintEnd_toStartOf="@id/harvestIcon"
-                        app:layout_constraintStart_toEndOf="@id/harvestData"
-                        app:layout_constraintTop_toTopOf="@id/harvestData" />
+                        <TextView
+                            android:id="@+id/harvestData"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:text="2"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+                            android:textColor="@color/white"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/harvestIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginEnd="8dp"
-                        android:src="@drawable/ic_baseline_agriculture_24"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/harvestData"
-                        app:tint="@color/white" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="harvest updates"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="@id/harvestData"
+                            app:layout_constraintEnd_toStartOf="@id/harvestIcon"
+                            app:layout_constraintStart_toEndOf="@id/harvestData"
+                            app:layout_constraintTop_toTopOf="@id/harvestData" />
 
-                    <View
-                        android:id="@+id/dividerHarvest"
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:background="@color/white"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/harvestData" />
+                        <ImageView
+                            android:id="@+id/harvestIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/ic_baseline_agriculture_24"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/harvestData"
+                            app:tint="@color/white" />
 
-                    <TextView
-                        android:id="@+id/harvestViewText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="View"
-                        android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/dividerHarvest" />
+                        <View
+                            android:id="@+id/dividerHarvest"
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:background="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/harvestData" />
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/ic_round_navigate_next_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/dividerHarvest" />
+                        <TextView
+                            android:id="@+id/harvestViewText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="View"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/dividerHarvest" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:src="@drawable/ic_round_navigate_next_24"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/dividerHarvest" />
 
-            </com.google.android.material.card.MaterialCardView>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/weatherContent"
+                    style="@style/Widget.Vino.Dashboard.CardView"
+                    android:layout_width="0dp"
+                    android:layout_height="300dp"
+                    android:translationY="-4dp"
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/chart_gold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/weatherAlertCardView"
+                    app:layout_constraintStart_toStartOf="@id/weatherAlertCardView"
+                    app:layout_constraintTop_toBottomOf="@id/weatherAlertCardView">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/weatherRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="4dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/alert_recycler_view_item" />
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/weatherAlertCardView"
@@ -416,10 +441,10 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
                     app:cardBackgroundColor="@color/chart_gold"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/guideline5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/harvestCardViewDashboard">
+                    app:layout_constraintTop_toBottomOf="@id/harvestCardViewDashboard"
+                    app:rippleColor="#00000000">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -480,17 +505,17 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
                             android:layout_marginBottom="8dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
                             android:text=""
                             android:textColor="@color/black"
-                            android:maxLines="1"
-                            android:ellipsize="end"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+                            app:layout_constraintEnd_toStartOf="@id/weatherArrow"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/dividerWeather" />
 
                         <ImageView
-                            android:id="@+id/imageView2"
+                            android:id="@+id/weatherArrow"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -506,23 +531,23 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.75" />
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.75" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
     </com.google.android.material.card.MaterialCardView>
 
