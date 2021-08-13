@@ -175,7 +175,7 @@ class DashboardFragment : Fragment() {
 
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                dashboardFragmentViewModel.getCurrentLocationAlerts(37.2090, -93.2923)
+                dashboardFragmentViewModel.getCurrentLocationAlerts(location.latitude, location.longitude)
             }
         } else {
             binding.weatherAlerts.text = ""
