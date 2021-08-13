@@ -25,6 +25,8 @@ The map displays the vineyard, along with all the blocks available and highlight
 
 A map layer selection feature is available. You can view the default, terrain, and satellite map. As for weather layers, you can view the temperature, with a scale, wind, and rain.
 
+[![Map Demo](http://img.youtube.com/vi/lcyJxaIw0_g/0.jpg)](http://www.youtube.com/watch?v=lcyJxaIw0_g "Vino Map Demo")
+
 #### Leaf Stress - MPAndroidChart
 It is important to know whether the vineyard's leaves are stressed. The leaf water potential chart displays the weekly data of the blocks. A high-stress level indicator is shown and a target line is shown as well to compare. Touch the map and drag to display values. Share the chart as an image by clicking the camera button, and send as an email attachment or message, upload to the cloud, etc. Compare blocks and water the blocks appropriately.
 
