@@ -6,7 +6,7 @@ Vino is an android app that helps to make vineyard management easier. Useful for
 ## Walkthrough 
 * Videos were recorded using Quick Time Player, and Android Emulator. Noticeable lag/slowness is a recording issue.
 ### Start
-Once users are logged in, the three main sections of the app are Home, Dashboard, And To-Do.
+Once users are logged in, the three main sections of the app are Home, Dashboard, and To-Do.
 
 <img src="https://media.giphy.com/media/evJnXt2MmVUusrytKb/giphy.gif" />
 
@@ -28,17 +28,27 @@ A map layer selection feature is available. You can view the default, terrain, a
 #### Leaf Stress - MPAndroidChart
 It is important to know whether the vineyard's leaves are stressed. The leaf water potential chart displays the weekly data of the blocks. A high-stress level indicator is shown and a target line is shown as well to compare. Touch the map and drag to display values. Share the chart as an image by clicking the camera button, and send as an email attachment or message, upload to the cloud, etc. Compare blocks and water the blocks appropriately.
 
+<img src="https://github.com/juanm707/Vino/blob/master/vino_gifs/lwp.gif" width=230 height=500 />
+
 #### Weather - OpenWeatherAPI
 Weather plays a big factor in vineyard management. If it's too hot, more stress and you can not spray the vineyard. Too cold and you can have frost damage. View the current weather at the vineyard including wind speed, humidity, and cloud coverage. View a 24-hr forecast and a 7-day high forecast as well. View weather alerts for the surrounding area like fires, heat waves, and heavy rains.
+
+<img src="https://github.com/juanm707/Vino/blob/master/vino_gifs/weather.gif" width=230 height=500 />
 
 #### Spray Work Order
 You can view the type and material used for the work order, and the re-entry interval. You can also view the work order PDF with the click of a button. 
 
+<img src="https://github.com/juanm707/Vino/blob/master/vino_gifs/workorder.gif" width=230 height=500 />
+
 ### Dashboard
 The dashboard provides you with quick glance at what is going on *today*. View all the sprays that finished this morning and their work orders. See how many to-dos are due today. View harvest updates when it is time to pick the grapes. View weather alerts for the current location of the device/user.
 
+<img src="https://github.com/juanm707/Vino/blob/master/vino_gifs/dashboard.gif" width=230 height=500 />
+
 ### To-Do
 Create to-dos to help you keep track of your tasks. Complete and incomplete sections are available to view. Users can also delete to-dos when needed by swiping.
+
+<img src="https://github.com/juanm707/Vino/blob/master/vino_gifs/todo.gif" width=230 height=500 />
 
 ### Settings
 Displays your user information and settings for notifications.
