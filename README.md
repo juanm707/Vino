@@ -3,15 +3,22 @@
 # Vino
 Vino is an android app that helps to make vineyard management easier. Useful for companies and/or regular users, Vino helps you stay on top of the current season by displaying vineyard maps, important weather information, viewing work orders, completing to-do lists, and much more!
 
-## Walkthrough
+## Walkthrough 
+* Videos were recorded using Quick Time Player, and Android Emulator. Noticeable lag/slowness is a recording issue.
 ### Start
 Once users are logged in, the three main sections of the app are Home, Dashboard, And To-Do.
+
+<img src="https://media.giphy.com/media/evJnXt2MmVUusrytKb/giphy.gif" />
 
 ### Home
 A list of your vineyards is displayed and contains the current job at the vineyard if any, and if the vineyard was recently sprayed. Spraying uses **chemicals** which can be **dangerous** without the proper protective equipment. It is good to know when a vineyard was sprayed before approaching.
 
+<img src="https://media.giphy.com/media/nwe3djRhy9EtMyDPIp/giphy.gif" />
+
 #### Vineyard
 Once you select a vineyard, you have various options to choose from for more specific info about the vineyard including the map, weather, leaf stress data, and if sprayed, the work order.
+
+<img src="https://media.giphy.com/media/ZVGSdp8G1BZq7sTLDy/giphy.gif" />
 
 #### Map - Google Maps SDK, OpenWeatherAPI
 The map displays the vineyard, along with all the blocks available and highlighted. User/device location is displayed, and if permission is granted. This is useful for locating vines, rows, valves, and other items. If the user clicks on a block, a banner appears asking if they would like to see the block info. If viewed, block info is shown as a dialog. 
@@ -36,6 +43,8 @@ Create to-dos to help you keep track of your tasks. Complete and incomplete sect
 ### Settings
 Displays your user information and settings for notifications.
 
+<img src="https://media.giphy.com/media/BqHOXoe4SgQY2IcFQ4/giphy.gif" />
+
 ## Architecture
 [Follows Google's Guide to App Architecture](https://developer.android.com/jetpack/guide)
 
@@ -44,6 +53,7 @@ Displays your user information and settings for notifications.
 ## Built with
 - Kotlin
 - Android Studio
+- AndroidX Libraries
 - Material Design
 - SQLite Database (Room)
 - Retrofit
