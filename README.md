@@ -24,6 +24,7 @@ Once you select a vineyard, you have various options to choose from for more spe
 The map displays the vineyard, along with all the blocks available and highlighted. User/device location is displayed, and if permission is granted. This is useful for locating vines, rows, valves, and other items. If the user clicks on a block, a banner appears asking if they would like to see the block info. If viewed, block info is shown as a dialog. 
 
 A map layer selection feature is available. You can view the default, terrain, and satellite map. As for weather layers, you can view the temperature, with a scale, wind, and rain.
+* Click on thumbnail for video demo
 
 [![Map Demo](http://img.youtube.com/vi/lcyJxaIw0_g/0.jpg)](http://www.youtube.com/watch?v=lcyJxaIw0_g "Vino Map Demo")
 
